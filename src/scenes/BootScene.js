@@ -20,10 +20,14 @@ class BootScene extends Scene {
 
     // SFX
     this.load.audio('sfx-shoot', 'assets/sfx/bang_02.wav');
+    this.load.audio('sfx-rocket', 'assets/sfx/fw_05.wav');
+    this.load.audio('sfx-explosion', 'assets/sfx/explodemini.wav');
 
     // VFX
     this.load.spritesheet('particles-dirt', 'assets/sprites/particles-dirt.png', { frameWidth: 192, frameHeight: 228 });
     this.load.spritesheet('particles-grass', 'assets/sprites/particles-grass.png', { frameWidth: 45, frameHeight: 157 });
+    this.load.image('particle-fire', 'assets/particles/fire.png');
+    this.load.image('particle-explosion', 'assets/particles/explosion.png');
 
     // Preloader
     this.loaderBar = this.add.graphics();

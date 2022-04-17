@@ -6,10 +6,11 @@ import GameScene from './scenes/GameScene';
 
 const canvas = document.getElementById('game-canvas');
 const config = {
-  type: Phaser.WEB_GL,
+  type: Phaser.WEBGL,
   width: window.innerWidth,
   height: window.innerHeight,
   canvas,
+  pixelArt: true,
   physics: {
     default: 'arcade',
     arcade: {

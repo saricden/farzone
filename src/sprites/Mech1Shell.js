@@ -1,0 +1,162 @@
+import { GameObjects, Math as pMath, Display } from "phaser";
+const { Container } = GameObjects;
+
+class Mech1Shell extends Container {
+  constructor(scene, x, y, rotation, flipX) {
+    super (scene, x, y, []);
+
+    this.scene = scene;
+
+    this.shell = this.scene.add.image(0, 0, 'mech1-shell');
+    this.shell.setScale(0.3);
+
+    this.scene.add.existing(this);
+    this.scene.physics.world.enable(this);
+
+    this.body.setAllowGravity(false);
+    this.setRotation(rotation);
+    const speed = this.scene.physics.velocityFromRotation(
+      this.rotation,
+      950,
+      new pMath.Vector2(this.body.velocity.x, this.body.velocity.y)
+    );
+
+    if (flipX) {
+      this.setRotation(this.rotation - Math.PI / 2);
+      this.body.setVelocity(-speed.x, -speed.y);
+    }
+    else {
+      this.setRotation(this.rotation + Math.PI / 2);
+      this.body.setVelocity(speed.x, speed.y);
+    }
+
+    this.fireParticle = this.scene.add.particles('particle-fire');
+    this.boomParticle = this.scene.add.particles('particle-explosion');
+    this.fireEmitter = this.fireParticle.createEmitter({
+      rotate: (p, k, t) => {
+        return ((1 - t) * 360) * 2;
+      },
+      speedX: {
+        min: 100,
+        max: 200
+      },
+      speedY: {
+        min: -50,
+        max: 50
+      },
+      alpha: {
+        start: 1,
+        end: 0
+      },
+      scale: {
+        start: 0.15,
+        end: 1
+      },
+      quantity: 30,
+      lifespan: 4000,
+      follow: this
+    });
+
+    this.boomEmitter = this.boomParticle.createEmitter({
+      alpha: {
+        start: 1,
+        end: 0
+      },
+      rotate: (p, k, t) => {
+        return ((1 - t) * 360) * 4;
+      },
+      tint: (particle, key, t) => {
+        const g = ((1 - t) / 1 * 255);
+        return Display.Color.GetColor(255, g, 0);
+      },
+      speedX: {
+        min: -400,
+        max: 400
+      },
+      speedY: {
+        min: -400,
+        max: 400
+      },
+      scale: {
+        start: 0.5,
+        end: 1
+      },
+      lifespan: {
+        min: 250,
+        max: 750
+      },
+      follow: this
+    });
+    this.boomEmitter.stop();
+
+    this.boomEmitter2 = this.fireParticle.createEmitter({
+      alpha: {
+        start: 0.5,
+        end: 0
+      },
+      rotate: (p, k, t) => {
+        return ((1 - t) * 360) * 4;
+      },
+      speedX: {
+        min: -500,
+        max: 500
+      },
+      speedY: {
+        min: -500,
+        max: 500
+      },
+      gravityX: 200,
+      lifespan: 4000,
+      follow: this
+    });
+    this.boomEmitter2.stop();
+
+    this.scene.physics.add.collider(this, this.scene.ground, () => {
+      this.scene.sound.play('sfx-explosion');
+
+      // Damage tiles
+      const tiles = this.scene.ground.getTilesWithinWorldXY(this.x - 400, this.y - 400, 800, 800);
+      tiles.forEach((tile) => {
+        const dmg = pMath.Between(4, 5);
+        for (let d = 0; d < dmg; d++) {
+          this.scene.damageTile(tile, { x: this.x, y: this.y });
+        }
+      })
+      this.scene.cameras.main.flash(250, 255, 255, 0, true);
+      this.boomEmitter.explode(50);
+      this.boomEmitter2.explode(100);
+
+      this.scene.time.addEvent({
+        delay: 4000,
+        repeat: 0,
+        callback: () => {
+          this.fireParticle.destroy();
+        }
+      });
+      this.fireEmitter.stop();
+      this.destroy();
+    });
+
+    this.add([
+      this.shell
+    ]);
+  }
+
+  preUpdate() {
+    const {tilemap} = this.scene;
+
+    if (this.x > tilemap.widthInPixels || this.x < 0 || this.y > tilemap.heightInPixels || this.y < 0) {
+      this.scene.time.addEvent({
+        delay: 4000,
+        repeat: 0,
+        callback: () => {
+          this.fireParticle.destroy();
+        }
+      });
+      this.fireEmitter.stop();
+      this.destroy();
+    }
+  }
+}
+
+export default Mech1Shell;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="140" height="70" tilewidth="175" tileheight="175" infinite="0" nextlayerid="3" nextobjectid="5">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="140" height="70" tilewidth="175" tileheight="175" infinite="0" nextlayerid="3" nextobjectid="7">
  <editorsettings>
   <export target="../../src/assets/maps/level1.json" format="json"/>
  </editorsettings>
@@ -159,7 +159,7 @@
   <object id="2" name="dummy" x="16275" y="7525">
    <point/>
   </object>
-  <object id="4" name="mech" x="8096" y="5976">
+  <object id="6" name="mech" x="8192" y="6216">
    <point/>
   </object>
  </objectgroup>

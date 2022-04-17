@@ -41,15 +41,15 @@
                 }, 
                 {
                  "height":0,
-                 "id":4,
+                 "id":6,
                  "name":"mech",
                  "point":true,
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":8096,
-                 "y":5976
+                 "x":8192,
+                 "y":6216
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -58,7 +58,7 @@
          "y":0
         }],
  "nextlayerid":3,
- "nextobjectid":5,
+ "nextobjectid":7,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",

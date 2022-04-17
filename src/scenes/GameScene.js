@@ -30,7 +30,6 @@ class GameScene extends Scene {
       }
     });
 
-    // this.ground.setCollisionByProperty({ collides: true });
     this.ground.setCollisionBetween(1, 15);
     this.physics.add.collider(this.cat, this.ground);
     this.physics.add.collider(this.dummy, this.ground);
@@ -91,12 +90,10 @@ class GameScene extends Scene {
     this.grassEmitter.stop();
 
     // Music
-    // this.sound.play('ost-level1', { loop: true });
+    this.sound.play('ost-level1', { loop: true });
 
     this.cameras.main.setBackgroundColor(0x225566);
-    // this.cameras.main.startFollow(this.cat);
-    this.cameras.main.setZoom(0.75);
-    // this.cameras.main.setZoom(2);
+    this.cameras.main.setZoom(0.005);
   }
 
   damageTile(tile, intersection) {
