@@ -44,18 +44,20 @@ class BootScene extends Scene {
     });
     this.preloaderLog.setOrigin(1, 1);
 
-    this.load.on('fileprogress', (file) => {
-      this.preloaderLog.text += `\n${file.key}`;
+    this.load.on('filecomplete', (file) => {
+      this.preloaderLog.text += `\n${file}`;
     });
 
     this.load.on('progress', (value) => {
       this.loaderBar.clear();
       this.loaderBar.fillStyle(0xFFFFFF, value);
-      this.loaderBar.fillRect(window.innerWidth / 2 - 150, window.innerHeight / 2 - 10, 300 * value, 20);
+      this.loaderBar.fillRect(window.innerWidth / 2 - 300, window.innerHeight / 2 - 5, 600 * value, 10);
 
       if (value === 1) {
         this.loaderBar.clear();
         this.completeText.setVisible(true);
+        this.loaderBar.fillStyle(0xFFFFFF, 0.1);
+        this.loaderBar.fillRect(window.innerWidth / 2 - 300, window.innerHeight / 2 - 5, 600 * value, 10);
       }
     });
   }
