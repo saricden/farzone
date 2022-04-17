@@ -26,17 +26,11 @@ class Mech1 extends Container {
     this.head.setOrigin(0.5, 1);
     this.head.setScale(0.75);
 
-    this.debugGfx = this.scene.add.graphics();
-    this.debugGfx.fillStyle(0xFF0000);
-    this.debugGfx.fillRect(this.armRight.x, this.armRight.y, 2, 2);
-
-
     this.add([
       this.armLeft,
       this.torsoLegs,
       this.head,
-      this.armRight,
-      this.debugGfx
+      this.armRight
     ]);
 
     this.scene.add.existing(this);
@@ -46,12 +40,89 @@ class Mech1 extends Container {
     this.body.setOffset(-70, -200);
     this.body.setMaxVelocityY(this.jumpForce);
 
+    this.bulletGfx = this.scene.add.graphics();
+    this.bulletGfx.setDepth(10);
+    this.bulletRaycaster = this.scene.raycasterPlugin.createRaycaster({ debug: false });
+    this.bulletRaycaster.mapGameObjects(this.scene.ground, true, {
+      collisionTiles: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    });
+    this.bulletRay = this.bulletRaycaster.createRay();
+
     this.cursors = this.scene.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,
       down: Phaser.Input.Keyboard.KeyCodes.S,
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
     });
+
+    // Let the shoosting begin
+    this.rapidfire = this.scene.time.addEvent({
+      delay: 75,
+      repeat: -1,
+      paused: true,
+      callback: () => {
+        const barrelOffsetY = 23;
+        const barrelOffsetX = 275;
+        const vector = new pMath.Vector2();
+        let angleMod = 2 * Math.PI;
+
+        if (this.torsoLegs.flipX) {
+          angleMod = Math.PI;
+        }
+
+        vector.setToPolar(this.armLeft.rotation + angleMod, barrelOffsetX);
+        
+        this.bulletRay.setOrigin(this.x + this.armLeft.x + vector.x, this.y + this.armLeft.y + vector.y - barrelOffsetY);
+        this.bulletRay.setAngle(this.armLeft.rotation + angleMod);
+        
+        const intersection = this.bulletRay.cast();
+        let endX = vector.x * 300;
+        let endY = vector.y * 300;
+
+        if (intersection) {
+          const isTile = (intersection.object && typeof intersection.object.getTilesWithinWorldXY === 'function');
+          endX = intersection.x;
+          endY = intersection.y;
+
+          if (isTile) {
+            const tiles = intersection.object.getTilesWithinWorldXY(intersection.x - 1, intersection.y - 1, 2, 2);
+
+            tiles.forEach((tile) => this.scene.damageTile(tile, intersection));
+          }
+        }
+
+        this.bulletGfx.lineStyle(4, 0xFBF236, 1);
+        this.bulletGfx.lineBetween(this.x + this.armLeft.x + vector.x, this.y + this.armLeft.y + vector.y - barrelOffsetY, endX, endY);
+
+        this.scene.time.addEvent({
+          delay: 10,
+          repeat: 0,
+          callback: () => {
+            this.bulletGfx.clear();
+          }
+        });
+
+        this.scene.sound.play('sfx-shoot');
+      }
+    });
+
+    this.scene.input.on('pointerdown', (pointer) => {
+      if (pointer.rightButtonDown()) {
+
+      }
+      else {
+        this.rapidfire.paused = false;
+        this.armLeft.play('mech1-arm-left-light-shot', true);
+        this.armRight.play('mech1-arm-right-light-shot', true);
+      }
+    });
+
+    this.scene.input.on('pointerup', () => {
+      this.rapidfire.paused = true;
+      this.armLeft.play('mech1-arm-left-idle', true);
+      this.armRight.play('mech1-arm-right-idle', true);
+    });
+
   }
 
   update(time, delta) {
@@ -80,6 +151,7 @@ class Mech1 extends Container {
     const angle = pMath.Angle.Between(relX + (this.armLeft.x * zoom), relY + (this.armLeft.y * zoom), mousePointer.x, mousePointer.y);
 
     let angleMod = 2 * Math.PI;
+    let headAngleMod = 0.35;
 
     if (mousePointer.x <= relX) {
       this.torsoLegs.setFlipX(true);
@@ -92,6 +164,7 @@ class Mech1 extends Container {
       this.armRight.setX(20);
       this.head.setX(12);
       angleMod = Math.PI;
+      headAngleMod = 0.35;
     }
     else {
       this.torsoLegs.setFlipX(false);
@@ -106,7 +179,9 @@ class Mech1 extends Container {
     }
 
     this.armLeft.setRotation(angle + angleMod);
-    this.armRight.setRotation((angle + angleMod));
+    this.armRight.setRotation(angle + angleMod);
+    // this.head.setRotation(angle * headAngleMod + angleMod);
+    this.head.setRotation(angle + angleMod);
 
     // Animation logic
     if (this.body.onFloor()) {

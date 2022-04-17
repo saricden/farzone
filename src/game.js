@@ -1,5 +1,6 @@
 import './main.css';
 import Phaser, {Game} from 'phaser';
+import PhaserRaycaster from 'phaser-raycaster/dist/phaser-raycaster';
 import BootScene from './scenes/BootScene';
 import GameScene from './scenes/GameScene';
 
@@ -15,6 +16,15 @@ const config = {
       gravity: { y: 600 },
       debug: false
     }
+  },
+  plugins: {
+    scene: [
+      {
+        key: 'PhaserRaycaster',
+        plugin: PhaserRaycaster,
+        mapping: 'raycasterPlugin'
+      }
+    ]
   },
   scene: [
     BootScene,

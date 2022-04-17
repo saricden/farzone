@@ -1,0 +1,83 @@
+{
+	"textures": [
+		{
+			"image": "particles-grass.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 135,
+				"h": 157
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Vector 40.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 45,
+						"h": 93
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 45,
+						"h": 93
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 45,
+						"h": 93
+					}
+				},
+				{
+					"filename": "Vector 41.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 35,
+						"h": 85
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 35,
+						"h": 85
+					},
+					"frame": {
+						"x": 45,
+						"y": 0,
+						"w": 35,
+						"h": 85
+					}
+				},
+				{
+					"filename": "Vector 42.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 19,
+						"h": 157
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 19,
+						"h": 157
+					},
+					"frame": {
+						"x": 90,
+						"y": 0,
+						"w": 19,
+						"h": 157
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:7c30991904e10ca44278a8fdee256d91:ffceacf296c3d64e88a070b134537e14:9bf7242041f3207d36c508900ae9d526$"
+	}
+}

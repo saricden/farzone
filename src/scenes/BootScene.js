@@ -11,9 +11,53 @@ class BootScene extends Scene {
     this.load.atlas('mech1-arm-left', 'assets/sprites/mech1-left-arm.png', 'assets/sprites/mech1-left-arm.json');
     this.load.atlas('mech1-arm-right', 'assets/sprites/mech1-right-arm.png', 'assets/sprites/mech1-right-arm.json');
     this.load.image('mech1-head', 'assets/sprites/mech1-head.png');
+    this.load.image('mech1-shell', 'assets/sprites/mech1-shell.png');
 
+    // Maps
     this.load.tilemapTiledJSON('map-level1', 'assets/maps/level1.json');
     this.load.image('tileset-grassland-ex', 'assets/maps/tileset-grassland-ex.png');
+    this.load.audio('ost-level1', 'assets/music/mech-ost1.mp3');
+
+    // SFX
+    this.load.audio('sfx-shoot', 'assets/sfx/bang_02.wav');
+
+    // VFX
+    this.load.spritesheet('particles-dirt', 'assets/sprites/particles-dirt.png', { frameWidth: 192, frameHeight: 228 });
+    this.load.spritesheet('particles-grass', 'assets/sprites/particles-grass.png', { frameWidth: 45, frameHeight: 157 });
+
+    // Preloader
+    this.loaderBar = this.add.graphics();
+
+    this.completeText = this.add.text(window.innerWidth / 2, window.innerHeight / 2, 'Click to start', {
+      fontFamily: 'monospace',
+      color: '#FFF',
+      fontSize: 32
+    });
+    this.completeText.setOrigin(0.5);
+    this.completeText.setVisible(false);
+
+    this.preloaderLog = this.add.text(window.innerWidth - 20, window.innerHeight - 20, '', {
+      fontFamily: 'monospace',
+      color: '#555',
+      fontSize: 24,
+      align: 'right'
+    });
+    this.preloaderLog.setOrigin(1, 1);
+
+    this.load.on('fileprogress', (file) => {
+      this.preloaderLog.text += `\n${file.key}`;
+    });
+
+    this.load.on('progress', (value) => {
+      this.loaderBar.clear();
+      this.loaderBar.fillStyle(0xFFFFFF, value);
+      this.loaderBar.fillRect(window.innerWidth / 2 - 150, window.innerHeight / 2 - 10, 300 * value, 20);
+
+      if (value === 1) {
+        this.loaderBar.clear();
+        this.completeText.setVisible(true);
+      }
+    });
   }
 
   create() {
@@ -99,10 +143,10 @@ class BootScene extends Scene {
         end: 5,
         prefix: 'light-',
         suffix: '.png',
-        zeroPad: 0
+        zeroPad: -1
       }),
       frameRate: 60,
-      repeat: 0
+      repeat: -1
     });
 
     this.anims.create({
@@ -115,7 +159,7 @@ class BootScene extends Scene {
         zeroPad: 2
       }),
       frameRate: 60,
-      repeat: 0
+      repeat: -1
     });
 
     this.anims.create({
@@ -140,7 +184,7 @@ class BootScene extends Scene {
         zeroPad: 0
       }),
       frameRate: 60,
-      repeat: 0
+      repeat: -1
     });
 
     this.anims.create({
@@ -153,10 +197,14 @@ class BootScene extends Scene {
         zeroPad: 2
       }),
       frameRate: 60,
-      repeat: 0
+      repeat: -1
     });
 
-    this.scene.start('scene-game');
+    this.input.mouse.disableContextMenu();
+
+    this.input.on('pointerdown', () => {
+      this.scene.start('scene-game');
+    });
   }
 }
 

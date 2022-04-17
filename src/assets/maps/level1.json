@@ -29,18 +29,6 @@
          "objects":[
                 {
                  "height":0,
-                 "id":1,
-                 "name":"mech",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":2625,
-                 "y":3850
-                }, 
-                {
-                 "height":0,
                  "id":2,
                  "name":"dummy",
                  "point":true,
@@ -50,6 +38,18 @@
                  "width":0,
                  "x":16275,
                  "y":7525
+                }, 
+                {
+                 "height":0,
+                 "id":4,
+                 "name":"mech",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":8096,
+                 "y":5976
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -58,7 +58,7 @@
          "y":0
         }],
  "nextlayerid":3,
- "nextobjectid":3,
+ "nextobjectid":5,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",
