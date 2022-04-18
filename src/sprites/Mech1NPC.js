@@ -13,12 +13,10 @@ class Mech1NPC extends Container {
     this.jumpAnimBuffer = 50;
     this.jumpAnimLock = false;
 
-    // AI controls
+    // AI config
     this.triggerDelay = 25; // The # of MS to change shooting state
-    this.aimEntropy = 0.05; // The PX aim offset from the target, scaled by SIN(time)
+    this.aimEntropy = 0.05; // Scaler value min(-)/max(+) -- higher values = less accurate
     this.reflexDelay = 500; // The MS speed of retargeting
-    this.eyesightDivider = 20;
-    this.perfectAimThreshold = 4000;
 
     this.torsoLegs = this.scene.add.sprite(0, 0, 'mech1');
     this.torsoLegs.play('mech1-idle');
@@ -118,17 +116,12 @@ class Mech1NPC extends Container {
       delay: this.reflexDelay,
       repeat: -1,
       callback: () => {
-        const {zoom} = this.scene.cameras.main;
         const d2p = pMath.Distance.Between(this.x, this.y, this.target.x, this.target.y);
+        const missX = (pMath.FloatBetween(-this.aimEntropy, this.aimEntropy) * d2p * 2);
+        const missY = (pMath.FloatBetween(-this.aimEntropy, this.aimEntropy) * d2p * 2);
+        const angle = pMath.Angle.Between(this.x + this.armLeft.x, this.y + this.armLeft.y, this.target.x + missX, this.target.y + missY);
 
-        let angle = pMath.Angle.Between(this.x + (this.armLeft.x * zoom), this.y + (this.armLeft.y * zoom), this.target.x + (pMath.FloatBetween(-this.aimEntropy, this.aimEntropy) * (d2p / this.eyesightDivider)), this.target.y + (pMath.FloatBetween(-this.aimEntropy, this.aimEntropy) * (d2p / this.eyesightDivider)));
         let angleMod = 2 * Math.PI;
-
-        // Once close enough, grant perfect aim
-        if (d2p < this.perfectAimThreshold) {
-          angle = pMath.Angle.Between(this.x + (this.armLeft.x * zoom), this.y + (this.armLeft.y * zoom), this.target.x, this.target.y);
-          console.log('perfect aim?');
-        }
 
         if (this.target.x <= this.x) {
           this.torsoLegs.setFlipX(true);
@@ -154,15 +147,9 @@ class Mech1NPC extends Container {
           this.head.setX(-12);
         }
 
-        const newAngle = pMath.DegToRad(pMath.Angle.ShortestBetween(pMath.RadToDeg(this.armLeft.rotation), pMath.RadToDeg(angle + angleMod)));
-        // console.log(angle + angleMod, newAngle);
-        // console.log(newAngle);
-
-        this.scene.tweens.add({
-          targets: [this.armLeft, this.armRight, this.head],
-          duration: this.reflexDelay / 2,
-          rotation: newAngle
-        });
+        this.armLeft.setRotation(angle + angleMod);
+        this.armRight.setRotation(angle + angleMod);
+        this.head.setRotation(angle + angleMod);
       }
     });
 

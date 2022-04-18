@@ -119,11 +119,14 @@ class GameScene extends Scene {
     // Game data
     this.registry.playerMaxHP = 1000;
     this.registry.playerHP = this.registry.playerMaxHP;
+    this.registry.playerRockets = 2;
+
     this.registry.enemyMaxHP = 1000;
     this.registry.enemyHP = this.registry.enemyMaxHP;
+    this.registry.enemyRockets = 2;
 
     // Music
-    // this.sound.play('ost-level1', { loop: true });
+    // this.sound.play('ost-level1b', { loop: true, volume: 0.75 });
 
     this.cameras.main.setBackgroundColor(0x5555FF);
     this.cameras.main.setZoom(1);

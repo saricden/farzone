@@ -114,22 +114,37 @@ class Mech1 extends Container {
 
     this.scene.input.on('pointerdown', (pointer) => {
       if (pointer.rightButtonDown()) {
-        const barrelOffsetY = 145;
-        const barrelOffsetX = 250;
-        const vector = new pMath.Vector2();
-        let angleMod = 2 * Math.PI;
+        if (this.scene.registry.playerRockets > 0) {
+          const barrelOffsetY = 145;
+          const barrelOffsetX = 250;
+          const vector = new pMath.Vector2();
+          let angleMod = 2 * Math.PI;
+  
+          if (this.torsoLegs.flipX) {
+            angleMod = Math.PI;
+          }
+  
+          vector.setToPolar(this.armLeft.rotation + angleMod, barrelOffsetX);
+  
+          const shell = new Mech1Shell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.torsoLegs.flipX);
+  
+          this.armLeft.play('mech1-arm-left-heavy-shot', true);
+          this.armRight.play('mech1-arm-right-heavy-shot', true);
+          this.scene.sound.play('sfx-rocket');
 
-        if (this.torsoLegs.flipX) {
-          angleMod = Math.PI;
+          this.scene.registry.playerRockets--;
+
+          this.scene.time.addEvent({
+            delay: 7500,
+            repeat: 0,
+            callback: () => {
+              this.scene.registry.playerRockets++;
+            }
+          })
         }
-
-        vector.setToPolar(this.armLeft.rotation + angleMod, barrelOffsetX);
-
-        const shell = new Mech1Shell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.torsoLegs.flipX);
-
-        this.armLeft.play('mech1-arm-left-heavy-shot', true);
-        this.armRight.play('mech1-arm-right-heavy-shot', true);
-        this.scene.sound.play('sfx-rocket');
+        else {
+          this.scene.sound.play('sfx-rocket-dry');
+        }
       }
       else {
         this.rapidfire.paused = false;

@@ -46,6 +46,22 @@ class BattleHUD extends Scene {
     });
     this.enemyHPText.setOrigin(1, 1);
 
+    this.playerSpecialIcon = this.add.image(500 - 20, window.innerHeight - 20, 'ui-mech1-shell');
+    this.playerSpecialIcon.setOrigin(1, 1);
+    this.playerSpecialIcon.setScale(0.15);
+
+    this.playerSpecialIcon2 = this.add.image(500 - 20 - this.playerSpecialIcon.displayWidth - 20, window.innerHeight - 20, 'ui-mech1-shell');
+    this.playerSpecialIcon2.setOrigin(1, 1);
+    this.playerSpecialIcon2.setScale(0.15);
+
+    this.enemySpecialIcon = this.add.image(window.innerWidth - 500 + 20, window.innerHeight - 20, 'ui-mech1-shell');
+    this.enemySpecialIcon.setOrigin(0, 1);
+    this.enemySpecialIcon.setScale(0.15);
+
+    this.enemySpecialIcon2 = this.add.image(window.innerWidth - 500  + 20 + this.enemySpecialIcon.displayWidth + 20, window.innerHeight - 20, 'ui-mech1-shell');
+    this.enemySpecialIcon2.setOrigin(0, 1);
+    this.enemySpecialIcon2.setScale(0.15);
+
     // Layering
     this.playerIcon.setDepth(1);
     this.enemyIcon.setDepth(1);
@@ -53,7 +69,7 @@ class BattleHUD extends Scene {
   }
 
   update() {
-    const {playerHP, playerMaxHP, enemyHP, enemyMaxHP} = this.registry;
+    const {playerHP, playerMaxHP, playerRockets, enemyHP, enemyMaxHP} = this.registry;
     const playerRatio = playerHP / playerMaxHP;
     const enemyRatio = enemyHP / enemyMaxHP;
     const playerColor = Display.Color.GetColor(255 * (1 - playerRatio), 255 * playerRatio, 0);
@@ -76,6 +92,9 @@ class BattleHUD extends Scene {
 
     this.enemyHPGfx.fillRect(window.innerWidth - 20 - this.enemyIcon.displayWidth - 20 - (500  - 20 - this.enemyIcon.displayWidth - 20 - 20) * enemyRatio, window.innerHeight - 20 - this.enemyIcon.displayHeight, (500  - 20 - this.enemyIcon.displayWidth - 20 - 20) * enemyRatio, 20);
     this.enemyHPGfx.strokeRect(window.innerWidth - 20 - this.enemyIcon.displayWidth - 20 - (500  - 20 - this.enemyIcon.displayWidth - 20 - 20), window.innerHeight - 20 - this.enemyIcon.displayHeight, 500 - 20 - this.enemyIcon.displayWidth - 20 - 20, 20);
+
+    this.playerSpecialIcon.setAlpha(playerRockets >= 1 ? 1 : 0.25);
+    this.playerSpecialIcon2.setAlpha(playerRockets >= 2 ? 1 : 0.25);
   }
 }
 

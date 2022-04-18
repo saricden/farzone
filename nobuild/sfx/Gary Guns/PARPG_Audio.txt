@@ -1,0 +1,54 @@
+All times given in SMTPE 30fps
+
+Browning Belgian 12ga semi-auto
+12ga_load_chamber:	0:20  Load 8-shot shell
+			2:00  Rack shell into chamber
+			3:20  Eject shell
+
+12ga_dry:		0:16  Pull bolt open to locked position
+			2:12  Bolt closed
+			4:04  Dry fire
+			6:08  Pull bolt open to locked position
+			8:10  Bolt closed
+			10:08  Dry Fire
+
+30-06_bolt:		0:18  Pull bolt open
+			2:03  Close bolt
+			4:00  Fast bolt open and close
+			6:00  Dry Fire
+
+30-06_load:		0:07  Load single round into magazine
+			4:10  Load single round into magazine
+			7:25  Load single round into magazine
+			12:04  Load round into chamber
+			13:26  Lock bolt
+			15:26  Unchamber round
+
+30-06_accessories:	0:03  Close bipod
+			1:14  Open bipod
+			3:00  Pop open scope cover
+			4:05  Close scope cover
+
+22_mag:		0:12  Open and close bolt
+			2:01  Dry Fire
+			2:22  Fast open and close bolt
+
+45_unload_rounds:	Unload all rounds from magazine
+
+45_add_rounds:		Load all rounds into magazine
+
+45ACP_Loading:	0:12  Slide magazine into .45
+			1:06  Load round into chamber
+			3:06  Eject magazine
+			4:27  Slide magazine into .45
+			6:09  Pull slide to locked open position
+			7:14  Slam slide home
+
+45ACP_slide:		0:10  Fast slide
+			1:16  Dry Fire
+			2:24  Slow slide
+			4:10  Dry Fire
+			5:08  Fast slide
+			6:18  Dry Fire
+			7:28  Slow slide
+			9:16  Dry Fire

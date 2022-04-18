@@ -16,12 +16,16 @@ class BootScene extends Scene {
     // Maps
     this.load.tilemapTiledJSON('map-level1', 'assets/maps/level1.json');
     this.load.image('tileset-grassland-ex', 'assets/maps/tileset-grassland-ex.png');
+
+    // Music
     this.load.audio('ost-level1', 'assets/music/mech-ost1.mp3');
+    this.load.audio('ost-level1b', 'assets/music/mech-ost2.mp3');
 
     // SFX
     this.load.audio('sfx-shoot', 'assets/sfx/bang_02.wav');
     this.load.audio('sfx-rocket', 'assets/sfx/fw_05.wav');
     this.load.audio('sfx-explosion', 'assets/sfx/explodemini.wav');
+    this.load.audio('sfx-rocket-dry', 'assets/sfx/12ga_dry.wav');
 
     // VFX
     this.load.spritesheet('particles-dirt', 'assets/sprites/particles-dirt.png', { frameWidth: 192, frameHeight: 228 });
@@ -31,6 +35,7 @@ class BootScene extends Scene {
 
     // UI
     this.load.image('ui-mech1', 'assets/ui/mech1-head-icon.png');
+    this.load.image('ui-mech1-shell', 'assets/ui/mech1-shell-icon.png');
 
     // Preloader
     this.loaderBar = this.add.graphics();
