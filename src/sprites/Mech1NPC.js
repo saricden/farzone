@@ -2,15 +2,21 @@ import { GameObjects, Math as pMath } from "phaser";
 import Mech1Shell from "./Mech1Shell";
 const { Container } = GameObjects;
 
-class Mech1 extends Container {
-  constructor(scene, x, y) {
+class Mech1NPC extends Container {
+  constructor(scene, x, y, target) {
     super(scene, x, y, []);
 
     this.scene = scene;
+    this.target = target;
     this.speed = 800;
     this.jumpForce = 950;
     this.jumpAnimBuffer = 50;
     this.jumpAnimLock = false;
+
+    // AI controls
+    this.triggerDelay = 2000; // The # of MS to change shooting state
+    this.aimEntropy = 500; // The PX aim offset from the target, scaled by SIN(time)
+    this.reflexDelay = 100; // The MS speed of retargeting
 
     this.torsoLegs = this.scene.add.sprite(0, 0, 'mech1');
     this.torsoLegs.play('mech1-idle');
@@ -48,14 +54,8 @@ class Mech1 extends Container {
     this.bulletRaycaster.mapGameObjects(this.scene.ground, true, {
       collisionTiles: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     });
+    this.bulletRaycaster.mapGameObjects(this.target, true);
     this.bulletRay = this.bulletRaycaster.createRay();
-
-    this.cursors = this.scene.input.keyboard.addKeys({
-      up: Phaser.Input.Keyboard.KeyCodes.W,
-      down: Phaser.Input.Keyboard.KeyCodes.S,
-      left: Phaser.Input.Keyboard.KeyCodes.A,
-      right: Phaser.Input.Keyboard.KeyCodes.D,
-    });
 
     // Let the shoosting begin
     this.rapidfire = this.scene.time.addEvent({
@@ -108,104 +108,98 @@ class Mech1 extends Container {
       }
     });
 
-    this.scene.input.on('pointerdown', (pointer) => {
-      if (pointer.rightButtonDown()) {
-        const barrelOffsetY = 145;
-        const barrelOffsetX = 250;
-        const vector = new pMath.Vector2();
+    // Aiming controls
+    this.timeOffset = 0;
+
+    this.scene.time.addEvent({
+      delay: 1000,
+      repeat: -1,
+      callback: () => {
+        const {zoom} = this.scene.cameras.main;
+        const d2p = pMath.Distance.Between(this.x, this.y, target.x, target.y);
+        const angle = pMath.Angle.Between(this.x + (this.armLeft.x * zoom), this.y + (this.armLeft.y * zoom), target.x + (Math.sin(this.timeOffset) * this.aimEntropy), target.y + Math.sin(this.timeOffset) * this.aimEntropy);
         let angleMod = 2 * Math.PI;
 
-        if (this.torsoLegs.flipX) {
+        if (target.x <= this.x) {
+          this.torsoLegs.setFlipX(true);
+          this.armLeft.setFlipX(true);
+          this.armRight.setFlipX(true);
+          this.head.setFlipX(true);
+          this.armLeft.setOrigin(1 - 0.19, 0.29);
+          this.armRight.setOrigin(1 - 0.21, 0.28);
+          this.armLeft.setX(20);
+          this.armRight.setX(20);
+          this.head.setX(12);
           angleMod = Math.PI;
         }
+        else {
+          this.torsoLegs.setFlipX(false);
+          this.armLeft.setFlipX(false);
+          this.armRight.setFlipX(false);
+          this.head.setFlipX(false);
+          this.armLeft.setOrigin(0.19, 0.29);
+          this.armRight.setOrigin(0.21, 0.28);
+          this.armLeft.setX(-20);
+          this.armRight.setX(-20);
+          this.head.setX(-12);
+        }
 
-        vector.setToPolar(this.armLeft.rotation + angleMod, barrelOffsetX);
-
-        const shell = new Mech1Shell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.torsoLegs.flipX);
-
-        this.armLeft.play('mech1-arm-left-heavy-shot', true);
-        this.armRight.play('mech1-arm-right-heavy-shot', true);
-        this.scene.sound.play('sfx-rocket');
-      }
-      else {
-        this.rapidfire.paused = false;
-        this.armLeft.play('mech1-arm-left-light-shot', true);
-        this.armRight.play('mech1-arm-right-light-shot', true);
+        const newAngle = pMath.Angle.ShortestBetween(this.armLeft.rotation, angle + angleMod);
+        console.log(angle + angleMod, newAngle);
+        
+        this.scene.tweens.add({
+          targets: [this.armLeft, this.armRight, this.head],
+          duration: this.reflexDelay,
+          rotation: newAngle
+        });
       }
     });
-
-    this.scene.input.on('pointerup', () => {
-      this.rapidfire.paused = true;
-      this.armLeft.play('mech1-arm-left-idle', true);
-      this.armRight.play('mech1-arm-right-idle', true);
-    });
-
-    // Set data attributes
-    this.setData('isPlayer', true);
   }
 
   update(time, delta) {
-    const {left, right, up} = this.cursors;
-    const {mousePointer} = this.scene.input;
+    const {target} = this;
+
+    this.timeOffset = time;
+
+    // Clear shot?
+    const barrelOffsetY = 23;
+    const barrelOffsetX = 275;
+    const vector = new pMath.Vector2();
+    let angleMod2 = Math.PI;
+
+    if (this.torsoLegs.flipX) {
+      // angleMod2 = 2 * Math.PI;
+    }
+
+    vector.setToPolar(this.armLeft.rotation + angleMod2, barrelOffsetX);
+    
+    this.bulletRay.setOrigin(this.x + this.armLeft.x + vector.x, this.y + this.armLeft.y + vector.y - barrelOffsetY);
+    this.bulletRay.setAngle(this.armLeft.rotation + angleMod2);
+    
+    const intersection = this.bulletRay.cast();
+
+    if (intersection) {
+      const isPlayer = (intersection.object && intersection.object.getData('isPlayer') === true);
+
+      this.scene.time.addEvent({
+        delay: this.triggerDelay = 250,
+        repeat: 0,
+        callback: () => {
+          this.rapidfire.paused = !isPlayer;
+        }
+      });
+    }
 
     if (!this.isKnocked) {
-      if (left.isDown) {
-        this.body.setVelocityX(-this.speed);
-      }
-      else if (right.isDown) {
-        this.body.setVelocityX(this.speed);
-      }
-      else {
-        this.body.setVelocityX(0);
-      }
+      // Movement logic
     }
     else if (!this.body.blocked.none) {
       this.isKnocked = false;
     }
 
-    if (up.isDown && this.body.onFloor()) {
-      this.body.setVelocityY(-this.jumpForce);
+    if (this.body.onFloor()) {
+      // Jump logic
     }
-
-    // Aim controls
-    const {zoom, worldView} = this.scene.cameras.main;
-    const relX = ((this.x - worldView.x) * zoom);
-    const relY = ((this.y - worldView.y) * zoom);
-
-    const angle = pMath.Angle.Between(relX + (this.armLeft.x * zoom), relY + (this.armLeft.y * zoom), mousePointer.x, mousePointer.y);
-
-    let angleMod = 2 * Math.PI;
-    let headAngleMod = 0.35;
-
-    if (mousePointer.x <= relX) {
-      this.torsoLegs.setFlipX(true);
-      this.armLeft.setFlipX(true);
-      this.armRight.setFlipX(true);
-      this.head.setFlipX(true);
-      this.armLeft.setOrigin(1 - 0.19, 0.29);
-      this.armRight.setOrigin(1 - 0.21, 0.28);
-      this.armLeft.setX(20);
-      this.armRight.setX(20);
-      this.head.setX(12);
-      angleMod = Math.PI;
-      headAngleMod = 0.35;
-    }
-    else {
-      this.torsoLegs.setFlipX(false);
-      this.armLeft.setFlipX(false);
-      this.armRight.setFlipX(false);
-      this.head.setFlipX(false);
-      this.armLeft.setOrigin(0.19, 0.29);
-      this.armRight.setOrigin(0.21, 0.28);
-      this.armLeft.setX(-20);
-      this.armRight.setX(-20);
-      this.head.setX(-12);
-    }
-
-    this.armLeft.setRotation(angle + angleMod);
-    this.armRight.setRotation(angle + angleMod);
-    // this.head.setRotation(angle * headAngleMod + angleMod);
-    this.head.setRotation(angle + angleMod);
 
     // Animation logic
     if (this.body.onFloor()) {
@@ -255,4 +249,4 @@ class Mech1 extends Container {
   }
 }
 
-export default Mech1;
+export default Mech1NPC;

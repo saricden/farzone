@@ -1,5 +1,6 @@
 import {Scene, Math as pMath} from 'phaser';
 import Mech1 from '../sprites/Mech1';
+import Mech1NPC from '../sprites/Mech1NPC';
 
 class GameScene extends Scene {
   constructor() {
@@ -38,7 +39,7 @@ class GameScene extends Scene {
     this.cat = new Mech1(this, 0, 0);
     this.catSpeed = 500;
 
-    this.dummy = null;
+    this.dummy = new Mech1NPC(this, 0, 0, this.cat);
 
     const spawnPoints = this.tilemap.getObjectLayer('spawn').objects;
 
@@ -47,9 +48,7 @@ class GameScene extends Scene {
         this.cat.setPosition(x, y);
       }
       else if (name === 'dummy') {
-        this.dummy = this.physics.add.image(x, y, 'mech1-head');
-        this.dummy.body.setBounce(0.5, 0.5);
-        this.dummy.body.setMaxVelocity(950);
+        this.dummy.setPosition(x, y);
       }
     });
 
@@ -256,6 +255,7 @@ class GameScene extends Scene {
 
   update(time, delta) {
     this.cat.update(time, delta);
+    this.dummy.update(time, delta);
 
     // Pan to the midpoint between players
     const midX = (this.cat.x + this.dummy.x) / 2;
