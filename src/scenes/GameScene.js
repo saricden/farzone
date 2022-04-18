@@ -41,8 +41,11 @@ class GameScene extends Scene {
     // Add, scale, and make up a speed for our creature
     this.cat = new Mech1(this, 0, 0);
     this.catSpeed = 500;
+    
+    this.dummy = new Mech1NPC(this, 0, 0);
 
-    this.dummy = new Mech1NPC(this, 0, 0, this.cat);
+    this.cat.mapTarget(this.dummy);
+    this.dummy.mapTarget(this.cat);
 
     const spawnPoints = this.tilemap.getObjectLayer('spawn').objects;
 
@@ -112,6 +115,12 @@ class GameScene extends Scene {
       gravityX: 1200
     });
     this.grassEmitter.stop();
+
+    // Game data
+    this.registry.playerMaxHP = 1000;
+    this.registry.playerHP = this.registry.playerMaxHP;
+    this.registry.enemyMaxHP = 1000;
+    this.registry.enemyHP = this.registry.enemyMaxHP;
 
     // Music
     // this.sound.play('ost-level1', { loop: true });

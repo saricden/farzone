@@ -83,6 +83,7 @@ class Mech1 extends Container {
 
         if (intersection) {
           const isTile = (intersection.object && typeof intersection.object.getTilesWithinWorldXY === 'function');
+          const isNPC = (intersection.object && intersection.object.getData('isNPC') === true);
           endX = intersection.x;
           endY = intersection.y;
 
@@ -90,6 +91,9 @@ class Mech1 extends Container {
             const tiles = intersection.object.getTilesWithinWorldXY(intersection.x - 1, intersection.y - 1, 2, 2);
 
             tiles.forEach((tile) => this.scene.damageTile(tile, intersection));
+          }
+          else if (isNPC) {
+            intersection.object.takeDamage(pMath.Between(1, 5), intersection);
           }
         }
 
@@ -142,6 +146,43 @@ class Mech1 extends Container {
 
     // Set data attributes
     this.setData('isPlayer', true);
+  }
+
+  mapTarget(target) {
+    this.bulletRaycaster.mapGameObjects(target, true);
+  }
+
+  takeDamage(dmg, intersection) {
+    if (this.scene.registry.playerHP > 0) {
+      const txtX = intersection.x + pMath.Between(-200, 200);
+      const txtY = intersection.y + pMath.Between(-200, 200);
+      const dmgLabel = this.scene.add.text(txtX, txtY, `${dmg}`, {
+        fontFamily: 'monospace',
+        fontSize: (dmg < this.scene.registry.playerMaxHP * 0.05 ? 60 : 120),
+        color: '#FFF',
+        stroke: '#000',
+        strokeThickness: 4
+      });
+      dmgLabel.setOrigin(0.5);
+      dmgLabel.setDepth(100);
+
+      this.scene.tweens.add({
+        targets: dmgLabel,
+        alpha: 0,
+        y: dmgLabel.y - 200,
+        duration: 1000,
+        onComplete: () => {
+          dmgLabel.destroy();
+        }
+      });
+    }
+
+    if (this.scene.registry.playerHP - dmg > 0) {
+      this.scene.registry.playerHP -= dmg;
+    }
+    else {
+      this.scene.registry.playerHP = 0;
+    }
   }
 
   update(time, delta) {

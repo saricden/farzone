@@ -144,6 +144,10 @@ class Mech1Shell extends Container {
             sprite.body.setVelocity(v.x * 500, v.y * 500);
             sprite.body.blocked.none = true;
             sprite.isKnocked = true;
+
+            if (typeof sprite.takeDamage === 'function') {
+              sprite.takeDamage(pMath.Between(50, 100), {x: this.x, y: this.y});
+            }
           }
         });
 

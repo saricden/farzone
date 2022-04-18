@@ -3,11 +3,11 @@ import Mech1Shell from "./Mech1Shell";
 const { Container } = GameObjects;
 
 class Mech1NPC extends Container {
-  constructor(scene, x, y, target) {
+  constructor(scene, x, y) {
     super(scene, x, y, []);
 
     this.scene = scene;
-    this.target = target;
+    this.target = null;
     this.speed = 800;
     this.jumpForce = 950;
     this.jumpAnimBuffer = 50;
@@ -56,7 +56,6 @@ class Mech1NPC extends Container {
     this.bulletRaycaster.mapGameObjects(this.scene.ground, true, {
       collisionTiles: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     });
-    this.bulletRaycaster.mapGameObjects(this.target, true);
     this.bulletRay = this.bulletRaycaster.createRay();
 
     // Let the shoosting begin
@@ -85,6 +84,7 @@ class Mech1NPC extends Container {
 
         if (intersection) {
           const isTile = (intersection.object && typeof intersection.object.getTilesWithinWorldXY === 'function');
+          const isPlayer = (intersection.object && intersection.object.getData('isPlayer') === true);
           endX = intersection.x;
           endY = intersection.y;
 
@@ -92,6 +92,9 @@ class Mech1NPC extends Container {
             const tiles = intersection.object.getTilesWithinWorldXY(intersection.x - 1, intersection.y - 1, 2, 2);
 
             tiles.forEach((tile) => this.scene.damageTile(tile, intersection));
+          }
+          else if (isPlayer) {
+            intersection.object.takeDamage(pMath.Between(1, 5), intersection);
           }
         }
 
@@ -162,6 +165,50 @@ class Mech1NPC extends Container {
         });
       }
     });
+
+    // Apply tint
+    this.list.forEach((obj) => obj.setTint(0xFF0000));
+
+    // Set data attributes
+    this.setData('isNPC', true);
+  }
+
+  mapTarget(target) {
+    this.target = target;
+    this.bulletRaycaster.mapGameObjects(target, true);
+  }
+
+  takeDamage(dmg, intersection) {
+    if (this.scene.registry.enemyHP > 0) {
+      const txtX = intersection.x + pMath.Between(-200, 200);
+      const txtY = intersection.y + pMath.Between(-200, 200);
+      const dmgLabel = this.scene.add.text(txtX, txtY, `${dmg}`, {
+        fontFamily: 'monospace',
+        fontSize: (dmg < this.scene.registry.enemyMaxHP * 0.05 ? 60 : 120),
+        color: '#FFF',
+        stroke: '#000',
+        strokeThickness: 4
+      });
+      dmgLabel.setOrigin(0.5);
+      dmgLabel.setDepth(100);
+  
+      this.scene.tweens.add({
+        targets: dmgLabel,
+        alpha: 0,
+        y: dmgLabel.y - 200,
+        duration: 1000,
+        onComplete: () => {
+          dmgLabel.destroy();
+        }
+      });
+    }
+    
+    if (this.scene.registry.enemyHP - dmg > 0) {
+      this.scene.registry.enemyHP -= dmg;
+    }
+    else {
+      this.scene.registry.enemyHP = 0;
+    }
   }
 
   update(time, delta) {
