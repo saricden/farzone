@@ -10,6 +10,28 @@ class GameScene extends Scene {
     this.tilemap = this.add.tilemap('map-level1');
     const tiles = this.tilemap.addTilesetImage('tileset-grassland', 'tileset-grassland-ex', 175, 175, 1, 2);
 
+    this.bg2 = this.tilemap.createLayer('bg2', tiles);
+    this.bg2.setScale(0.1);
+    this.bg2.setAlpha(0.2);
+    this.bg2.setScrollFactor(0.5);
+    this.bg2.setPosition(6000, 2000);
+
+    this.bg2Mist = this.add.graphics();
+    this.bg2Mist.setScrollFactor(0);
+    this.bg2Mist.fillStyle(0x000000, 0.3);
+    this.bg2Mist.fillRect(-this.tilemap.widthInPixels, -this.tilemap.heightInPixels, this.tilemap.widthInPixels * 2, this.tilemap.heightInPixels * 2);
+
+    this.bg1 = this.tilemap.createLayer('bg1', tiles);
+    this.bg1.setScale(0.25);
+    this.bg1.setAlpha(1);
+    this.bg1.setScrollFactor(0.75);
+    this.bg1.setPosition(8200, 3500);
+
+    this.bg1Mist = this.add.graphics();
+    this.bg1Mist.setScrollFactor(0);
+    this.bg1Mist.fillStyle(0x000000, 0.3);
+    this.bg1Mist.fillRect(-this.tilemap.widthInPixels, -this.tilemap.heightInPixels, this.tilemap.widthInPixels * 2, this.tilemap.heightInPixels * 2);
+    
     this.ground = this.tilemap.createLayer('ground', tiles);
 
     // Add, scale, and make up a speed for our creature
@@ -27,6 +49,7 @@ class GameScene extends Scene {
       else if (name === 'dummy') {
         this.dummy = this.physics.add.image(x, y, 'mech1-head');
         this.dummy.body.setBounce(0.5, 0.5);
+        this.dummy.body.setMaxVelocity(950);
       }
     });
 
@@ -36,7 +59,6 @@ class GameScene extends Scene {
     this.physics.add.collider(this.dummy, this.cat);
 
     // Particle effects
-
     this.dirtParticles = this.add.particles('particles-dirt');
     this.dirtEmitter = this.dirtParticles.createEmitter({
       frame: Phaser.Utils.Array.NumberArray(0, 15),
@@ -90,10 +112,11 @@ class GameScene extends Scene {
     this.grassEmitter.stop();
 
     // Music
-    this.sound.play('ost-level1', { loop: true });
+    // this.sound.play('ost-level1', { loop: true });
 
-    this.cameras.main.setBackgroundColor(0x225566);
-    this.cameras.main.setZoom(0.005);
+    this.cameras.main.setBackgroundColor(0x5555FF);
+    this.cameras.main.setZoom(1);
+    this.cameras.main.setBounds(0, 0, this.tilemap.widthInPixels, this.tilemap.heightInPixels);
   }
 
   damageTile(tile, intersection) {
@@ -245,6 +268,23 @@ class GameScene extends Scene {
     // const scale = Math.min(Math.max(((this.tilemap.widthInPixels - dist) / this.tilemap.widthInPixels), minZoom), 1);
     const scale = Math.min(Math.max(window.innerWidth / (dist * 1.35), minZoom), 0.5);
     this.cameras.main.zoomTo(scale, 250, 'Linear', true);
+
+    // Reposition dummy if it goes off-map
+    const {widthInPixels, heightInPixels} = this.tilemap;
+
+    if (this.dummy.x > widthInPixels) {
+      this.dummy.setX(0);
+    }
+    else if (this.dummy.x < 0) {
+      this.dummy.setX(widthInPixels);
+    }
+
+    if (this.dummy.y > heightInPixels) {
+      this.dummy.setY(0);
+    }
+    else if (this.y < 0) {
+      this.dummy.setY(heightInPixels);
+    }
   }
 
 }

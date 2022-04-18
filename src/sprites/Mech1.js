@@ -39,7 +39,8 @@ class Mech1 extends Container {
 
     this.body.setSize(140, 320);
     this.body.setOffset(-70, -200);
-    this.body.setMaxVelocityY(this.jumpForce);
+    this.body.setMaxVelocity(this.jumpForce);
+    this.isKnocked = false;
 
     this.bulletGfx = this.scene.add.graphics();
     this.bulletGfx.setDepth(10);
@@ -145,14 +146,19 @@ class Mech1 extends Container {
     const {left, right, up} = this.cursors;
     const {mousePointer} = this.scene.input;
 
-    if (left.isDown) {
-      this.body.setVelocityX(-this.speed);
+    if (!this.isKnocked) {
+      if (left.isDown) {
+        this.body.setVelocityX(-this.speed);
+      }
+      else if (right.isDown) {
+        this.body.setVelocityX(this.speed);
+      }
+      else {
+        this.body.setVelocityX(0);
+      }
     }
-    else if (right.isDown) {
-      this.body.setVelocityX(this.speed);
-    }
-    else {
-      this.body.setVelocityX(0);
+    else if (!this.body.blocked.none) {
+      this.isKnocked = false;
     }
 
     if (up.isDown && this.body.onFloor()) {
@@ -226,6 +232,23 @@ class Mech1 extends Container {
         this.torsoLegs.play('mech1-up-down', true);
         this.jumpAnimLock = true;
       }
+    }
+
+    // Map bounds handling
+    const {widthInPixels, heightInPixels} = this.scene.tilemap;
+
+    if (this.x > widthInPixels) {
+      this.setX(0);
+    }
+    else if (this.x < 0) {
+      this.setX(widthInPixels);
+    }
+
+    if (this.y > heightInPixels) {
+      this.setY(0);
+    }
+    else if (this.y < 0) {
+      this.setY(heightInPixels);
     }
   }
 }

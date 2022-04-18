@@ -34,7 +34,7 @@ class Mech1Shell extends Container {
     this.boomParticle = this.scene.add.particles('particle-explosion');
     this.fireEmitter = this.fireParticle.createEmitter({
       rotate: (p, k, t) => {
-        return ((1 - t) * 360) * 2;
+        return ((1 - t) * 360);
       },
       speedX: {
         min: 100,
@@ -53,7 +53,7 @@ class Mech1Shell extends Container {
         end: 1
       },
       quantity: 30,
-      lifespan: 4000,
+      lifespan: 2000,
       follow: this
     });
 
@@ -106,35 +106,58 @@ class Mech1Shell extends Container {
         max: 500
       },
       gravityX: 200,
-      lifespan: 4000,
+      lifespan: 2000,
       follow: this
     });
     this.boomEmitter2.stop();
 
-    this.scene.physics.add.collider(this, this.scene.ground, () => {
-      this.scene.sound.play('sfx-explosion');
+    this.scene.physics.add.collider(this, [this.scene.ground, this.scene.cat, this.scene.dummy], () => {
+      // Sometimes this.scene is undefined?
+      if (typeof this.scene !== 'undefined') {
+        this.scene.sound.play('sfx-explosion');
+  
+        // Damage tiles
+        const tiles = this.scene.ground.getTilesWithinWorldXY(this.x - 400, this.y - 400, 800, 800);
+        tiles.forEach((tile) => {
+          const dmg = pMath.Between(4, 5);
+          for (let d = 0; d < dmg; d++) {
+            this.scene.damageTile(tile, { x: this.x, y: this.y });
+          }
+        })
+        this.scene.cameras.main.flash(250, 255, 255, 0, true);
+        this.scene.cameras.main.shake(750, 0.05, true);
+        this.boomEmitter.explode(50);
+        this.boomEmitter2.explode(100);
+  
+        // Apply velocity to player and opponent
+        const sprites = [this.scene.cat, this.scene.dummy];
 
-      // Damage tiles
-      const tiles = this.scene.ground.getTilesWithinWorldXY(this.x - 400, this.y - 400, 800, 800);
-      tiles.forEach((tile) => {
-        const dmg = pMath.Between(4, 5);
-        for (let d = 0; d < dmg; d++) {
-          this.scene.damageTile(tile, { x: this.x, y: this.y });
-        }
-      })
-      this.scene.cameras.main.flash(250, 255, 255, 0, true);
-      this.boomEmitter.explode(50);
-      this.boomEmitter2.explode(100);
+        sprites.forEach((sprite) => {
+          const spriteInBounds = (sprite.x >= this.x - 400 && sprite.x <= this.x + 400 && this.y >= this.y - 400 && this.y <= this.y + 400);
 
-      this.scene.time.addEvent({
-        delay: 4000,
-        repeat: 0,
-        callback: () => {
-          this.fireParticle.destroy();
-        }
-      });
-      this.fireEmitter.stop();
-      this.destroy();
+          if (spriteInBounds) {
+            const v = new pMath.Vector2();
+            const angle = pMath.Angle.Between(this.x, this.y, sprite.x, sprite.y);
+
+            v.setToPolar(angle, 100);
+
+            sprite.body.setVelocity(v.x * 500, v.y * 500);
+            sprite.body.blocked.none = true;
+            sprite.isKnocked = true;
+          }
+        });
+
+        // Cleanup emitters
+        this.scene.time.addEvent({
+          delay: 4000,
+          repeat: 0,
+          callback: () => {
+            this.fireParticle.destroy();
+          }
+        });
+        this.fireEmitter.stop();
+        this.destroy();
+      }
     });
 
     this.add([
