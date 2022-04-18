@@ -29,6 +29,9 @@ class BootScene extends Scene {
     this.load.image('particle-fire', 'assets/particles/fire.png');
     this.load.image('particle-explosion', 'assets/particles/explosion.png');
 
+    // UI
+    this.load.image('ui-mech1', 'assets/ui/mech1-head-icon.png');
+
     // Preloader
     this.loaderBar = this.add.graphics();
 

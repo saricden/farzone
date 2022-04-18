@@ -4,6 +4,9 @@ import PhaserRaycaster from 'phaser-raycaster/dist/phaser-raycaster';
 import BootScene from './scenes/BootScene';
 import GameScene from './scenes/GameScene';
 
+// UI
+import BattleHUD from './scenes/BattleHUD';
+
 const canvas = document.getElementById('game-canvas');
 const config = {
   type: Phaser.WEBGL,
@@ -29,7 +32,9 @@ const config = {
   },
   scene: [
     BootScene,
-    GameScene
+    GameScene,
+
+    BattleHUD
   ]
 };
 

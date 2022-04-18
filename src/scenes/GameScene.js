@@ -8,6 +8,9 @@ class GameScene extends Scene {
   }
 
   create() {
+    // Launch HUD ui
+    this.scene.launch('ui-battlehud');
+
     this.tilemap = this.add.tilemap('map-level1');
     const tiles = this.tilemap.addTilesetImage('tileset-grassland', 'tileset-grassland-ex', 175, 175, 1, 2);
 
