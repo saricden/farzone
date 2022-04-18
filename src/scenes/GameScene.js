@@ -126,7 +126,7 @@ class GameScene extends Scene {
     this.registry.enemyRockets = 2;
 
     // Music
-    // this.sound.play('ost-level1b', { loop: true, volume: 0.75 });
+    this.sound.play('ost-level1', { loop: true, volume: 0.75 });
 
     this.cameras.main.setBackgroundColor(0x5555FF);
     this.cameras.main.setZoom(1);
