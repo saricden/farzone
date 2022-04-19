@@ -2,6 +2,7 @@ import './main.css';
 import Phaser, {Game} from 'phaser';
 import PhaserRaycaster from 'phaser-raycaster/dist/phaser-raycaster';
 import BootScene from './scenes/BootScene';
+import MenuScene from './scenes/MenuScene';
 import GameScene from './scenes/GameScene';
 
 // UI
@@ -12,7 +13,10 @@ const config = {
   type: Phaser.WEBGL,
   width: window.innerWidth,
   height: window.innerHeight,
-  canvas,
+  parent: "game",
+  dom: {
+    createContainer: true
+  },
   pixelArt: true,
   physics: {
     default: 'arcade',
@@ -32,6 +36,7 @@ const config = {
   },
   scene: [
     BootScene,
+    MenuScene,
     GameScene,
 
     BattleHUD

@@ -20,12 +20,14 @@ class BootScene extends Scene {
     // Music
     this.load.audio('ost-level1', 'assets/music/mech-ost1.mp3');
     this.load.audio('ost-level1b', 'assets/music/mech-ost2.mp3');
+    this.load.audio('ost-title', 'assets/music/mech-ost3.mp3');
 
     // SFX
     this.load.audio('sfx-shoot', 'assets/sfx/bang_02.wav');
     this.load.audio('sfx-rocket', 'assets/sfx/fw_05.wav');
     this.load.audio('sfx-explosion', 'assets/sfx/explodemini.wav');
     this.load.audio('sfx-rocket-dry', 'assets/sfx/12ga_dry.wav');
+    this.load.audio('sfx-wind-loop', 'assets/sfx/amb_mountains.wav');
 
     // VFX
     this.load.spritesheet('particles-dirt', 'assets/sprites/particles-dirt.png', { frameWidth: 192, frameHeight: 228 });
@@ -36,6 +38,9 @@ class BootScene extends Scene {
     // UI
     this.load.image('ui-mech1', 'assets/ui/mech1-head-icon.png');
     this.load.image('ui-mech1-shell', 'assets/ui/mech1-shell-icon.png');
+
+    // DOM UI
+    this.load.html('dom-title', 'assets/ui-dom/title.html');
 
     // Preloader
     this.loaderBar = this.add.graphics();
@@ -216,8 +221,21 @@ class BootScene extends Scene {
 
     this.input.mouse.disableContextMenu();
 
+    this.fadeGfx = this.add.graphics();
+    this.fadeGfx.fillStyle(0xFFFFFF, 1);
+    this.fadeGfx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    this.fadeGfx.setAlpha(0);
+
     this.input.on('pointerdown', () => {
-      this.scene.start('scene-game');
+      this.tweens.add({
+        targets: this.fadeGfx,
+        alpha: 1,
+        duration: 250,
+        repeat: 0,
+        onComplete: () => {
+          this.scene.start('scene-menu');
+        }
+      });
     });
   }
 }
