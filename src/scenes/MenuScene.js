@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import moment from "moment";
 
 class MenuScene extends Scene {
   constructor() {
@@ -13,6 +14,11 @@ class MenuScene extends Scene {
     const btnPlay = document.getElementById('btn-play');
     const btnSettings = document.getElementById('btn-settings');
     const btnGitHub = document.getElementById('btn-github');
+    const btnUpdate = document.getElementById('btn-update');
+
+    const updateAvatar = document.getElementById('avatar');
+    const updateMessage = document.getElementById('message');
+    const updateTime = document.getElementById('update-time');
 
     btnPlay.addEventListener('click', () => {
       this.wind.stop();
@@ -27,6 +33,22 @@ class MenuScene extends Scene {
     this.sound.play('ost-title');
     this.wind = this.sound.add('sfx-wind-loop', { loop: true, volume: 0.1 });
     this.wind.play();
+
+    // Load latest update from GH
+    fetch('https://api.github.com/repos/saricden/mech-game/commits')
+    .then((response) => response.json())
+    .then((json) => {
+      const latestCommit = json[0];
+      const {author, commit} = latestCommit;
+      const {avatar_url} = author;
+      const {message} = commit;
+      const {date} = commit.author;
+
+      updateAvatar.setAttribute('src', avatar_url);
+      updateMessage.innerHTML = message;
+      updateTime.innerHTML = moment(date).fromNow();
+      btnUpdate.classList.add('on');
+    });
   }
 }
 

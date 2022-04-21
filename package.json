@@ -25,6 +25,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "moment": "^2.29.3",
     "phaser": "^3.55.2",
     "phaser-raycaster": "^0.10.2"
   }
