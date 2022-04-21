@@ -18,6 +18,7 @@ class BootScene extends Scene {
     this.load.tilemapTiledJSON('map-level1', 'assets/maps/level1.json');
     this.load.tilemapTiledJSON('map-level2', 'assets/maps/level2.json');
     this.load.tilemapTiledJSON('map-level3', 'assets/maps/level3.json');
+    this.load.tilemapTiledJSON('map-level4', 'assets/maps/level4.json');
 
     // Music
     this.load.audio('ost-level1', 'assets/music/mech-ost1.mp3');
