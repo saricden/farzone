@@ -337,3 +337,92 @@ canvas {
   margin: 40px 0;
   line-height: 1.5em;
 }
+
+#map-select {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-top: 120px;
+  overflow-y: scroll;
+
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 1s, opacity 1s, visibility 1s;
+}
+
+#map-select.open {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+#map-select button {
+  position: relative;
+  width: calc(50% - 10px);
+  height: 300px;
+  margin-bottom: 20px;
+  background-color: transparent;
+  border: solid 2px rgba(255, 255, 255, 0.35);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+
+  transition: border-color 0.35s, background-color 0.35s;
+}
+
+#map-select button:hover {
+  border-color: #FFF;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+#map-select button img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  opacity: 0.75;
+  pointer-events: none;
+
+  transition: opacity 0.35s;
+}
+
+#map-select button:hover img {
+  opacity: 1;
+}
+
+#map-select button label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 10px 25px;
+  border-top-right-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.35);
+  color: #000;
+  font-family: sans-serif;
+  font-size: 26px;
+  pointer-events: none;
+
+  transition: background-color 0.35s;
+}
+
+#map-select button:hover label {
+  background-color: #FFF;
+}
+
+#map-select > div {
+  width: 1200px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: space-between;
+}

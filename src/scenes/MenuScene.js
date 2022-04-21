@@ -24,11 +24,31 @@ class MenuScene extends Scene {
     const titleBG = document.getElementById('title-bg');
     const menuTitle = document.getElementById('menu-title');
 
+    const mapSelect = document.getElementById('map-select');
+    const mapBtns = document.querySelectorAll('[data-map]');
+
     const credits = document.getElementById('credits');
+
+    mapBtns.forEach((btn) => {
+      btn.addEventListener('mouseenter', () => {
+        this.sound.play('sfx-click');
+      });
+
+      btn.addEventListener('click', () => {
+        const levelKey = btn.getAttribute('data-map');
+
+        this.sound.play('sfx-electro-click2');
+        this.wind.stop();
+        
+        this.scene.start('scene-game', {
+          levelKey: `map-${levelKey}`
+        });
+      });
+    });
 
     btnCredits.addEventListener('mouseenter', () => {
       this.sound.play('sfx-click');
-    })
+    });
 
     btnCredits.addEventListener('click', () => {
       this.sound.play('sfx-electro-click2');
@@ -56,12 +76,10 @@ class MenuScene extends Scene {
     btnPlay.addEventListener('click', () => {
       this.sound.play('sfx-electro-click2');
 
-      this.wind.stop();
-      this.scene.start('scene-game');
-
-      // titleBG.classList.add('down');
-      // menuTitle.classList.add('off');
-      // btnUpdate.classList.add('off');
+      titleBG.classList.add('down');
+      menuTitle.classList.add('off');
+      btnUpdate.classList.add('off');
+      mapSelect.classList.add('open');
     });
 
     btnGitHub.addEventListener('mouseenter', () => {

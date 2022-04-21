@@ -7,11 +7,17 @@ class GameScene extends Scene {
     super("scene-game");
   }
 
+  init({ levelKey }) {
+    this.levelKey = levelKey;
+  }
+
   create() {
     // Launch HUD ui
     this.scene.launch('ui-battlehud');
 
-    this.tilemap = this.add.tilemap('map-level1');
+    console.log(this.levelKey);
+
+    this.tilemap = this.add.tilemap(this.levelKey);
     const tiles = this.tilemap.addTilesetImage('tileset-grassland', 'tileset-grassland-ex', 175, 175, 1, 2);
 
     this.bg2 = this.tilemap.createLayer('bg2', tiles);
