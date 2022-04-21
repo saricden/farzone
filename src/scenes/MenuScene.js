@@ -26,7 +26,13 @@ class MenuScene extends Scene {
 
     const credits = document.getElementById('credits');
 
+    btnCredits.addEventListener('mouseenter', () => {
+      this.sound.play('sfx-click');
+    })
+
     btnCredits.addEventListener('click', () => {
+      this.sound.play('sfx-electro-click2');
+
       menuTitle.classList.add('off');
       btnUpdate.classList.add('off');
       btnUpdate.style = "transition-delay: 0s;";
@@ -43,13 +49,23 @@ class MenuScene extends Scene {
       })
     });
 
+    btnPlay.addEventListener('mouseenter', () => {
+      this.sound.play('sfx-click');
+    });
+
     btnPlay.addEventListener('click', () => {
+      this.sound.play('sfx-electro-click2');
+
       this.wind.stop();
       this.scene.start('scene-game');
 
       // titleBG.classList.add('down');
       // menuTitle.classList.add('off');
       // btnUpdate.classList.add('off');
+    });
+
+    btnGitHub.addEventListener('mouseenter', () => {
+      this.sound.play('sfx-click');
     });
 
     btnGitHub.addEventListener('click', () => {
@@ -76,9 +92,17 @@ class MenuScene extends Scene {
       updateTime.innerHTML = moment(date).fromNow();
       btnUpdate.classList.add('on');
 
+      btnUpdate.addEventListener('mouseenter', () => {
+        this.sound.play('sfx-click');
+      });
+
       btnUpdate.addEventListener('click', () => {
         window.open(html_url, '_blank');
       });
+    });
+
+    btnSettings.addEventListener('mouseenter', () => {
+      this.sound.play('sfx-click');
     });
   }
 }

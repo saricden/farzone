@@ -28,6 +28,9 @@ class BootScene extends Scene {
     this.load.audio('sfx-explosion', 'assets/sfx/explodemini.wav');
     this.load.audio('sfx-rocket-dry', 'assets/sfx/12ga_dry.wav');
     this.load.audio('sfx-wind-loop', 'assets/sfx/amb_mountains.wav');
+    this.load.audio('sfx-electro-click1', 'assets/sfx/Click_Electronic_15.wav');
+    this.load.audio('sfx-electro-click2', 'assets/sfx/Click_Electronic_14.wav');
+    this.load.audio('sfx-click', 'assets/sfx/Click_Standard_00.wav');
 
     // VFX
     this.load.spritesheet('particles-dirt', 'assets/sprites/particles-dirt.png', { frameWidth: 192, frameHeight: 228 });
@@ -225,6 +228,8 @@ class BootScene extends Scene {
     this.fadeGfx.fillStyle(0xFFFFFF, 1);
     this.fadeGfx.fillRect(0, 0, window.innerWidth, window.innerHeight);
     this.fadeGfx.setAlpha(0);
+
+    this.sound.play('sfx-electro-click1');
 
     this.input.on('pointerdown', () => {
       this.tweens.add({
