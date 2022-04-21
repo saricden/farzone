@@ -205,10 +205,10 @@ class Mech1NPC extends Container {
     const barrelOffsetY = 23;
     const barrelOffsetX = 275;
     const vector = new pMath.Vector2();
-    let angleMod2 = Math.PI;
+    let angleMod2 = 2 * Math.PI;
 
     if (this.torsoLegs.flipX) {
-      // angleMod2 = 2 * Math.PI;
+      angleMod2 = Math.PI;
     }
 
     vector.setToPolar(this.armLeft.rotation + angleMod2, barrelOffsetX);
