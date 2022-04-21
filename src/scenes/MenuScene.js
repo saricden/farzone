@@ -13,6 +13,7 @@ class MenuScene extends Scene {
     // Bind DOM events
     const btnPlay = document.getElementById('btn-play');
     const btnSettings = document.getElementById('btn-settings');
+    const btnCredits = document.getElementById('btn-credits');
     const btnGitHub = document.getElementById('btn-github');
     const btnUpdate = document.getElementById('btn-update');
 
@@ -20,9 +21,35 @@ class MenuScene extends Scene {
     const updateMessage = document.getElementById('message');
     const updateTime = document.getElementById('update-time');
 
+    const titleBG = document.getElementById('title-bg');
+    const menuTitle = document.getElementById('menu-title');
+
+    const credits = document.getElementById('credits');
+
+    btnCredits.addEventListener('click', () => {
+      menuTitle.classList.add('off');
+      btnUpdate.classList.add('off');
+      btnUpdate.style = "transition-delay: 0s;";
+      credits.classList.add('on');
+
+      this.time.addEvent({
+        delay: 20000,
+        repeat: 0,
+        callback: () => {
+          credits.classList.remove('on');
+          menuTitle.classList.remove('off');
+          btnUpdate.classList.remove('off');
+        }
+      })
+    });
+
     btnPlay.addEventListener('click', () => {
       this.wind.stop();
       this.scene.start('scene-game');
+
+      // titleBG.classList.add('down');
+      // menuTitle.classList.add('off');
+      // btnUpdate.classList.add('off');
     });
 
     btnGitHub.addEventListener('click', () => {

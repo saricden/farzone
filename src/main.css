@@ -42,6 +42,9 @@ canvas {
   object-fit: cover;
   object-position: top center;
   filter: blur(5px);
+
+  transition: transform 3s;
+  transition-timing-function: linear;
 }
 
 @keyframes titleIntro {
@@ -68,6 +71,8 @@ canvas {
   font-weight: 900;
   font-size: 100px;
   overflow: visible;
+
+  transition: bottom 2s, width 2s, transform 1s;
 }
 
 .menubg--title .title h1 {
@@ -80,6 +85,8 @@ canvas {
   animation-fill-mode: forwards;
   filter: blur(2px);
   user-select: none;
+
+  transition: font-size 2s;
 }
 
 .menubg--title .cliffs {
@@ -91,6 +98,23 @@ canvas {
   height: 53%;
   object-fit: cover;
   object-position: bottom center;
+
+  transition: transform 1s;
+  transition-timing-function: linear;
+}
+
+.menubg--title.down .cliffs,
+.menubg--title.down .valley {
+  transform: translateY(100%);
+}
+
+.menubg--title.down .title {
+  width: 40%;
+  bottom: calc(100% - 100px);
+}
+
+.menubg--title.down .title h1 {
+  font-size: 70px;
 }
 
 .fadein {
@@ -151,9 +175,9 @@ canvas {
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 20px;
-  padding: 20px;
+  padding: 15px;
   border: solid 2px transparent;
-  font-size: 30px;
+  font-size: 28px;
   background-color: rgba(0, 0, 0, 0.85);
   color: #FFF;
   text-align: left;
@@ -163,13 +187,18 @@ canvas {
   animation-fill-mode: forwards;
   transform: translateX(calc(100% + 20px));
 
-  transition: border-color 0.15s, margin-right 0.35s, background-color 0.35s;
+  transition: border-color 0.15s, margin-right 0.35s, background-color 0.35s, opacity 1s, visibility 1s;
 }
 
 .menu--title button:hover {
   margin-right: 15px;
   border-color: #FFF;
   background-color: rgba(0, 0, 0, 0.6);
+}
+
+.menu--title.off button {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .menu--title button:last-of-type {
@@ -191,8 +220,14 @@ canvas {
   cursor: pointer;
   
   transform: translateY(calc(100% + 20px));
-  transition: transform 2s;
+  transition: transform 2s, opacity 1s, visibility 1s;
   transition-delay: 9s;
+}
+
+.last-update.off {
+  transition-delay: 0s;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .last-update.on {
@@ -253,4 +288,52 @@ canvas {
   border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.85);
   color: #000;
+}
+
+#credits {
+  z-index: 20;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px);
+  user-select: none;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s, visibility 1s;
+}
+
+#credits.on {
+  opacity: 1;
+  visibility: visible;
+}
+
+#credits > div {
+  width: 350px;
+  min-height: 100%;
+  color: #FFF;
+  font-size: 24px;
+  font-family: sans-serif;
+  transform: translateY(100%);
+
+  transition: none;
+}
+
+#credits.on > div {
+  transition: transform 20s;
+  transition-timing-function: linear;
+  transition-delay: 1s;
+  transform: translateY(-100%);
+}
+
+#credits > div p {
+  margin: 40px 0;
+  line-height: 1.5em;
 }
