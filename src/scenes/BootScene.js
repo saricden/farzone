@@ -14,8 +14,9 @@ class BootScene extends Scene {
     this.load.image('mech1-shell', 'assets/sprites/mech1-shell.png');
 
     // Maps
-    this.load.tilemapTiledJSON('map-level1', 'assets/maps/level1.json');
     this.load.image('tileset-grassland-ex', 'assets/maps/tileset-grassland-ex.png');
+    this.load.tilemapTiledJSON('map-level1', 'assets/maps/level1.json');
+    this.load.tilemapTiledJSON('map-level2', 'assets/maps/level2.json');
 
     // Music
     this.load.audio('ost-level1', 'assets/music/mech-ost1.mp3');

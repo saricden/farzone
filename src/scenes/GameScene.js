@@ -15,8 +15,6 @@ class GameScene extends Scene {
     // Launch HUD ui
     this.scene.launch('ui-battlehud');
 
-    console.log(this.levelKey);
-
     this.tilemap = this.add.tilemap(this.levelKey);
     const tiles = this.tilemap.addTilesetImage('tileset-grassland', 'tileset-grassland-ex', 175, 175, 1, 2);
 
