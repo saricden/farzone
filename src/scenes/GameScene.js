@@ -41,8 +41,15 @@ class GameScene extends Scene {
     // Add, scale, and make up a speed for our creature
     this.cat = new Mech1(this, 0, 0);
     this.catSpeed = 500;
+    this.catSpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
     
     this.dummy = new Mech1NPC(this, 0, 0);
+    this.dummySpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
+
+    // Make sure we don't spawn both players at same point
+    while (this.catSpawnpoint === this.dummySpawnpoint) {
+      this.dummySpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
+    }
 
     this.cat.mapTarget(this.dummy);
     this.dummy.mapTarget(this.cat);
@@ -50,10 +57,10 @@ class GameScene extends Scene {
     const spawnPoints = this.tilemap.getObjectLayer('spawn').objects;
 
     spawnPoints.forEach(({x, y, name}) => {
-      if (name === 'mech') {
+      if (name === this.catSpawnpoint) {
         this.cat.setPosition(x, y);
       }
-      else if (name === 'dummy') {
+      else if (name === this.dummySpawnpoint) {
         this.dummy.setPosition(x, y);
       }
     });

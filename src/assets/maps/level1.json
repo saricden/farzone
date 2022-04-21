@@ -54,7 +54,7 @@
                 {
                  "height":0,
                  "id":2,
-                 "name":"dummy",
+                 "name":"spawnpoint2",
                  "point":true,
                  "rotation":0,
                  "type":"",
@@ -66,7 +66,7 @@
                 {
                  "height":0,
                  "id":11,
-                 "name":"mech",
+                 "name":"spawnpoint1",
                  "point":true,
                  "rotation":0,
                  "type":"",
@@ -74,6 +74,42 @@
                  "width":0,
                  "x":2912,
                  "y":1984
+                }, 
+                {
+                 "height":0,
+                 "id":12,
+                 "name":"spawnpoint3",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":4356,
+                 "y":6272
+                }, 
+                {
+                 "height":0,
+                 "id":13,
+                 "name":"spawnpoint4",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":22628,
+                 "y":5464
+                }, 
+                {
+                 "height":0,
+                 "id":14,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":25740,
+                 "y":4592
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -82,7 +118,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":12,
+ "nextobjectid":15,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",

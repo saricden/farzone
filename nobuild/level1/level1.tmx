@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="140" height="57" tilewidth="175" tileheight="175" infinite="0" nextlayerid="5" nextobjectid="12">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="140" height="57" tilewidth="175" tileheight="175" infinite="0" nextlayerid="5" nextobjectid="15">
  <editorsettings>
   <export target="../../src/assets/maps/level1.json" format="json"/>
  </editorsettings>
@@ -265,10 +265,19 @@
 </data>
  </layer>
  <objectgroup id="2" name="spawn">
-  <object id="2" name="dummy" x="16275" y="5250">
+  <object id="2" name="spawnpoint2" x="16275" y="5250">
    <point/>
   </object>
-  <object id="11" name="mech" x="2912" y="1984">
+  <object id="11" name="spawnpoint1" x="2912" y="1984">
+   <point/>
+  </object>
+  <object id="12" name="spawnpoint3" x="4356" y="6272">
+   <point/>
+  </object>
+  <object id="13" name="spawnpoint4" x="22628" y="5464">
+   <point/>
+  </object>
+  <object id="14" x="25740" y="4592">
    <point/>
   </object>
  </objectgroup>
