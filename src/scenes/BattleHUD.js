@@ -5,7 +5,13 @@ class BattleHUD extends Scene {
     super('ui-battlehud');
   }
 
+  init({ parentScene }) {
+    this.parentScene = parentScene;
+  }
+
   create() {
+    this.uiLocked = false;
+
     this.playerIcon = this.add.image(20, window.innerHeight - 20, 'ui-mech1');
     this.playerIcon.setScale(0.1);
     this.playerIcon.setOrigin(0, 1);
@@ -62,42 +68,103 @@ class BattleHUD extends Scene {
     this.enemySpecialIcon2.setOrigin(0, 1);
     this.enemySpecialIcon2.setScale(0.15);
 
+    this.gameOverText = this.add.text(window.innerWidth / 2, window.innerHeight / 2 + 100, '', {
+      fontFamily: 'monospace',
+      fontSize: 82,
+      color: '#FFF',
+      stroke: '#000',
+      strokeThickness: 10
+    });
+    this.gameOverText.setOrigin(0.5);
+    this.gameOverText.setAlpha(0);
+
+    this.fadeGfx = this.add.graphics();
+    this.fadeGfx.fillStyle(0xFFFFFF, 1);
+    this.fadeGfx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    this.fadeGfx.setAlpha(0);
+
     // Layering
+    this.fadeGfx.setDepth(10);
     this.playerIcon.setDepth(1);
     this.enemyIcon.setDepth(1);
     this.bgGfx.setDepth(0);
   }
 
+  doGameOver(msg) {
+    this.uiLocked = true;
+
+    this.time.addEvent({
+      delay: 5000,
+      repeat: 0,
+      callback: () => {
+        this.gameOverText.setText(msg);
+        this.tweens.add({
+          targets: this.fadeGfx,
+          duration: 5000,
+          alpha: 1,
+          onComplete: () => {
+            this.scene.stop(this.parentScene);
+            this.scene.start('scene-menu');
+          }
+        });
+      }
+    });
+  }
+
   update() {
     const {playerHP, playerMaxHP, playerRockets, enemyHP, enemyMaxHP, enemyRockets} = this.registry;
-    const playerRatio = playerHP / playerMaxHP;
-    const enemyRatio = enemyHP / enemyMaxHP;
-    const playerColor = Display.Color.GetColor(255 * (1 - playerRatio), 255 * playerRatio, 0);
-    const enemyColor = Display.Color.GetColor(255 * (1 - enemyRatio), 255 * enemyRatio, 0);
 
-    this.playerHPText.setText(`${playerHP} / ${playerMaxHP}`);
-
-    this.playerHPGfx.clear();
-    this.playerHPGfx.fillStyle(playerColor);
-    this.playerHPGfx.lineStyle(2, playerColor);
-
-    this.playerHPGfx.fillRect(20 + this.playerIcon.displayWidth + 20, window.innerHeight - 20 - this.playerIcon.displayHeight, (500  - 20 - this.playerIcon.displayWidth - 20 - 20) * playerRatio, 20);
-    this.playerHPGfx.strokeRect(20 + this.playerIcon.displayWidth + 20, window.innerHeight - 20 - this.playerIcon.displayHeight, 500 - 20 - this.playerIcon.displayWidth - 20 - 20, 20);
-
-    this.enemyHPText.setText(`${enemyHP} / ${enemyMaxHP}`);
-
-    this.enemyHPGfx.clear();
-    this.enemyHPGfx.fillStyle(enemyColor);
-    this.enemyHPGfx.lineStyle(2, enemyColor);
-
-    this.enemyHPGfx.fillRect(window.innerWidth - 20 - this.enemyIcon.displayWidth - 20 - (500  - 20 - this.enemyIcon.displayWidth - 20 - 20) * enemyRatio, window.innerHeight - 20 - this.enemyIcon.displayHeight, (500  - 20 - this.enemyIcon.displayWidth - 20 - 20) * enemyRatio, 20);
-    this.enemyHPGfx.strokeRect(window.innerWidth - 20 - this.enemyIcon.displayWidth - 20 - (500  - 20 - this.enemyIcon.displayWidth - 20 - 20), window.innerHeight - 20 - this.enemyIcon.displayHeight, 500 - 20 - this.enemyIcon.displayWidth - 20 - 20, 20);
-
-    this.playerSpecialIcon.setAlpha(playerRockets >= 1 ? 1 : 0.25);
-    this.playerSpecialIcon2.setAlpha(playerRockets >= 2 ? 1 : 0.25);
-
-    this.enemySpecialIcon.setAlpha(enemyRockets >= 1 ? 1 : 0.25);
-    this.enemySpecialIcon2.setAlpha(enemyRockets >= 2 ? 1 : 0.25);
+    if (!this.uiLocked) {
+      if (playerHP === 0) {
+        this.doGameOver("You Lose!");
+      }
+      else if (enemyHP === 0) {
+        this.doGameOver("You Win!");
+      }
+      else {
+        const playerRatio = playerHP / playerMaxHP;
+        const enemyRatio = enemyHP / enemyMaxHP;
+        const playerColor = Display.Color.GetColor(255 * (1 - playerRatio), 255 * playerRatio, 0);
+        const enemyColor = Display.Color.GetColor(255 * (1 - enemyRatio), 255 * enemyRatio, 0);
+  
+        this.playerHPText.setText(`${playerHP} / ${playerMaxHP}`);
+  
+        this.playerHPGfx.clear();
+        this.playerHPGfx.fillStyle(playerColor);
+        this.playerHPGfx.lineStyle(2, playerColor);
+  
+        this.playerHPGfx.fillRect(20 + this.playerIcon.displayWidth + 20, window.innerHeight - 20 - this.playerIcon.displayHeight, (500  - 20 - this.playerIcon.displayWidth - 20 - 20) * playerRatio, 20);
+        this.playerHPGfx.strokeRect(20 + this.playerIcon.displayWidth + 20, window.innerHeight - 20 - this.playerIcon.displayHeight, 500 - 20 - this.playerIcon.displayWidth - 20 - 20, 20);
+  
+        this.enemyHPText.setText(`${enemyHP} / ${enemyMaxHP}`);
+  
+        this.enemyHPGfx.clear();
+        this.enemyHPGfx.fillStyle(enemyColor);
+        this.enemyHPGfx.lineStyle(2, enemyColor);
+  
+        this.enemyHPGfx.fillRect(window.innerWidth - 20 - this.enemyIcon.displayWidth - 20 - (500  - 20 - this.enemyIcon.displayWidth - 20 - 20) * enemyRatio, window.innerHeight - 20 - this.enemyIcon.displayHeight, (500  - 20 - this.enemyIcon.displayWidth - 20 - 20) * enemyRatio, 20);
+        this.enemyHPGfx.strokeRect(window.innerWidth - 20 - this.enemyIcon.displayWidth - 20 - (500  - 20 - this.enemyIcon.displayWidth - 20 - 20), window.innerHeight - 20 - this.enemyIcon.displayHeight, 500 - 20 - this.enemyIcon.displayWidth - 20 - 20, 20);
+  
+        this.playerSpecialIcon.setAlpha(playerRockets >= 1 ? 1 : 0.25);
+        this.playerSpecialIcon2.setAlpha(playerRockets >= 2 ? 1 : 0.25);
+  
+        this.enemySpecialIcon.setAlpha(enemyRockets >= 1 ? 1 : 0.25);
+        this.enemySpecialIcon2.setAlpha(enemyRockets >= 2 ? 1 : 0.25);
+      }
+    }
+    else {
+      this.bgGfx.clear();
+      this.playerHPGfx.clear();
+      this.enemyHPGfx.clear();
+      this.playerHPText.setText('');
+      this.enemyHPText.setText('');
+      this.playerSpecialIcon.setVisible(false);
+      this.playerSpecialIcon2.setVisible(false);
+      this.enemySpecialIcon.setVisible(false);
+      this.enemySpecialIcon2.setVisible(false);
+      this.playerIcon.setVisible(false);
+      this.enemyIcon.setVisible(false);
+    }
   }
 }
 

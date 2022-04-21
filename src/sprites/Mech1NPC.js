@@ -12,6 +12,7 @@ class Mech1NPC extends Container {
     this.jumpForce = 950;
     this.jumpAnimBuffer = 50;
     this.jumpAnimLock = false;
+    this.isDead = false;
 
     // AI config
     this.triggerDelay = 25; // The # of MS to change shooting state
@@ -19,20 +20,24 @@ class Mech1NPC extends Container {
     this.reflexDelay = 500; // The MS speed of retargeting
     this.closeThreshold = 2000; // The distance before the enemy will stop moving
 
-    this.torsoLegs = this.scene.add.sprite(0, 0, 'mech1');
+    this.torsoLegs = this.scene.physics.add.sprite(0, 0, 'mech1');
     this.torsoLegs.play('mech1-idle');
+    this.torsoLegs.body.setAllowGravity(false);
 
-    this.armLeft = this.scene.add.sprite(-20, -148, 'mech1-arm-left');
+    this.armLeft = this.scene.physics.add.sprite(-20, -148, 'mech1-arm-left');
     this.armLeft.play('mech1-arm-left-idle');
     this.armLeft.setOrigin(0.19, 0.29);
+    this.armLeft.body.setAllowGravity(false);
 
-    this.armRight = this.scene.add.sprite(-20, -148, 'mech1-arm-right');
+    this.armRight = this.scene.physics.add.sprite(-20, -148, 'mech1-arm-right');
     this.armRight.play('mech1-arm-right-idle');
     this.armRight.setOrigin(0.21, 0.28);
+    this.armRight.body.setAllowGravity(false);
 
-    this.head = this.scene.add.image(-12, -185, 'mech1-head');
+    this.head = this.scene.physics.add.image(-12, -185, 'mech1-head');
     this.head.setOrigin(0.5, 1);
     this.head.setScale(0.75);
+    this.head.body.setAllowGravity(false);
 
     this.add([
       this.armLeft,
@@ -123,40 +128,42 @@ class Mech1NPC extends Container {
       delay: this.reflexDelay,
       repeat: -1,
       callback: () => {
-        const d2p = pMath.Distance.Between(this.x, this.y, this.target.x, this.target.y);
-        const missX = (pMath.FloatBetween(-this.aimEntropy, this.aimEntropy) * d2p * 2);
-        const missY = (pMath.FloatBetween(-this.aimEntropy, this.aimEntropy) * d2p * 2);
-        const angle = pMath.Angle.Between(this.x + this.armLeft.x, this.y + this.armLeft.y, this.target.x + missX, this.target.y + missY);
-
-        let angleMod = 2 * Math.PI;
-
-        if (this.target.x <= this.x) {
-          this.torsoLegs.setFlipX(true);
-          this.armLeft.setFlipX(true);
-          this.armRight.setFlipX(true);
-          this.head.setFlipX(true);
-          this.armLeft.setOrigin(1 - 0.19, 0.29);
-          this.armRight.setOrigin(1 - 0.21, 0.28);
-          this.armLeft.setX(20);
-          this.armRight.setX(20);
-          this.head.setX(12);
-          angleMod = Math.PI;
+        if (!this.target.isDead && !this.isDead) {
+          const d2p = pMath.Distance.Between(this.x, this.y, this.target.x, this.target.y);
+          const missX = (pMath.FloatBetween(-this.aimEntropy, this.aimEntropy) * d2p * 2);
+          const missY = (pMath.FloatBetween(-this.aimEntropy, this.aimEntropy) * d2p * 2);
+          const angle = pMath.Angle.Between(this.x + this.armLeft.x, this.y + this.armLeft.y, this.target.x + missX, this.target.y + missY);
+  
+          let angleMod = 2 * Math.PI;
+  
+          if (this.target.x <= this.x) {
+            this.torsoLegs.setFlipX(true);
+            this.armLeft.setFlipX(true);
+            this.armRight.setFlipX(true);
+            this.head.setFlipX(true);
+            this.armLeft.setOrigin(1 - 0.19, 0.29);
+            this.armRight.setOrigin(1 - 0.21, 0.28);
+            this.armLeft.setX(20);
+            this.armRight.setX(20);
+            this.head.setX(12);
+            angleMod = Math.PI;
+          }
+          else {
+            this.torsoLegs.setFlipX(false);
+            this.armLeft.setFlipX(false);
+            this.armRight.setFlipX(false);
+            this.head.setFlipX(false);
+            this.armLeft.setOrigin(0.19, 0.29);
+            this.armRight.setOrigin(0.21, 0.28);
+            this.armLeft.setX(-20);
+            this.armRight.setX(-20);
+            this.head.setX(-12);
+          }
+  
+          this.armLeft.setRotation(angle + angleMod);
+          this.armRight.setRotation(angle + angleMod);
+          this.head.setRotation(angle + angleMod);
         }
-        else {
-          this.torsoLegs.setFlipX(false);
-          this.armLeft.setFlipX(false);
-          this.armRight.setFlipX(false);
-          this.head.setFlipX(false);
-          this.armLeft.setOrigin(0.19, 0.29);
-          this.armRight.setOrigin(0.21, 0.28);
-          this.armLeft.setX(-20);
-          this.armRight.setX(-20);
-          this.head.setX(-12);
-        }
-
-        this.armLeft.setRotation(angle + angleMod);
-        this.armRight.setRotation(angle + angleMod);
-        this.head.setRotation(angle + angleMod);
       }
     });
 
@@ -202,143 +209,208 @@ class Mech1NPC extends Container {
     }
     else {
       this.scene.registry.enemyHP = 0;
+
+      this.isDead = true;
+  
+      this.body.setAllowGravity(false);
+      this.body.setImmovable(true);
+      this.body.setVelocity(0, 0);
+
+      const maxDeathBurst = 500;
+
+      this.scene.cameras.main.flash(1000, 255, 255, 255, true);
+      this.scene.cameras.main.shake(1000);
+      this.scene.cameras.main.stopFollow();
+      this.scene.cameras.main.pan(this.x, this.y, 2000, 'Linear', true);
+      this.scene.cameras.main.zoomTo(1, 2000, 'Linear', true, (cam, prog) => {
+        if (prog === 1) {
+          this.scene.time.addEvent({
+            delay: 1000,
+            repeat: 0,
+            callback: () => {
+              this.scene.cameras.main.pan(this.scene.cat.x, this.scene.cat.y, 2000, 'Linear', true, (cam, prog) => {
+                if (prog === 1) {
+                  this.scene.cameras.main.zoomTo(0.05, 7000, 'Linear', true);
+                }
+              });
+            }
+          });
+        }
+      });
+
+      this.head.body.setAllowGravity(true);
+      this.head.body.setVelocity(pMath.Between(-maxDeathBurst, maxDeathBurst), pMath.Between(-maxDeathBurst * 2, -maxDeathBurst));
+
+      this.torsoLegs.body.setAllowGravity(true);
+      this.torsoLegs.body.setVelocity(pMath.Between(-maxDeathBurst, maxDeathBurst), pMath.Between(-maxDeathBurst * 2, -maxDeathBurst));
+
+      this.armLeft.body.setAllowGravity(true);
+      this.armLeft.body.setVelocity(pMath.Between(-maxDeathBurst, maxDeathBurst), pMath.Between(-maxDeathBurst * 2, -maxDeathBurst));
+
+      this.armRight.body.setAllowGravity(true);
+      this.armRight.body.setVelocity(pMath.Between(-maxDeathBurst, maxDeathBurst), pMath.Between(-maxDeathBurst * 2, -maxDeathBurst));
     }
   }
 
   update(time, delta) {
     const {target} = this;
 
-    // Run towards player
-    const d2p = pMath.Distance.Between(this.x, this.y, target.x, target.y);
-
-    if (!this.isKnocked) {
-      if (d2p > this.closeThreshold) {
-        const xDirMod = (this.x <= target.x ? 1 : -1);
-        this.body.setVelocityX(this.speed * xDirMod);
-
-        // Cast a ray from beside the enemy straight down, to detect if there's a gap
-        this.gapRay.setOrigin(this.x + xDirMod * 200, this.y);
-        this.gapRay.setAngle(Math.PI / 2);
-        const intersection = this.gapRay.cast();
+    if (!this.isDead) {
+      // Run towards player
+      const d2p = pMath.Distance.Between(this.x, this.y, target.x, target.y);
   
-        if (
-          this.body.onFloor() &&
-          (
-            (this.body.blocked.left || this.body.blocked.right) ||
-            (intersection === false)
-          )
-        ) {
-          this.body.setVelocityY(-this.jumpForce);
+      if (!target.isDead) {
+        if (!this.isKnocked) {
+          if (d2p > this.closeThreshold) {
+            const xDirMod = (this.x <= target.x ? 1 : -1);
+            this.body.setVelocityX(this.speed * xDirMod);
+  
+            // Cast a ray from beside the enemy straight down, to detect if there's a gap
+            this.gapRay.setOrigin(this.x + xDirMod * 200, this.y);
+            this.gapRay.setAngle(Math.PI / 2);
+            const intersection = this.gapRay.cast();
+      
+            if (
+              this.body.onFloor() &&
+              (
+                (this.body.blocked.left || this.body.blocked.right) ||
+                (intersection === false)
+              )
+            ) {
+              this.body.setVelocityY(-this.jumpForce);
+            }
+          }
+          else {
+            this.body.setVelocityX(0);
+          }
         }
       }
       else {
         this.body.setVelocityX(0);
       }
-    }
-
-    // Shooting logic
-    const barrelOffsetY = 23;
-    const barrelOffsetX = 275;
-    const vector = new pMath.Vector2();
-    let angleMod2 = 2 * Math.PI;
-
-    if (this.torsoLegs.flipX) {
-      angleMod2 = Math.PI;
-    }
-
-    vector.setToPolar(this.armLeft.rotation + angleMod2, barrelOffsetX);
-    
-    this.bulletRay.setOrigin(this.x + this.armLeft.x + vector.x, this.y + this.armLeft.y + vector.y - barrelOffsetY);
-    this.bulletRay.setAngle(this.armLeft.rotation + angleMod2);
-    
-    const intersection = this.bulletRay.cast();
-
-    if (intersection) {
-      const isPlayer = (intersection.object && intersection.object.getData('isPlayer') === true);
-      const isTile = (intersection.object && typeof intersection.object.getTilesWithinWorldXY === 'function');
-
-      this.scene.time.addEvent({
-        delay: this.triggerDelay,
-        repeat: 0,
-        callback: () => {
-          this.rapidfire.paused = (!isPlayer && !isTile);
-        }
-      });
-
-      const doShootRocket = (pMath.Between(0, d2p) < 500);
-
-      if (isPlayer && doShootRocket && this.scene.registry.enemyRockets > 0) {
-        new Mech1Shell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.torsoLegs.flipX);
-
-        this.scene.sound.play('sfx-rocket');
-
-        this.scene.registry.enemyRockets--;
-
+  
+      // Shooting logic
+      const barrelOffsetY = 23;
+      const barrelOffsetX = 275;
+      const vector = new pMath.Vector2();
+      let angleMod2 = 2 * Math.PI;
+  
+      if (this.torsoLegs.flipX) {
+        angleMod2 = Math.PI;
+      }
+  
+      vector.setToPolar(this.armLeft.rotation + angleMod2, barrelOffsetX);
+      
+      this.bulletRay.setOrigin(this.x + this.armLeft.x + vector.x, this.y + this.armLeft.y + vector.y - barrelOffsetY);
+      this.bulletRay.setAngle(this.armLeft.rotation + angleMod2);
+      
+      const intersection = this.bulletRay.cast();
+  
+      if (intersection) {
+        const isPlayer = (intersection.object && intersection.object.getData('isPlayer') === true);
+        const isTile = (intersection.object && typeof intersection.object.getTilesWithinWorldXY === 'function');
+  
         this.scene.time.addEvent({
-          delay: 7500,
+          delay: this.triggerDelay,
           repeat: 0,
           callback: () => {
-            this.scene.registry.enemyRockets++;
+            if (target.isDead || this.isDead) {
+              this.rapidfire.paused = true;
+            }
+            else {
+              this.rapidfire.paused = (!isPlayer && !isTile);
+            }
           }
         });
+  
+        const doShootRocket = (pMath.Between(0, d2p) < 500 && !target.isDead);
+  
+        if (isPlayer && doShootRocket && this.scene.registry.enemyRockets > 0) {
+          new Mech1Shell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.torsoLegs.flipX);
+  
+          this.scene.sound.play('sfx-rocket');
+  
+          this.scene.registry.enemyRockets--;
+  
+          this.scene.time.addEvent({
+            delay: 7500,
+            repeat: 0,
+            callback: () => {
+              this.scene.registry.enemyRockets++;
+            }
+          });
+        }
       }
-    }
-
-    if (!this.isKnocked) {
-      // Movement logic
-    }
-    else if (!this.body.blocked.none) {
-      this.isKnocked = false;
-    }
-
-    if (this.body.onFloor()) {
-      // Jump logic
-    }
-
-    // Animation logic
-    if (this.body.onFloor()) {
-      this.jumpAnimLock = false;
-
-      if (this.body.velocity.x !== 0) {
-        if (this.torsoLegs.flipX && this.body.velocity.x > 0 || !this.torsoLegs.flipX && this.body.velocity.x < 0) {
-          this.torsoLegs.playReverse('mech1-run', true);
+  
+      if (!this.isKnocked) {
+        // Movement logic
+      }
+      else if (!this.body.blocked.none) {
+        this.isKnocked = false;
+      }
+  
+      if (this.body.onFloor()) {
+        // Jump logic
+      }
+  
+      // Animation logic
+      if (this.body.onFloor()) {
+        this.jumpAnimLock = false;
+  
+        if (this.body.velocity.x !== 0) {
+          if (this.torsoLegs.flipX && this.body.velocity.x > 0 || !this.torsoLegs.flipX && this.body.velocity.x < 0) {
+            this.torsoLegs.playReverse('mech1-run', true);
+          }
+          else {
+            this.torsoLegs.play('mech1-run', true);
+          }
         }
         else {
-          this.torsoLegs.play('mech1-run', true);
+          this.torsoLegs.play('mech1-idle', true);
         }
       }
       else {
-        this.torsoLegs.play('mech1-idle', true);
+        if (this.body.velocity.y < -this.jumpAnimBuffer) {
+          this.torsoLegs.play('mech1-up', true);
+        }
+        else if (this.body.velocity.y > this.jumpAnimBuffer) {
+          this.torsoLegs.play('mech1-down', true);
+        }
+        else if (!this.jumpAnimLock) {
+          this.torsoLegs.play('mech1-up-down', true);
+          this.jumpAnimLock = true;
+        }
+      }
+  
+      // Map bounds handling
+      const {widthInPixels, heightInPixels} = this.scene.tilemap;
+  
+      if (this.x > widthInPixels) {
+        this.setX(0);
+      }
+      else if (this.x < 0) {
+        this.setX(widthInPixels);
+      }
+  
+      if (this.y > heightInPixels) {
+        this.setY(0);
+      }
+      else if (this.y < 0) {
+        this.setY(heightInPixels);
       }
     }
     else {
-      if (this.body.velocity.y < -this.jumpAnimBuffer) {
-        this.torsoLegs.play('mech1-up', true);
-      }
-      else if (this.body.velocity.y > this.jumpAnimBuffer) {
-        this.torsoLegs.play('mech1-down', true);
-      }
-      else if (!this.jumpAnimLock) {
-        this.torsoLegs.play('mech1-up-down', true);
-        this.jumpAnimLock = true;
-      }
-    }
+      const flipRot = 5 * Math.PI * (delta / 1000);
+      
+      this.head.setOrigin(0.5);
+      this.torsoLegs.setOrigin(0.5);
+      this.armLeft.setOrigin(0.5);
+      this.armRight.setOrigin(0.5);
 
-    // Map bounds handling
-    const {widthInPixels, heightInPixels} = this.scene.tilemap;
-
-    if (this.x > widthInPixels) {
-      this.setX(0);
-    }
-    else if (this.x < 0) {
-      this.setX(widthInPixels);
-    }
-
-    if (this.y > heightInPixels) {
-      this.setY(0);
-    }
-    else if (this.y < 0) {
-      this.setY(heightInPixels);
+      this.head.rotation -= flipRot;
+      this.torsoLegs.rotation += flipRot;
+      this.armLeft.rotation -= flipRot;
+      this.armRight.rotation += flipRot;
     }
   }
 }

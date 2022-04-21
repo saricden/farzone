@@ -13,7 +13,9 @@ class GameScene extends Scene {
 
   create() {
     // Launch HUD ui
-    this.scene.launch('ui-battlehud');
+    this.scene.launch('ui-battlehud', {
+      parentScene: this
+    });
 
     this.tilemap = this.add.tilemap(this.levelKey);
     const tiles = this.tilemap.addTilesetImage('tileset-grassland', 'tileset-grassland-ex', 175, 175, 1, 2);
@@ -137,7 +139,8 @@ class GameScene extends Scene {
     this.registry.enemyRockets = 2;
 
     // Music
-    this.sound.play('ost-level1c', { loop: true, volume: 0.85 });
+    this.bgm = this.sound.add('ost-level1c', { loop: true, volume: 0.85 });
+    this.bgm.play();
 
     const follow_lerp_x = 0.05;
     const follow_lerp_y = 0.05;
@@ -308,22 +311,27 @@ class GameScene extends Scene {
 
     // Shoutout to @samme for this solution!!
     // https://codepen.io/samme/pen/BaoXxdx?editors=0010
-    this.cameraMid.copy(this.cat.body.center).lerp(this.dummy.body.center, 0.5);
-
-    const dist = pMath.Distance.BetweenPoints(
-      this.cat.body.position,
-      this.dummy.body.position
-    );
-    const camera = this.cameras.main;
-    const min = Math.min(this.scale.width, this.scale.height) / 1.5;
-
-    camera.setZoom(
-      pMath.Linear(
-        camera.zoom,
-        pMath.Clamp(min / dist, this.camZoomMin, this.camZoomMax),
-        this.camZoomLerp
-      )
-    )
+    if (!this.cat.isDead && !this.dummy.isDead) {
+      this.cameraMid.copy(this.cat.body.center).lerp(this.dummy.body.center, 0.5);
+  
+      const dist = pMath.Distance.BetweenPoints(
+        this.cat.body.position,
+        this.dummy.body.position
+      );
+      const camera = this.cameras.main;
+      const min = Math.min(this.scale.width, this.scale.height) / 1.5;
+  
+      camera.setZoom(
+        pMath.Linear(
+          camera.zoom,
+          pMath.Clamp(min / dist, this.camZoomMin, this.camZoomMax),
+          this.camZoomLerp
+        )
+      );
+    }
+    else {
+      this.bgm.stop();
+    }
 
     // Reposition dummy if it goes off-map
     const {widthInPixels, heightInPixels} = this.tilemap;

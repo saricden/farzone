@@ -233,6 +233,8 @@ class BootScene extends Scene {
     this.fadeGfx.fillRect(0, 0, window.innerWidth, window.innerHeight);
     this.fadeGfx.setAlpha(0);
 
+    // this.sound.setVolume(0);
+
     this.sound.play('sfx-electro-click1');
 
     this.input.on('pointerdown', () => {
