@@ -8,9 +8,6 @@ Welcome to Farzone: the open source 2D shooter fighting game. The goal for this 
 ## Technologies Used
 
 [![HTML5](docs/html5.png)](https://en.wikipedia.org/wiki/HTML5)
-
 [![CSS3](docs/css3.png)](https://en.wikipedia.org/wiki/CSS)
-
 [![JavaScript](docs/js.png)](https://en.wikipedia.org/wiki/JavaScript)
-
 [![PhaserJS](docs/phaser.png)](http://phaser.io/)
