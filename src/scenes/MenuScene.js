@@ -26,7 +26,7 @@ class MenuScene extends Scene {
     });
 
     btnGitHub.addEventListener('click', () => {
-      window.open('https://github.com/saricden/mech-game', '_blank');
+      window.open('https://github.com/saricden/farzone', '_blank');
     });
 
     // Play intro tune
