@@ -19,7 +19,7 @@ In order to run this game locally, follow these instructions:
 
 1. [Fork](https://github.com/saricden/farzone/fork) the repository to your GitHub account.
 
-![Fork Farzone](docs/fork.png)
+[![Fork Farzone](docs/fork.png)](https://github.com/saricden/farzone/fork)
 
 2. Clone your repository locally.
 ```
