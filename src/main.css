@@ -185,19 +185,24 @@ canvas {
   position: fixed;
   bottom: 20px;
   left: 20px;
-  width: 400px;
   text-align: left;
   border: 0;
   background-color: transparent;
+  cursor: pointer;
   
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 8s, visibility 8s;
+  transform: translateY(calc(100% + 20px));
+  transition: transform 2s;
+  transition-delay: 9s;
 }
 
 .last-update.on {
-  opacity: 1;
-  visibility: visible;
+  transform: translateY(0);
+}
+
+.last-update:hover > div {
+  margin-left: 15px;
+  border-color: #FFF;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .last-update header {
@@ -209,6 +214,7 @@ canvas {
 }
 
 .last-update > div {
+  width: 400px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -219,6 +225,8 @@ canvas {
   font-family: sans-serif;
   color: #FFF;
   background-color: rgba(0, 0, 0, 0.85);
+
+  transition: border-color 0.15s, margin-left 0.35s, background-color 0.35s;
 }
 
 #avatar {

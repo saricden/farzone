@@ -39,7 +39,7 @@ class MenuScene extends Scene {
     .then((response) => response.json())
     .then((json) => {
       const latestCommit = json[0];
-      const {author, commit} = latestCommit;
+      const {author, commit, html_url} = latestCommit;
       const {avatar_url} = author;
       const {message} = commit;
       const {date} = commit.author;
@@ -48,6 +48,10 @@ class MenuScene extends Scene {
       updateMessage.innerHTML = message;
       updateTime.innerHTML = moment(date).fromNow();
       btnUpdate.classList.add('on');
+
+      btnUpdate.addEventListener('click', () => {
+        window.open(html_url, '_blank');
+      });
     });
   }
 }
