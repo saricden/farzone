@@ -69,7 +69,7 @@ class BattleHUD extends Scene {
   }
 
   update() {
-    const {playerHP, playerMaxHP, playerRockets, enemyHP, enemyMaxHP} = this.registry;
+    const {playerHP, playerMaxHP, playerRockets, enemyHP, enemyMaxHP, enemyRockets} = this.registry;
     const playerRatio = playerHP / playerMaxHP;
     const enemyRatio = enemyHP / enemyMaxHP;
     const playerColor = Display.Color.GetColor(255 * (1 - playerRatio), 255 * playerRatio, 0);
@@ -95,6 +95,9 @@ class BattleHUD extends Scene {
 
     this.playerSpecialIcon.setAlpha(playerRockets >= 1 ? 1 : 0.25);
     this.playerSpecialIcon2.setAlpha(playerRockets >= 2 ? 1 : 0.25);
+
+    this.enemySpecialIcon.setAlpha(enemyRockets >= 1 ? 1 : 0.25);
+    this.enemySpecialIcon2.setAlpha(enemyRockets >= 2 ? 1 : 0.25);
   }
 }
 

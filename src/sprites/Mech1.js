@@ -126,7 +126,7 @@ class Mech1 extends Container {
   
           vector.setToPolar(this.armLeft.rotation + angleMod, barrelOffsetX);
   
-          const shell = new Mech1Shell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.torsoLegs.flipX);
+          new Mech1Shell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.torsoLegs.flipX);
   
           this.armLeft.play('mech1-arm-left-heavy-shot', true);
           this.armRight.play('mech1-arm-right-heavy-shot', true);
@@ -140,7 +140,7 @@ class Mech1 extends Container {
             callback: () => {
               this.scene.registry.playerRockets++;
             }
-          })
+          });
         }
         else {
           this.scene.sound.play('sfx-rocket-dry');

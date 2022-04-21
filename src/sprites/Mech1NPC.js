@@ -236,7 +236,7 @@ class Mech1NPC extends Container {
       }
     }
 
-    // Clear shot?
+    // Shooting logic
     const barrelOffsetY = 23;
     const barrelOffsetX = 275;
     const vector = new pMath.Vector2();
@@ -264,6 +264,24 @@ class Mech1NPC extends Container {
           this.rapidfire.paused = (!isPlayer && !isTile);
         }
       });
+
+      const doShootRocket = (pMath.Between(0, d2p) < 500);
+
+      if (isPlayer && doShootRocket && this.scene.registry.enemyRockets > 0) {
+        new Mech1Shell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.torsoLegs.flipX);
+
+        this.scene.sound.play('sfx-rocket');
+
+        this.scene.registry.enemyRockets--;
+
+        this.scene.time.addEvent({
+          delay: 7500,
+          repeat: 0,
+          callback: () => {
+            this.scene.registry.enemyRockets++;
+          }
+        });
+      }
     }
 
     if (!this.isKnocked) {
