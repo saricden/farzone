@@ -220,12 +220,13 @@ class Mech1NPC extends Container {
 
     if (intersection) {
       const isPlayer = (intersection.object && intersection.object.getData('isPlayer') === true);
+      const isTile = (intersection.object && typeof intersection.object.getTilesWithinWorldXY === 'function');
 
       this.scene.time.addEvent({
-        delay: this.triggerDelay = 250,
+        delay: this.triggerDelay,
         repeat: 0,
         callback: () => {
-          this.rapidfire.paused = !isPlayer;
+          this.rapidfire.paused = (!isPlayer && !isTile);
         }
       });
     }
