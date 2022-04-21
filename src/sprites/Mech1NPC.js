@@ -17,6 +17,7 @@ class Mech1NPC extends Container {
     this.triggerDelay = 25; // The # of MS to change shooting state
     this.aimEntropy = 0.05; // Scaler value min(-)/max(+) -- higher values = less accurate
     this.reflexDelay = 500; // The MS speed of retargeting
+    this.closeThreshold = 2000; // The distance before the enemy will stop moving
 
     this.torsoLegs = this.scene.add.sprite(0, 0, 'mech1');
     this.torsoLegs.play('mech1-idle');
@@ -55,6 +56,12 @@ class Mech1NPC extends Container {
       collisionTiles: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     });
     this.bulletRay = this.bulletRaycaster.createRay();
+
+    this.gapRaycaster = this.scene.raycasterPlugin.createRaycaster({ debug: false });
+    this.gapRaycaster.mapGameObjects(this.scene.ground, true, {
+      collisionTiles: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    });
+    this.gapRay = this.gapRaycaster.createRay();
 
     // Let the shoosting begin
     this.rapidfire = this.scene.time.addEvent({
@@ -200,6 +207,34 @@ class Mech1NPC extends Container {
 
   update(time, delta) {
     const {target} = this;
+
+    // Run towards player
+    const d2p = pMath.Distance.Between(this.x, this.y, target.x, target.y);
+
+    if (!this.isKnocked) {
+      if (d2p > this.closeThreshold) {
+        const xDirMod = (this.x <= target.x ? 1 : -1);
+        this.body.setVelocityX(this.speed * xDirMod);
+
+        // Cast a ray from beside the enemy straight down, to detect if there's a gap
+        this.gapRay.setOrigin(this.x + xDirMod * 200, this.y);
+        this.gapRay.setAngle(Math.PI / 2);
+        const intersection = this.gapRay.cast();
+  
+        if (
+          this.body.onFloor() &&
+          (
+            (this.body.blocked.left || this.body.blocked.right) ||
+            (intersection === false)
+          )
+        ) {
+          this.body.setVelocityY(-this.jumpForce);
+        }
+      }
+      else {
+        this.body.setVelocityX(0);
+      }
+    }
 
     // Clear shot?
     const barrelOffsetY = 23;
