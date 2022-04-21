@@ -27,7 +27,7 @@ class GameScene extends Scene {
     this.bg2Mist = this.add.graphics();
     this.bg2Mist.setScrollFactor(0);
     this.bg2Mist.fillStyle(0x000000, 0.3);
-    this.bg2Mist.fillRect(-this.tilemap.widthInPixels, -this.tilemap.heightInPixels, this.tilemap.widthInPixels * 2, this.tilemap.heightInPixels * 2);
+    this.bg2Mist.fillRect(-this.tilemap.widthInPixels * 5, -this.tilemap.heightInPixels * 5, this.tilemap.widthInPixels * 10, this.tilemap.heightInPixels * 10);
 
     this.bg1 = this.tilemap.createLayer('bg1', tiles);
     this.bg1.setScale(0.25);
@@ -38,7 +38,7 @@ class GameScene extends Scene {
     this.bg1Mist = this.add.graphics();
     this.bg1Mist.setScrollFactor(0);
     this.bg1Mist.fillStyle(0x000000, 0.3);
-    this.bg1Mist.fillRect(-this.tilemap.widthInPixels, -this.tilemap.heightInPixels, this.tilemap.widthInPixels * 2, this.tilemap.heightInPixels * 2);
+    this.bg1Mist.fillRect(-this.tilemap.widthInPixels * 5, -this.tilemap.heightInPixels * 5, this.tilemap.widthInPixels * 10, this.tilemap.heightInPixels * 10);
     
     this.ground = this.tilemap.createLayer('ground', tiles);
 
@@ -139,9 +139,18 @@ class GameScene extends Scene {
     // Music
     this.sound.play('ost-level1c', { loop: true, volume: 0.85 });
 
+    const follow_lerp_x = 0.05;
+    const follow_lerp_y = 0.05;
+    this.camZoomMin = 0.01;
+    this.camZoomMax = 0.5;
+    this.camZoomLerp = 0.05;
+
     this.cameras.main.setBackgroundColor(0x5555FF);
     this.cameras.main.setZoom(1);
-    this.cameras.main.setBounds(0, 0, this.tilemap.widthInPixels, this.tilemap.heightInPixels);
+    // this.cameras.main.setBounds(0, 0, this.tilemap.widthInPixels, this.tilemap.heightInPixels);
+    
+    this.cameraMid = new pMath.Vector2();
+    this.cameras.main.startFollow(this.cameraMid, false, follow_lerp_x, follow_lerp_y);
   }
 
   damageTile(tile, intersection) {
@@ -284,16 +293,37 @@ class GameScene extends Scene {
     this.dummy.update(time, delta);
 
     // Pan to the midpoint between players
-    const midX = (this.cat.x + this.dummy.x) / 2;
-    const midY = (this.cat.y + this.dummy.y) / 2;
-    this.cameras.main.pan(midX, midY, 250, 'Linear', true);
+    // const midX = (this.cat.x + this.dummy.x) / 2;
+    // const midY = (this.cat.y + this.dummy.y) / 2;
+    // this.cameras.main.pan(midX, midY, 250, 'Linear', true);
     
     // Zoom to fit both players in frame
-    const dist = pMath.Distance.Between(this.cat.x, this.cat.y, this.dummy.x, this.dummy.y);
-    const minZoom = (window.innerWidth / this.tilemap.widthInPixels);
-    // const scale = Math.min(Math.max(((this.tilemap.widthInPixels - dist) / this.tilemap.widthInPixels), minZoom), 1);
-    const scale = Math.min(Math.max(window.innerWidth / (dist * 1.35), minZoom), 0.5);
-    this.cameras.main.zoomTo(scale, 250, 'Linear', true);
+    // const dist = pMath.Distance.Between(this.cat.x, this.cat.y, this.dummy.x, this.dummy.y);
+    // const minZoomX = (window.innerWidth / this.tilemap.widthInPixels);
+    // const minZoomY = (window.innerHeight / this.tilemap.heightInPixels);
+    // const minZoom = Math.min(minZoomX, minZoomY);
+    // // const scale = Math.min(Math.max(((this.tilemap.widthInPixels - dist) / this.tilemap.widthInPixels), minZoom), 1);
+    // const scale = Math.min(Math.max(window.innerWidth / (dist * 1.35), minZoom), 0.5);
+    // this.cameras.main.zoomTo(scale, 250, 'Linear', true);
+
+    // Shoutout to @samme for this solution!!
+    // https://codepen.io/samme/pen/BaoXxdx?editors=0010
+    this.cameraMid.copy(this.cat.body.center).lerp(this.dummy.body.center, 0.5);
+
+    const dist = pMath.Distance.BetweenPoints(
+      this.cat.body.position,
+      this.dummy.body.position
+    );
+    const camera = this.cameras.main;
+    const min = Math.min(this.scale.width, this.scale.height) / 1.5;
+
+    camera.setZoom(
+      pMath.Linear(
+        camera.zoom,
+        pMath.Clamp(min / dist, this.camZoomMin, this.camZoomMax),
+        this.camZoomLerp
+      )
+    )
 
     // Reposition dummy if it goes off-map
     const {widthInPixels, heightInPixels} = this.tilemap;
