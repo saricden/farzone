@@ -18,6 +18,7 @@ Welcome to Farzone: the open source 2D shooter fighting game. The goal for this 
 In order to run this game locally, follow these instructions:
 
 1. [Fork](https://github.com/saricden/farzone/fork) the repository to your GitHub account.
+
 ![Fork Farzone](docs/fork.png)
 
 2. Clone your repository locally.
