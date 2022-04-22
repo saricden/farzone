@@ -6,6 +6,10 @@ class MenuScene extends Scene {
     super('scene-menu');
   }
 
+  init({ skipTo = 'none' }) {
+    this.skipTo = skipTo;
+  }
+
   create() {
     this.title = this.add.dom(0, 0, 'div', 'width: 100%;').createFromCache('dom-title');
     this.title.setOrigin(0, 0);
@@ -28,6 +32,8 @@ class MenuScene extends Scene {
     const mapBtns = document.querySelectorAll('[data-map]');
 
     const credits = document.getElementById('credits');
+
+    const btnTitle = document.getElementById('btn-title');
 
     mapBtns.forEach((btn) => {
       btn.addEventListener('mouseenter', () => {
@@ -80,7 +86,16 @@ class MenuScene extends Scene {
       menuTitle.classList.add('off');
       btnUpdate.classList.add('off');
       mapSelect.classList.add('open');
+      btnTitle.classList.add('on');
     });
+
+    if (this.skipTo === 'level-select') {
+      titleBG.classList.add('down');
+      menuTitle.classList.add('off');
+      btnUpdate.classList.add('off');
+      mapSelect.classList.add('open');
+      btnTitle.classList.add('on');
+    }
 
     btnGitHub.addEventListener('mouseenter', () => {
       this.sound.play('sfx-click');
@@ -91,7 +106,10 @@ class MenuScene extends Scene {
     });
 
     // Play intro tune
-    this.sound.play('ost-title');
+    if (this.skipTo === 'none') {
+      this.sound.play('ost-title');
+    }
+    
     this.wind = this.sound.add('sfx-wind-loop', { loop: true, volume: 0.1 });
     this.wind.play();
 
@@ -121,6 +139,20 @@ class MenuScene extends Scene {
 
     btnSettings.addEventListener('mouseenter', () => {
       this.sound.play('sfx-click');
+    });
+
+    btnTitle.addEventListener('mouseenter', () => {
+      this.sound.play('sfx-click');
+    });
+
+    btnTitle.addEventListener('click', () => {
+      this.sound.play('sfx-electro-click2');
+      
+      titleBG.classList.remove('down');
+      menuTitle.classList.remove('off');
+      btnUpdate.classList.remove('off');
+      mapSelect.classList.remove('open');
+      btnTitle.classList.remove('on');
     });
   }
 }

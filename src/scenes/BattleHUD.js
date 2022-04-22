@@ -90,21 +90,26 @@ class BattleHUD extends Scene {
     this.bgGfx.setDepth(0);
   }
 
-  doGameOver(msg) {
+  doGameOver(playerWon) {
     this.uiLocked = true;
+    const totalTime = Date.now() -  this.parentScene.startTime;
+    const {tilesDestroyed} = this.parentScene;
 
     this.time.addEvent({
       delay: 5000,
       repeat: 0,
       callback: () => {
-        this.gameOverText.setText(msg);
         this.tweens.add({
           targets: this.fadeGfx,
           duration: 5000,
           alpha: 1,
           onComplete: () => {
             this.scene.stop(this.parentScene);
-            this.scene.start('scene-menu');
+            this.scene.start('scene-gameover', {
+              playerWon,
+              totalTime,
+              tilesDestroyed
+            });
           }
         });
       }
@@ -116,10 +121,10 @@ class BattleHUD extends Scene {
 
     if (!this.uiLocked) {
       if (playerHP === 0) {
-        this.doGameOver("You Lose!");
+        this.doGameOver(false);
       }
       else if (enemyHP === 0) {
-        this.doGameOver("You Win!");
+        this.doGameOver(true);
       }
       else {
         const playerRatio = playerHP / playerMaxHP;

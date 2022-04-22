@@ -154,6 +154,10 @@ class GameScene extends Scene {
     
     this.cameraMid = new pMath.Vector2();
     this.cameras.main.startFollow(this.cameraMid, false, follow_lerp_x, follow_lerp_y);
+
+    // Stats
+    this.startTime = Date.now();
+    this.tilesDestroyed = 0;
   }
 
   damageTile(tile, intersection) {
@@ -183,6 +187,8 @@ class GameScene extends Scene {
     else if (tile.index === 13) {
       this.ground.removeTileAt(tile.x, tile.y, false, true);
       const tileUnder = this.ground.getTileAt(tile.x, tile.y + 1, true);
+
+      this.tilesDestroyed++;
       
       this.dirtEmitter.explode(40, intersection.x, intersection.y);
       this.grassEmitter.explode(200, intersection.x, intersection.y);
@@ -227,6 +233,8 @@ class GameScene extends Scene {
       this.ground.removeTileAt(tile.x, tile.y, false, true);
       const tileUnder = this.ground.getTileAt(tile.x, tile.y + 1, true);
 
+      this.tilesDestroyed++;
+
       this.dirtEmitter.explode(500, intersection.x, intersection.y);
 
       if (tileUnder) {
@@ -268,6 +276,8 @@ class GameScene extends Scene {
     else if (tile.index === 15) {
       this.ground.removeTileAt(tile.x, tile.y, false, true);
       const tileUnder = this.ground.getTileAt(tile.x, tile.y + 1, true);
+
+      this.tilesDestroyed++;
 
       this.dirtEmitter.explode(500, intersection.x, intersection.y);
 

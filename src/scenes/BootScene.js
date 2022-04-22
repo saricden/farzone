@@ -12,6 +12,7 @@ class BootScene extends Scene {
     this.load.atlas('mech1-arm-right', 'assets/sprites/mech1-right-arm.png', 'assets/sprites/mech1-right-arm.json');
     this.load.image('mech1-head', 'assets/sprites/mech1-head.png');
     this.load.image('mech1-shell', 'assets/sprites/mech1-shell.png');
+    this.load.image('mech1-victory', 'assets/sprites/mech1-victory.png');
 
     // Maps
     this.load.image('tileset-grassland-ex', 'assets/maps/tileset-grassland-ex.png');
@@ -48,6 +49,7 @@ class BootScene extends Scene {
 
     // DOM UI
     this.load.html('dom-title', 'assets/ui-dom/title.html');
+    this.load.html('dom-game-over', 'assets/ui-dom/game-over.html');
 
     // Preloader
     this.loaderBar = this.add.graphics();
