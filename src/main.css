@@ -156,7 +156,7 @@ canvas {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding: 20px;
+  padding: 10px;
 }
 
 @keyframes btnIntro {
@@ -174,7 +174,7 @@ canvas {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding: 15px;
   border: solid 2px transparent;
   font-size: 28px;
@@ -212,14 +212,14 @@ canvas {
 .last-update {
   z-index: 10;
   position: fixed;
-  bottom: 20px;
-  left: 20px;
+  bottom: 10px;
+  left: 10px;
   text-align: left;
   border: 0;
   background-color: transparent;
   cursor: pointer;
   
-  transform: translateY(calc(100% + 20px));
+  transform: translateY(calc(100% + 10px));
   transition: transform 2s, opacity 1s, visibility 1s;
   transition-delay: 9s;
 }
@@ -364,7 +364,7 @@ canvas {
 
 #map-select button {
   position: relative;
-  width: calc(50% - 10px);
+  width: calc(33% - 10px);
   height: 300px;
   margin-bottom: 20px;
   background-color: transparent;
