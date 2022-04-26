@@ -32,6 +32,10 @@ class Mech1Shell extends Container {
 
     this.fireParticle = this.scene.add.particles('particle-fire');
     this.boomParticle = this.scene.add.particles('particle-explosion');
+
+    this.fireParticle.setDepth(16);
+    this.boomParticle.setDepth(17);
+
     this.fireEmitter = this.fireParticle.createEmitter({
       rotate: (p, k, t) => {
         return ((1 - t) * 360);

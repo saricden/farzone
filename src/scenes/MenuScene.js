@@ -47,7 +47,7 @@ class MenuScene extends Scene {
         this.wind.stop();
         
         this.scene.start('scene-game', {
-          levelKey: `map-${levelKey}`
+          levelKey
         });
       });
     });

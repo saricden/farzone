@@ -21,6 +21,11 @@ class BootScene extends Scene {
     this.load.tilemapTiledJSON('map-level3', 'assets/maps/level3.json');
     this.load.tilemapTiledJSON('map-level4', 'assets/maps/level4.json');
 
+    // Maps 2.0
+    this.load.image('tileset-ex', 'assets/maps/2.0/tileset-ex.png');
+    this.load.tilemapTiledJSON('map1', 'assets/maps/2.0/map1.json');
+    this.load.tilemapTiledJSON('map2', 'assets/maps/2.0/map2.json');
+
     // Music
     this.load.audio('ost-level1', 'assets/music/mech-ost1.mp3');
     this.load.audio('ost-level1b', 'assets/music/mech-ost2.mp3');
@@ -42,6 +47,7 @@ class BootScene extends Scene {
     this.load.spritesheet('particles-grass', 'assets/sprites/particles-grass.png', { frameWidth: 45, frameHeight: 157 });
     this.load.image('particle-fire', 'assets/particles/fire.png');
     this.load.image('particle-explosion', 'assets/particles/explosion.png');
+    this.load.spritesheet('particles-brick', 'assets/particles/brick.png', { frameWidth: 205, frameHeight: 78 });
 
     // UI
     this.load.image('ui-mech1', 'assets/ui/mech1-head-icon.png');
@@ -247,6 +253,7 @@ class BootScene extends Scene {
         repeat: 0,
         onComplete: () => {
           this.scene.start('scene-menu');
+          // this.scene.start('scene-game', { levelKey: 'map2' });
         }
       });
     });
