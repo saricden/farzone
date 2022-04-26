@@ -50,8 +50,12 @@ class Mech1 extends Container {
     this.bulletGfx = this.scene.add.graphics();
     this.bulletGfx.setDepth(10);
     this.bulletRaycaster = this.scene.raycasterPlugin.createRaycaster({ debug: true });
-    this.bulletRaycaster.mapGameObjects(this.scene.ground, true);
+    this.bulletRaycaster.mapGameObjects(this.scene.ground, true, {
+      collisionTiles: [1, 2, 3, 4, 5, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 31, 32, 33, 34, 35, 41, 42, 43, 44, 45]
+    });
     this.bulletRay = this.bulletRaycaster.createRay();
+
+    console.log(this.bulletRaycaster);
 
     this.cursors = this.scene.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,
