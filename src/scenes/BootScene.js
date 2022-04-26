@@ -241,7 +241,7 @@ class BootScene extends Scene {
     this.fadeGfx.fillRect(0, 0, window.innerWidth, window.innerHeight);
     this.fadeGfx.setAlpha(0);
 
-    this.sound.setVolume(0);
+    // this.sound.setVolume(0);
 
     this.sound.play('sfx-electro-click1');
 
@@ -252,9 +252,8 @@ class BootScene extends Scene {
         duration: 250,
         repeat: 0,
         onComplete: () => {
-          // this.scene.start('scene-menu');
-
-          this.scene.start('scene-game', { levelKey: 'map2' });
+          this.scene.start('scene-menu');
+          // this.scene.start('scene-game', { levelKey: 'map2' });
         }
       });
     });

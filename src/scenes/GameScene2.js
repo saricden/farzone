@@ -2,7 +2,7 @@ import {Scene, Math as pMath} from 'phaser';
 import Mech1 from '../sprites/Mech1';
 import Mech1NPC from '../sprites/Mech1NPC';
 
-class GameScene extends Scene {
+class GameScene2 extends Scene {
   constructor() {
     super("scene-game");
   }
@@ -64,9 +64,6 @@ class GameScene extends Scene {
     while (this.catSpawnpoint === this.dummySpawnpoint) {
       this.dummySpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
     }
-
-    this.cat.mapTarget(this.dummy);
-    this.dummy.mapTarget(this.cat);
 
     const spawnPoints = this.tilemap.getObjectLayer('spawn').objects;
 
@@ -186,6 +183,11 @@ class GameScene extends Scene {
     this.para2Mist.setDepth(1);
     this.para2.setDepth(0);
 
+    // Map raycasters
+    this.cat.mapGroundLayer(this.ground);
+    this.cat.mapTarget(this.dummy);
+    this.dummy.mapTarget(this.cat);
+    this.dummy.mapGroundLayer(this.ground);
 
     // Game data
     this.registry.playerMaxHP = 1000;
@@ -581,4 +583,4 @@ class GameScene extends Scene {
   }
 
 }
-export default GameScene;
+export default GameScene2;
