@@ -13,6 +13,7 @@ class Mech1NPC extends Container {
     this.jumpAnimBuffer = 50;
     this.jumpAnimLock = false;
     this.isDead = false;
+    this.isPaused = true;
 
     // AI config
     this.triggerDelay = 25; // The # of MS to change shooting state
@@ -58,7 +59,13 @@ class Mech1NPC extends Container {
     this.bulletGfx.setDepth(10);
     this.bulletRaycaster = this.scene.raycasterPlugin.createRaycaster({ debug: false });
     this.bulletRaycaster.mapGameObjects(this.scene.ground, true, {
-      collisionTiles: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+      collisionTiles: [
+        1, 2, 3, 4, 5,
+        11, 12, 13, 14, 15,
+        21, 22, 23, 24, 25,
+        31, 32, 33, 34, 35,
+        41, 42, 43, 44, 45
+      ]
     });
     this.bulletRay = this.bulletRaycaster.createRay();
 
@@ -255,7 +262,7 @@ class Mech1NPC extends Container {
   update(time, delta) {
     const {target} = this;
 
-    if (!this.isDead) {
+    if (!this.isDead && !this.isPaused) {
       // Run towards player
       const d2p = pMath.Distance.Between(this.x, this.y, target.x, target.y);
   
@@ -399,7 +406,7 @@ class Mech1NPC extends Container {
         this.setY(heightInPixels);
       }
     }
-    else {
+    else if (!this.isPaused) {
       const flipRot = 5 * Math.PI * (delta / 1000);
       
       this.head.setOrigin(0.5);

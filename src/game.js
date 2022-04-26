@@ -3,7 +3,7 @@ import Phaser, {Game} from 'phaser';
 import PhaserRaycaster from 'phaser-raycaster/dist/phaser-raycaster';
 import BootScene from './scenes/BootScene';
 import MenuScene from './scenes/MenuScene';
-import GameScene from './scenes/GameScene';
+import GameScene2 from './scenes/GameScene2';
 import GameOverScene from './scenes/GameOverScene';
 
 // UI
@@ -38,7 +38,7 @@ const config = {
   scene: [
     BootScene,
     MenuScene,
-    GameScene,
+    GameScene2,
     GameOverScene,
 
     BattleHUD
