@@ -92,7 +92,7 @@ class Mech1 extends Container {
           if (isTile) {
             const tiles = intersection.object.getTilesWithinWorldXY(intersection.x - 1, intersection.y - 1, 2, 2);
 
-            tiles.forEach((tile) => this.scene.damageTile(tile, intersection));
+            tiles.forEach((tile) => this.scene.damageTile(tile, intersection, intersection.object));
           }
           else if (isNPC) {
             intersection.object.takeDamage(pMath.Between(1, 5), intersection);
@@ -176,6 +176,12 @@ class Mech1 extends Container {
   mapGroundLayer(layer) {
     this.bulletRaycaster.mapGameObjects(layer, true, {
       collisionTiles: [1, 2, 3, 4, 5, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 31, 32, 33, 34, 35, 41, 42, 43, 44, 45]
+    });
+  }
+
+  mapDetailLayers(layers) {
+    this.bulletRaycaster.mapGameObjects(layers, true, {
+      collisionTiles: [81, 82, 84, 85, 86, 87, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 113, 118, 123, 127, 133, 137]
     });
   }
 

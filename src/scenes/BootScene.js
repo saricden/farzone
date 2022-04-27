@@ -48,6 +48,7 @@ class BootScene extends Scene {
     this.load.image('particle-fire', 'assets/particles/fire.png');
     this.load.image('particle-explosion', 'assets/particles/explosion.png');
     this.load.spritesheet('particles-brick', 'assets/particles/brick.png', { frameWidth: 205, frameHeight: 78 });
+    this.load.spritesheet('particles-wood', 'assets/particles/wood-splinters.png', { frameWidth: 24, frameHeight: 243 });
 
     // UI
     this.load.image('ui-mech1', 'assets/ui/mech1-head-icon.png');
@@ -253,7 +254,7 @@ class BootScene extends Scene {
         repeat: 0,
         onComplete: () => {
           this.scene.start('scene-menu');
-          // this.scene.start('scene-game', { levelKey: 'map2' });
+          // this.scene.start('scene-game', { levelKey: 'map1' });
         }
       });
     });

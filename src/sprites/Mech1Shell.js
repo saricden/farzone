@@ -115,19 +115,31 @@ class Mech1Shell extends Container {
     });
     this.boomEmitter2.stop();
 
-    this.scene.physics.add.collider(this, [this.scene.ground, this.scene.cat, this.scene.dummy], () => {
+    const layers = [
+      this.scene.ground,
+      this.scene.bgd1,
+      this.scene.bgd2,
+      this.scene.bgd3,
+      this.scene.leaves,
+      // this.scene.leavesBG1,
+      // this.scene.leavesBG2
+    ];
+
+    this.scene.physics.add.collider(this, [...layers, this.scene.cat, this.scene.dummy], (shell, object) => {
       // Sometimes this.scene is undefined?
       if (typeof this.scene !== 'undefined') {
         this.scene.sound.play('sfx-explosion');
-  
-        // Damage tiles
-        const tiles = this.scene.ground.getTilesWithinWorldXY(this.x - 400, this.y - 400, 800, 800);
-        tiles.forEach((tile) => {
-          const dmg = pMath.Between(4, 5);
-          for (let d = 0; d < dmg; d++) {
-            this.scene.damageTile(tile, { x: this.x, y: this.y });
-          }
-        })
+
+        // Damage tiles on any applicable layers
+        layers.forEach((layer) => {
+          const tiles = layer.getTilesWithinWorldXY(this.x - 400, this.y - 400, 800, 800);
+          tiles.forEach((tile) => {
+            const dmg = pMath.Between(4, 5);
+            for (let d = 0; d < dmg; d++) {
+              this.scene.damageTile(tile, { x: this.x, y: this.y }, layer);
+            }
+          });
+        });
         this.scene.cameras.main.flash(250, 255, 255, 0, true);
         this.scene.cameras.main.shake(750, 0.05, true);
         this.boomEmitter.explode(50);
