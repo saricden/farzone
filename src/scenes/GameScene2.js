@@ -244,7 +244,7 @@ class GameScene2 extends Scene {
     this.registry.enemyRockets = 2;
 
     // Music
-    this.bgm = this.sound.add('ost-level1c', { loop: true, volume: 0.85 });
+    this.bgm = this.sound.add('ost-level1d', { loop: true });
     this.bgm.play();
 
     const follow_lerp_x = 0.05;

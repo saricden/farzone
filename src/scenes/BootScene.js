@@ -31,6 +31,7 @@ class BootScene extends Scene {
     this.load.audio('ost-level1b', 'assets/music/mech-ost2.mp3');
     this.load.audio('ost-title', 'assets/music/mech-ost3.mp3');
     this.load.audio('ost-level1c', 'assets/music/mech-ost4.mp3');
+    this.load.audio('ost-level1d', 'assets/music/mech-ost5.mp3');
 
     // SFX
     this.load.audio('sfx-shoot', 'assets/sfx/bang_02.wav');

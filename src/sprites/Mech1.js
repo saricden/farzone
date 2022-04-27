@@ -110,7 +110,7 @@ class Mech1 extends Container {
           }
         });
 
-        this.scene.sound.play('sfx-shoot');
+        this.scene.sound.play('sfx-shoot', { volume: 0.5 });
       }
     });
 
