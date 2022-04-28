@@ -65,6 +65,7 @@ class BootScene extends Scene {
     // UI
     this.load.image('ui-mech1', 'assets/ui/mech1-head-icon.png');
     this.load.image('ui-mech1-shell', 'assets/ui/mech1-shell-icon.png');
+    this.load.image('ui-hume1', 'assets/ui/hume1-head-icon.png');
 
     // DOM UI
     this.load.html('dom-title', 'assets/ui-dom/title.html');

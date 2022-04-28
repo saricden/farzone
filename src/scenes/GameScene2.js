@@ -249,11 +249,11 @@ class GameScene2 extends Scene {
     ]);
 
     // Game data
-    this.registry.playerMaxHP = 1000;
+    this.registry.playerMaxHP = 700;
     this.registry.playerHP = this.registry.playerMaxHP;
     this.registry.playerRockets = 2;
 
-    this.registry.enemyMaxHP = 1000;
+    this.registry.enemyMaxHP = 1200;
     this.registry.enemyHP = this.registry.enemyMaxHP;
     this.registry.enemyRockets = 2;
 

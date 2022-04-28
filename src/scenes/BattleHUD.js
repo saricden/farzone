@@ -12,7 +12,7 @@ class BattleHUD extends Scene {
   create() {
     this.uiLocked = false;
 
-    this.playerIcon = this.add.image(20, window.innerHeight - 20, 'ui-mech1');
+    this.playerIcon = this.add.image(20, window.innerHeight - 20, 'ui-hume1');
     this.playerIcon.setScale(0.1);
     this.playerIcon.setOrigin(0, 1);
     
@@ -55,10 +55,12 @@ class BattleHUD extends Scene {
     this.playerSpecialIcon = this.add.image(500 - 20, window.innerHeight - 20, 'ui-mech1-shell');
     this.playerSpecialIcon.setOrigin(1, 1);
     this.playerSpecialIcon.setScale(0.15);
+    this.playerSpecialIcon.setVisible(false);
 
     this.playerSpecialIcon2 = this.add.image(500 - 20 - this.playerSpecialIcon.displayWidth - 20, window.innerHeight - 20, 'ui-mech1-shell');
     this.playerSpecialIcon2.setOrigin(1, 1);
     this.playerSpecialIcon2.setScale(0.15);
+    this.playerSpecialIcon2.setVisible(false);
 
     this.enemySpecialIcon = this.add.image(window.innerWidth - 500 + 20, window.innerHeight - 20, 'ui-mech1-shell');
     this.enemySpecialIcon.setOrigin(0, 1);
