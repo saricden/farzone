@@ -14,6 +14,13 @@ class BootScene extends Scene {
     this.load.image('mech1-shell', 'assets/sprites/mech1-shell.png');
     this.load.image('mech1-victory', 'assets/sprites/mech1-victory.png');
 
+    // Hume1
+    this.load.multiatlas('hume1', 'assets/sprites/hume1.json', 'assets/sprites');
+    this.load.image('hume1-head', 'assets/sprites/hume1-head.png');
+    this.load.image('hume1-sword-arm', 'assets/sprites/hume1-sword-arm-aim.png');
+    this.load.image('hume1-shield-arm', 'assets/sprites/hume1-shield-arm-aim.png');
+    this.load.image('hume1-shield-arm-block', 'assets/sprites/hume1-shield-arm-block.png');
+
     // Maps
     this.load.image('tileset-grassland-ex', 'assets/maps/tileset-grassland-ex.png');
     this.load.tilemapTiledJSON('map-level1', 'assets/maps/level1.json');
@@ -42,6 +49,10 @@ class BootScene extends Scene {
     this.load.audio('sfx-electro-click1', 'assets/sfx/Click_Electronic_15.wav');
     this.load.audio('sfx-electro-click2', 'assets/sfx/Click_Electronic_14.wav');
     this.load.audio('sfx-click', 'assets/sfx/Click_Standard_00.wav');
+    this.load.audio('sfx-hume1-hah', 'assets/sfx/hume1-hah.mp3');
+    this.load.audio('sfx-hume1-yah', 'assets/sfx/hume1-yah.mp3');
+    this.load.audio('sfx-hume1-huah', 'assets/sfx/hume1-huah.mp3');
+    this.load.audio('sfx-narrator-begin', 'assets/sfx/narrator-begin.wav');
 
     // VFX
     this.load.spritesheet('particles-dirt', 'assets/sprites/particles-dirt.png', { frameWidth: 192, frameHeight: 228 });
@@ -234,6 +245,120 @@ class BootScene extends Scene {
       }),
       frameRate: 60,
       repeat: -1
+    });
+
+    // Hume1 animations
+    this.anims.create({
+      key: 'hume1-idle',
+      frames: this.anims.generateFrameNames('hume1', {
+        start: 0,
+        end: 59,
+        prefix: 'idle-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'hume1-run',
+      frames: this.anims.generateFrameNames('hume1', {
+        start: 0,
+        end: 49,
+        prefix: 'run-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'hume1-run-back',
+      frames: this.anims.generateFrameNames('hume1', {
+        start: 0,
+        end: 59,
+        prefix: 'run-back-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'hume1-jump',
+      frames: this.anims.generateFrameNames('hume1', {
+        start: 0,
+        end: 19,
+        prefix: 'jump-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'hume1-flip',
+      frames: this.anims.generateFrameNames('hume1', {
+        start: 0,
+        end: 19,
+        prefix: 'flip-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'hume1-fall',
+      frames: this.anims.generateFrameNames('hume1', {
+        start: 0,
+        end: 59,
+        prefix: 'fall-', // will need to change this
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'hume1-aim',
+      frames: [
+        { key: 'hume1', frame: 'aim.png' }
+      ],
+      frameRate: 0,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'hume1-lunge',
+      frames: this.anims.generateFrameNames('hume1', {
+        start: 0,
+        end: 19,
+        prefix: 'lunge-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'hume1-air-atk',
+      frames: this.anims.generateFrameNames('hume1', {
+        start: 0,
+        end: 29,
+        prefix: 'fall-atk-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: 0
     });
 
     this.input.mouse.disableContextMenu();

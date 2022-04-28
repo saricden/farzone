@@ -1,6 +1,7 @@
 import {Scene, Math as pMath} from 'phaser';
 import Mech1 from '../sprites/Mech1';
 import Mech1NPC from '../sprites/Mech1NPC';
+import Hume1 from '../sprites/Hume1';
 
 class GameScene2 extends Scene {
   constructor() {
@@ -12,6 +13,8 @@ class GameScene2 extends Scene {
   }
 
   create() {
+    this.soloTest = false; // set to true if you want to solo a character
+
     // Launch HUD ui
     this.scene.launch('ui-battlehud', {
       parentScene: this
@@ -53,12 +56,17 @@ class GameScene2 extends Scene {
     // this.leavesBG2 = this.tilemap.createLayer('leaves', tiles);
 
     // Add, scale, and make up a speed for our creature
-    this.cat = new Mech1(this, 0, 0);
+    // this.cat = new Mech1(this, 0, 0);
+    this.cat = new Hume1(this, 0, 0);
     this.catSpeed = 500;
     this.catSpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
     
     this.dummy = new Mech1NPC(this, 0, 0);
     this.dummySpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
+
+    if (this.soloTest) {
+      this.dummy.isPaused = true;
+    }
 
     // Make sure we don't spawn both players at same point
     while (this.catSpawnpoint === this.dummySpawnpoint) {
@@ -91,7 +99,13 @@ class GameScene2 extends Scene {
     // this.leavesBG1.setCollisionBetween(51, 73);
     // this.leavesBG2.setCollisionBetween(51, 73);
 
-    this.physics.add.collider(this.cat, this.ground);
+    this.physics.add.collider(this.cat, this.ground, null, () => {
+      if (typeof this.cat.processGround === 'function') {
+        return this.cat.processGround();
+      }
+
+      return true;
+    });
     this.physics.add.collider(this.dummy, this.ground);
     this.physics.add.collider(this.dummy, this.cat);
 
@@ -245,7 +259,8 @@ class GameScene2 extends Scene {
 
     // Music
     this.bgm = this.sound.add('ost-level1d', { loop: true });
-    this.bgm.play();
+
+    this.sound.add('sfx-narrator-begin').once('complete', () => this.bgm.play()).play();
 
     const follow_lerp_x = 0.05;
     const follow_lerp_y = 0.05;
@@ -254,11 +269,17 @@ class GameScene2 extends Scene {
     this.camZoomLerp = 0.05;
 
     this.cameras.main.setBackgroundColor(0x5555FF);
-    this.cameras.main.setZoom(1);
+    this.cameras.main.setZoom(0.3);
     // this.cameras.main.setBounds(0, 0, this.tilemap.widthInPixels, this.tilemap.heightInPixels);
     
     this.cameraMid = new pMath.Vector2();
-    this.cameras.main.startFollow(this.cameraMid, false, follow_lerp_x, follow_lerp_y);
+
+    if (this.soloTest) {
+      this.cameras.main.startFollow(this.cat);
+    }
+    else {
+      this.cameras.main.startFollow(this.cameraMid, false, follow_lerp_x, follow_lerp_y);
+    }
 
     // Stats
     this.startTime = Date.now();
@@ -726,22 +747,24 @@ class GameScene2 extends Scene {
     // Shoutout to @samme for this solution!!
     // https://codepen.io/samme/pen/BaoXxdx?editors=0010
     if (!this.cat.isDead && !this.dummy.isDead) {
-      this.cameraMid.copy(this.cat.body.center).lerp(this.dummy.body.center, 0.5);
-  
-      const dist = pMath.Distance.BetweenPoints(
-        this.cat.body.position,
-        this.dummy.body.position
-      );
-      const camera = this.cameras.main;
-      const min = Math.min(this.scale.width, this.scale.height) / 1.5;
-  
-      camera.setZoom(
-        pMath.Linear(
-          camera.zoom,
-          pMath.Clamp(min / dist, this.camZoomMin, this.camZoomMax),
-          this.camZoomLerp
-        )
-      );
+      if (!this.soloTest) {
+        this.cameraMid.copy(this.cat.body.center).lerp(this.dummy.body.center, 0.5);
+    
+        const dist = pMath.Distance.BetweenPoints(
+          this.cat.body.position,
+          this.dummy.body.position
+        );
+        const camera = this.cameras.main;
+        const min = Math.min(this.scale.width, this.scale.height) / 1.5;
+    
+        camera.setZoom(
+          pMath.Linear(
+            camera.zoom,
+            pMath.Clamp(min / dist, this.camZoomMin, this.camZoomMax),
+            this.camZoomLerp
+          )
+        );
+      }
     }
     else {
       this.bgm.stop();

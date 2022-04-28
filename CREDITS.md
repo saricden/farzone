@@ -4,3 +4,5 @@
 - https://opengameart.org/content/handling-guns
 - https://opengameart.org/content/ambient-mountain-river-wind-and-forest-and-waterfall
 - https://opengameart.org/content/ui-sound-effects-library
+- https://opengameart.org/content/female-warrior-grunts
+- https://opengameart.org/content/voiceover-pack-fighter-40-taunts

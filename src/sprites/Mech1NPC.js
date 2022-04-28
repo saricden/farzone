@@ -102,7 +102,22 @@ class Mech1NPC extends Container {
             tiles.forEach((tile) => this.scene.damageTile(tile, intersection, intersection.object));
           }
           else if (isPlayer) {
-            intersection.object.takeDamage(pMath.Between(1, 5), intersection);
+            // Handling for Arial's shield ability
+            if (intersection.object.isBlocking) {
+              const {object} = intersection;
+              const {blockArmShield} = object;
+
+              const angleDiff = pMath.Angle.ShortestBetween(blockArmShield.angle, pMath.RadToDeg(this.bulletRay.angle));
+              const blockThreshold = 20;
+              const blocked = (angleDiff <= 90 + blockThreshold && angleDiff >= 90 - blockThreshold);
+
+              if (!blocked) {
+                intersection.object.takeDamage(pMath.Between(0, 2), intersection);
+              }
+            }
+            else {
+              intersection.object.takeDamage(pMath.Between(0, 2), intersection);
+            }
           }
         }
 
