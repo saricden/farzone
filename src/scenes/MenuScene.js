@@ -11,6 +11,22 @@ class MenuScene extends Scene {
   }
 
   create() {
+    const charData = {
+      'roboto': {
+        voiceKey: 'mitch-roboto'
+      },
+      'arial': {
+        voiceKey: 'mitch-arial'
+      },
+      'oswald': {
+        voiceKey: 'mitch-oswald'
+      }
+    };
+
+    this.levelKey = null;
+    this.p1Key = 'roboto';
+    this.p2Key = 'roboto';
+
     this.title = this.add.dom(0, 0, 'div', 'width: 100%;').createFromCache('dom-title');
     this.title.setOrigin(0, 0);
     
@@ -31,9 +47,86 @@ class MenuScene extends Scene {
     const mapSelect = document.getElementById('map-select');
     const mapBtns = document.querySelectorAll('[data-map]');
 
+    const playerSelect = document.getElementById('player-select');
+    const profilePlayer = document.getElementById('profile-player');
+    const profileComputer = document.getElementById('profile-computer');
+    const charBtnsPlayer = document.querySelectorAll('[data-character-player]');
+    const charBtnsComputer = document.querySelectorAll('[data-character-computer]');
+    const playerInfo = document.getElementById('player-info');
+    const computerInfo = document.getElementById('computer-info');
+    const btnStartMatch = document.getElementById('btn-start-match');
+
     const credits = document.getElementById('credits');
 
     const btnTitle = document.getElementById('btn-title');
+
+    btnStartMatch.addEventListener('click', () => {
+      this.sound.play('mitch-ready');
+      
+      btnStartMatch.classList.add('go');
+
+      this.time.addEvent({
+        delay: 600,
+        repeat: 0,
+        callback: () => {
+          this.wind.stop();
+        
+          this.scene.start('scene-game', {
+            levelKey: this.levelKey,
+            p1Key: this.p1Key,
+            p2Key: this.p2Key
+          });
+        }
+      });
+    });
+
+    charBtnsPlayer.forEach((btn) => {
+      btn.addEventListener('mouseenter', () => {
+        this.sound.play('sfx-click');
+      });
+
+      btn.addEventListener('click', () => {
+        const charKey = btn.getAttribute('data-character-player');
+        const {voiceKey} = charData[charKey];
+
+        charBtnsPlayer.forEach((btn2) => {
+          btn2.classList.remove('selected');
+        });
+
+        btn.classList.add('selected');
+
+        profilePlayer.setAttribute('src', `/assets/ui-dom/profiles/${charKey}.png`);
+
+        playerInfo.querySelector('header').innerHTML = charKey;
+
+        this.p1Key = charKey;
+
+        this.sound.play(voiceKey);
+      });
+    });
+
+    // charBtnsComputer.forEach((btn) => {
+    //   btn.addEventListener('mouseenter', () => {
+    //     this.sound.play('sfx-click');
+    //   });
+
+    //   btn.addEventListener('click', () => {
+    //     this.sound.play('sfx-click');
+    //     const charKey = btn.getAttribute('data-character-computer');
+
+    //     charBtnsComputer.forEach((btn2) => {
+    //       btn2.classList.remove('selected');
+    //     });
+
+    //     btn.classList.add('selected');
+
+    //     profileComputer.setAttribute('src', `/assets/ui-dom/profiles/${charKey}.png`);
+
+    //     computerInfo.querySelector('header').innerHTML = charKey;
+
+    //     this.p2Key = charKey;
+    //   });
+    // });
 
     mapBtns.forEach((btn) => {
       btn.addEventListener('mouseenter', () => {
@@ -44,11 +137,12 @@ class MenuScene extends Scene {
         const levelKey = btn.getAttribute('data-map');
 
         this.sound.play('sfx-electro-click2');
-        this.wind.stop();
         
-        this.scene.start('scene-game', {
-          levelKey
-        });
+        this.levelKey = levelKey;
+
+        mapSelect.classList.remove('open');
+        playerSelect.classList.add('open');
+        btnStartMatch.classList.add('open');
       });
     });
 

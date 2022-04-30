@@ -8,8 +8,9 @@ class GameScene2 extends Scene {
     super("scene-game");
   }
 
-  init({ levelKey }) {
+  init({ levelKey, p1Key }) {
     this.levelKey = levelKey;
+    this.p1Key = p1Key;
   }
 
   create() {
@@ -17,7 +18,8 @@ class GameScene2 extends Scene {
 
     // Launch HUD ui
     this.scene.launch('ui-battlehud', {
-      parentScene: this
+      parentScene: this,
+      p1Key: this.p1Key
     });
 
     this.tilemap = this.add.tilemap(this.levelKey);
@@ -57,7 +59,12 @@ class GameScene2 extends Scene {
 
     // Add, scale, and make up a speed for our creature
     // this.cat = new Mech1(this, 0, 0);
-    this.cat = new Hume1(this, 0, 0);
+    if (this.p1Key === 'roboto') {
+      this.cat = new Mech1(this, 0, 0);
+    }
+    else if (this.p1Key === 'arial') {
+      this.cat = new Hume1(this, 0, 0);
+    }
     this.catSpeed = 500;
     this.catSpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
     
@@ -249,9 +256,15 @@ class GameScene2 extends Scene {
     ]);
 
     // Game data
-    this.registry.playerMaxHP = 700;
-    this.registry.playerHP = this.registry.playerMaxHP;
-    this.registry.playerRockets = 2;
+    if (this.p1Key === 'roboto') {
+      this.registry.playerMaxHP = 1200;
+      this.registry.playerHP = this.registry.playerMaxHP;
+      this.registry.playerRockets = 2;
+    }
+    else if (this.p1Key === 'arial') {
+      this.registry.playerMaxHP = 700;
+      this.registry.playerHP = this.registry.playerMaxHP;
+    }
 
     this.registry.enemyMaxHP = 1200;
     this.registry.enemyHP = this.registry.enemyMaxHP;
@@ -260,7 +273,7 @@ class GameScene2 extends Scene {
     // Music
     this.bgm = this.sound.add('ost-level1d', { loop: true });
 
-    this.sound.add('sfx-narrator-begin').once('complete', () => this.bgm.play()).play();
+    this.sound.add('mitch-go').once('complete', () => this.bgm.play()).play();
 
     const follow_lerp_x = 0.05;
     const follow_lerp_y = 0.05;

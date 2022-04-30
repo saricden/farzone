@@ -9,6 +9,9 @@ import GameOverScene from './scenes/GameOverScene';
 // UI
 import BattleHUD from './scenes/BattleHUD';
 
+// Render pipelines
+import HueRotatePipeline from "./pipelines/HueRotate";
+
 const canvas = document.getElementById('game-canvas');
 const config = {
   type: Phaser.WEBGL,
@@ -42,7 +45,10 @@ const config = {
     GameOverScene,
 
     BattleHUD
-  ]
+  ],
+  pipeline: {
+    'HueRotate': HueRotatePipeline
+  }
 };
 
 const game = new Game(config);

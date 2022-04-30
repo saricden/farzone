@@ -54,6 +54,13 @@ class BootScene extends Scene {
     this.load.audio('sfx-hume1-huah', 'assets/sfx/hume1-huah.mp3');
     this.load.audio('sfx-narrator-begin', 'assets/sfx/narrator-begin.wav');
 
+    // Mitch voiceovers
+    this.load.audio('mitch-roboto', 'assets/sfx/mitch/roboto.mp3');
+    this.load.audio('mitch-arial', 'assets/sfx/mitch/arial.mp3');
+    this.load.audio('mitch-oswald', 'assets/sfx/mitch/oswald.mp3');
+    this.load.audio('mitch-ready', 'assets/sfx/mitch/ready.mp3');
+    this.load.audio('mitch-go', 'assets/sfx/mitch/go.mp3');
+
     // VFX
     this.load.spritesheet('particles-dirt', 'assets/sprites/particles-dirt.png', { frameWidth: 192, frameHeight: 228 });
     this.load.spritesheet('particles-grass', 'assets/sprites/particles-grass.png', { frameWidth: 45, frameHeight: 157 });
@@ -381,7 +388,7 @@ class BootScene extends Scene {
         repeat: 0,
         onComplete: () => {
           this.scene.start('scene-menu');
-          // this.scene.start('scene-game', { levelKey: 'map1' });
+          // this.scene.start('scene-game', { levelKey: 'map1', p1Key: 'arial' });
         }
       });
     });

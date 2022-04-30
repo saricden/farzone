@@ -5,14 +5,20 @@ class BattleHUD extends Scene {
     super('ui-battlehud');
   }
 
-  init({ parentScene }) {
+  init({ parentScene, p1Key }) {
     this.parentScene = parentScene;
+    this.p1Key = p1Key;
   }
 
   create() {
     this.uiLocked = false;
 
-    this.playerIcon = this.add.image(20, window.innerHeight - 20, 'ui-hume1');
+    if (this.p1Key === 'roboto') {
+      this.playerIcon = this.add.image(20, window.innerHeight - 20, 'ui-mech1');
+    }
+    else if (this.p1Key === 'arial') {
+      this.playerIcon = this.add.image(20, window.innerHeight - 20, 'ui-hume1');
+    }
     this.playerIcon.setScale(0.1);
     this.playerIcon.setOrigin(0, 1);
     
@@ -21,6 +27,10 @@ class BattleHUD extends Scene {
     this.enemyIcon.setOrigin(1, 1);
     this.enemyIcon.setFlipX(true);
     this.enemyIcon.setTint(0xFF0000);
+
+    const hueRotatePipeline = this.renderer.pipelines.get('HueRotate');
+    this.enemyIcon.setPipeline(hueRotatePipeline);
+    hueRotatePipeline.time = 180.25;
 
     this.bgGfx = this.add.graphics();
     this.bgGfx.fillStyle(0xFFFFFF, 0.1);
@@ -83,13 +93,21 @@ class BattleHUD extends Scene {
     this.fadeGfx = this.add.graphics();
     this.fadeGfx.fillStyle(0xFFFFFF, 1);
     this.fadeGfx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-    this.fadeGfx.setAlpha(0);
+    this.fadeGfx.setAlpha(1);
 
     // Layering
     this.fadeGfx.setDepth(10);
     this.playerIcon.setDepth(1);
     this.enemyIcon.setDepth(1);
     this.bgGfx.setDepth(0);
+
+    // Fade in to start
+    this.tweens.add({
+      targets: this.fadeGfx,
+      duration: 500,
+      repeat: 0,
+      alpha: 0
+    });
   }
 
   doGameOver(playerWon) {

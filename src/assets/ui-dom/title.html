@@ -57,7 +57,8 @@
   <div>
     <p>"Farzone"</p>
     <p>Original graphics, soundtrack and code by saricden</p>
-    <p>Featuring sound effects by:</p>
+    <p>Featuring voice acting by Mitch</p>
+    <p>With sound effects by:</p>
     <ul>
       <li>rubberduck</li>
       <li>Michel Baradari</li>
@@ -67,7 +68,7 @@
       <li>SkyRae</li>
       <li>Kenney</li>
     </ul>
-    <p>With contributions from:</p>
+    <p>Contributions from:</p>
     <ul>
       <li>(automagically pull contributers here)</li>
     </ul>
@@ -80,6 +81,10 @@
   </div>
 </div>
 
+<button id="btn-title">
+  Main Menu
+</button>
+
 <div id="map-select">
   <div>
     <button data-map="map1">
@@ -89,6 +94,42 @@
   </div>
 </div>
 
-<button id="btn-title">
-  Main Menu
+<div id="player-select">
+  <img id="profile-player" src="/assets/ui-dom/profiles/roboto.png" alt="" />
+  <img id="profile-computer" src="/assets/ui-dom/profiles/roboto.png" alt="" />
+
+  <div id="player-info">
+    <header>Roboto</header>
+  </div>
+
+  <div id="computer-info">
+    <header>Roboto</header>
+  </div>
+
+  <div class="radial-overlay"></div>
+  
+  <div class="character-btns">
+    <div>
+      <div class="characters player">
+        <button data-character-player="roboto" class="selected"><img src="/assets/ui/mech1-head-icon.png" alt="" /></button>
+        <button data-character-player="arial"><img src="/assets/ui/hume1-head-icon.png" alt="" /></button>
+        <button data-character-player="char3"></button>
+        <button data-character-player="char4"></button>
+        <button data-character-player="char5"></button>
+      </div>
+
+      <div class="characters computer">
+        <button data-character-computer="roboto" class="selected"><img src="/assets/ui/mech1-head-icon.png" alt="" /></button>
+        <button data-character-computer="arial"><img src="/assets/ui/hume1-head-icon.png" alt="" /></button>
+        <button data-character-computer="char3"></button>
+        <button data-character-computer="char4"></button>
+        <button data-character-computer="char5"></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<button id="btn-start-match">
+  <img src="/assets/ui-dom/icons/play.svg" alt="" />
 </button>
