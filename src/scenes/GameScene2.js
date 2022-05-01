@@ -277,7 +277,7 @@ class GameScene2 extends Scene {
 
     const follow_lerp_x = 0.05;
     const follow_lerp_y = 0.05;
-    this.camZoomMin = 0.01;
+    this.camZoomMin = Math.min(window.innerWidth / this.tilemap.widthInPixels, window.innerHeight / this.tilemap.heightInPixels);
     this.camZoomMax = 0.5;
     this.camZoomLerp = 0.05;
 
