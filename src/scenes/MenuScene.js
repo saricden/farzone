@@ -113,6 +113,7 @@ class MenuScene extends Scene {
     //   btn.addEventListener('click', () => {
     //     this.sound.play('sfx-click');
     //     const charKey = btn.getAttribute('data-character-computer');
+    //     const {voiceKey} = charData[charKey];
 
     //     charBtnsComputer.forEach((btn2) => {
     //       btn2.classList.remove('selected');
@@ -125,6 +126,8 @@ class MenuScene extends Scene {
     //     computerInfo.querySelector('header').innerHTML = charKey;
 
     //     this.p2Key = charKey;
+
+    //     this.sound.play(voiceKey);
     //   });
     // });
 
@@ -247,6 +250,8 @@ class MenuScene extends Scene {
       btnUpdate.classList.remove('off');
       mapSelect.classList.remove('open');
       btnTitle.classList.remove('on');
+      playerSelect.classList.remove('open');
+      btnStartMatch.classList.remove('open');
     });
   }
 }
