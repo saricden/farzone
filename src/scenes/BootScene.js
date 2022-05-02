@@ -1,10 +1,11 @@
-import {Scene} from 'phaser';
+import { Scene, GameObjects } from 'phaser';
+const { Rectangle } = GameObjects;
 
 class BootScene extends Scene {
   constructor() {
     super("scene-boot");
   }
-  
+
   preload() {
     // Mech1
     this.load.multiatlas('mech1', 'assets/sprites/mech1.json', 'assets/sprites');
@@ -79,15 +80,12 @@ class BootScene extends Scene {
     this.load.html('dom-game-over', 'assets/ui-dom/game-over.html');
 
     // Preloader
-    this.loaderBar = this.add.graphics();
-
     this.completeText = this.add.text(window.innerWidth / 2, window.innerHeight / 2, 'Click to start', {
       fontFamily: 'monospace',
       color: '#FFF',
       fontSize: 32
     });
     this.completeText.setOrigin(0.5);
-    this.completeText.setVisible(false);
 
     this.preloaderLog = this.add.text(window.innerWidth - 20, window.innerHeight - 20, '', {
       fontFamily: 'monospace',
@@ -102,17 +100,28 @@ class BootScene extends Scene {
     });
 
     this.load.on('progress', (value) => {
-      this.loaderBar.clear();
-      this.loaderBar.fillStyle(0xFFFFFF, value);
-      this.loaderBar.fillRect(window.innerWidth / 2 - 300, window.innerHeight / 2 - 5, 600 * value, 10);
+      this.completeText.setText(`${Math.floor(value * 100)}%`);
+      this.completeText.setAlpha(value);
 
       if (value === 1) {
-        this.loaderBar.clear();
-        this.completeText.setVisible(true);
-        this.loaderBar.fillStyle(0xFFFFFF, 0.1);
-        this.loaderBar.fillRect(window.innerWidth / 2 - 300, window.innerHeight / 2 - 5, 600 * value, 10);
+        this.completeText.setText('Click to start');
       }
     });
+
+    // Setup resize event
+    this.scale.on('resize', this.resize, this);
+    this.resize({ width: window.innerWidth, height: window.innerHeight });
+  }
+
+  resize({ width, height }) {
+    this.completeText.setPosition(width / 2, height / 2);
+    this.preloaderLog.setPosition(width - 20, height - 20);
+
+    if (this.fadeGfx) {
+      this.fadeGfx.clear();
+      this.fadeGfx.fillStyle(0xFFFFFF, 1);
+      this.fadeGfx.fillRect(0, 0, width, height);
+    }
   }
 
   create() {

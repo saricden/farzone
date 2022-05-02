@@ -108,6 +108,30 @@ class BattleHUD extends Scene {
       repeat: 0,
       alpha: 0
     });
+
+    // Setup window resizing event
+    this.scale.on('resize', this.resize, this);
+    this.resize({width: window.innerWidth, height: window.innerHeight});
+  }
+
+  resize({width, height}) {
+    this.playerIcon.setPosition(20, height - 20);
+    this.enemyIcon.setPosition(width - 20, height - 20);
+    this.playerHPText.setPosition(20 + this.playerIcon.displayWidth + 20, height - 20);
+    this.enemyHPText.setPosition(width - 20 - this.enemyIcon.displayWidth - 20, height - 20);
+    this.playerSpecialIcon.setPosition(500 - 20, height - 20);
+    this.playerSpecialIcon2.setPosition(500 - 20 - this.playerSpecialIcon.displayWidth - 20);
+    this.enemySpecialIcon.setPosition(width - 500 + 20, height - 20);
+    this.enemySpecialIcon2.setPosition(width - 500  + 20 + this.enemySpecialIcon.displayWidth + 20, height - 20);
+
+    this.bgGfx.clear();
+    this.bgGfx.fillStyle(0xFFFFFF, 0.1);
+    this.bgGfx.fillRect(0, height - 20 - this.playerIcon.displayHeight - 20, 500, 20 + this.playerIcon.displayHeight + 20);
+    this.bgGfx.fillRect(width - 500, height - 20 - this.enemyIcon.displayHeight - 20, 500, 20 + this.enemyIcon.displayHeight + 20);
+
+    this.fadeGfx.clear();
+    this.fadeGfx.fillStyle(0xFFFFFF, 1);
+    this.fadeGfx.fillRect(0, 0, width, height);
   }
 
   doGameOver(playerWon) {

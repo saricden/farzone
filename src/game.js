@@ -15,9 +15,12 @@ import HueRotatePipeline from "./pipelines/HueRotate";
 const canvas = document.getElementById('game-canvas');
 const config = {
   type: Phaser.WEBGL,
-  width: window.innerWidth,
-  height: window.innerHeight,
-  parent: "game",
+  scale: {
+    mode: Phaser.Scale.NONE,
+    parent: 'game',
+    width: window.innerWidth,
+    height: window.innerHeight
+  },
   dom: {
     createContainer: true
   },
@@ -52,3 +55,9 @@ const config = {
 };
 
 const game = new Game(config);
+
+window.addEventListener('resize', function (event) {
+
+  game.scale.resize(window.innerWidth, window.innerHeight);
+
+}, false);
