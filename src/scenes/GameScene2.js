@@ -55,8 +55,13 @@ class GameScene2 extends Scene {
     this.bgd3 = this.tilemap.createLayer('bgd3', tiles); // more branches
 
     this.leaves = this.tilemap.createLayer('leaves', tiles);
-    // this.leavesBG1 = this.tilemap.createLayer('leaves', tiles);
-    // this.leavesBG2 = this.tilemap.createLayer('leaves', tiles);
+    this.leavesBG1 = this.tilemap.createLayer('leavesBG1', tiles);
+    this.leavesBG2 = this.tilemap.createLayer('leavesBG2', tiles);
+
+    this.leavesBG1Pos = new pMath.Vector2(10, 30);
+    this.leavesBG2Pos = new pMath.Vector2(-20, -20);
+    this.leavesBG1.setPosition(this.leavesBG1Pos);
+    this.leavesBG2.setPosition(this.leavesBG2Pos);
 
     // Add, scale, and make up a speed for our creature
     // this.cat = new Mech1(this, 0, 0);
@@ -109,8 +114,8 @@ class GameScene2 extends Scene {
     this.bgd3.setCollisionBetween(81, 138);
 
     this.leaves.setCollisionBetween(51, 73);
-    // this.leavesBG1.setCollisionBetween(51, 73);
-    // this.leavesBG2.setCollisionBetween(51, 73);
+    this.leavesBG1.setCollisionBetween(51, 73);
+    this.leavesBG2.setCollisionBetween(51, 73);
 
     this.physics.add.collider(this.cat, this.ground, null, () => {
       if (typeof this.cat.processGround === 'function') {
@@ -236,8 +241,8 @@ class GameScene2 extends Scene {
     this.bgd1.setDepth(9);
     this.bgd2.setDepth(8);
     this.bgd3.setDepth(7);
-    // this.leavesBG1.setDepth(6);
-    // this.leavesBG2.setDepth(5);
+    this.leavesBG1.setDepth(6);
+    this.leavesBG2.setDepth(5);
     this.ground.setDepth(4);
     this.para1Mist.setDepth(3);
     this.para1.setDepth(2);
@@ -808,6 +813,7 @@ class GameScene2 extends Scene {
   }
 
   update(time, delta) {
+    // Apply timescale
     if (this.dirtEmitter.timeScale !== this.scaleTime) {
       this.dirtEmitter.timeScale = this.scaleTime;
     }
@@ -821,23 +827,24 @@ class GameScene2 extends Scene {
       this.woodEmitter.timeScale = this.scaleTime;
     }
 
+    // Apply wind effect to leaves
+    const leaves1Offset = new pMath.Vector2(Math.cos(time / 500) * 10, Math.sin(time / 500) * 10);
+    const leaves2Offset = new pMath.Vector2(Math.cos(time / 500) * -10, Math.sin(time / 500) * -10);
+
+    this.leavesBG1.setPosition(
+      this.leavesBG1Pos.x + leaves1Offset.x,
+      this.leavesBG2Pos.y + leaves1Offset.y
+    );
+    this.leavesBG2.setPosition(
+      this.leavesBG2Pos.x + leaves2Offset.x,
+      this.leavesBG2Pos.y + leaves2Offset.y
+    );
+
+    // Call player update functions
     this.cat.update(time, delta);
     this.dummy.update(time, delta);
 
-    // Pan to the midpoint between players
-    // const midX = (this.cat.x + this.dummy.x) / 2;
-    // const midY = (this.cat.y + this.dummy.y) / 2;
-    // this.cameras.main.pan(midX, midY, 250, 'Linear', true);
-    
-    // Zoom to fit both players in frame
-    // const dist = pMath.Distance.Between(this.cat.x, this.cat.y, this.dummy.x, this.dummy.y);
-    // const minZoomX = (window.innerWidth / this.tilemap.widthInPixels);
-    // const minZoomY = (window.innerHeight / this.tilemap.heightInPixels);
-    // const minZoom = Math.min(minZoomX, minZoomY);
-    // // const scale = Math.min(Math.max(((this.tilemap.widthInPixels - dist) / this.tilemap.widthInPixels), minZoom), 1);
-    // const scale = Math.min(Math.max(window.innerWidth / (dist * 1.35), minZoom), 0.5);
-    // this.cameras.main.zoomTo(scale, 250, 'Linear', true);
-
+    // Pan / zoom to the midpoint between players
     // Shoutout to @samme for this solution!!
     // https://codepen.io/samme/pen/BaoXxdx?editors=0010
     if (!this.cat.isDead && !this.dummy.isDead) {
