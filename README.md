@@ -28,11 +28,11 @@ git clone git@github.com:your_username/farzone.git
 ```
 Replacing "your_username" with your own username.
 
-3. Switch to an older version of Node.js (I use version 14).
+3. Switch to an older version of Node.js (I use version ~~14~~, turns out 16 works).
 ```
-nvm install 14
+nvm install 16
 # or...
-nvm use 14
+nvm use 16
 ```
 If you don't have `nvm` (Node Version Manager) installed, check out [their GitHub page](https://github.com/nvm-sh/nvm).
 > This is likely a temporary measure, as I will fix up the game's build tools to work with the latest version of Node.js in the future.
