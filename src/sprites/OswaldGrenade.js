@@ -36,8 +36,8 @@ class OswaldGrendade extends Image {
             this.scene.bgd2,
             this.scene.bgd3,
             this.scene.leaves,
-            // this.scene.leavesBG1,
-            // this.scene.leavesBG2
+            this.scene.leavesBG1,
+            this.scene.leavesBG2
           ];
 
           // Sometimes this.scene is undefined?

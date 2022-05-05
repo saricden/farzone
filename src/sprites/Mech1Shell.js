@@ -121,8 +121,8 @@ class Mech1Shell extends Container {
       this.scene.bgd2,
       this.scene.bgd3,
       this.scene.leaves,
-      // this.scene.leavesBG1,
-      // this.scene.leavesBG2
+      this.scene.leavesBG1,
+      this.scene.leavesBG2
     ];
 
     this.scene.physics.add.collider(this, [...layers, this.scene.cat, this.scene.dummy],

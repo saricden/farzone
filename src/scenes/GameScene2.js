@@ -228,6 +228,34 @@ class GameScene2 extends Scene {
     });
     this.woodEmitter.stop();
 
+    this.leafParticles = this.add.particles('particles-leaves');
+    this.leavesEmitter = this.leafParticles.createEmitter({
+      frame: Phaser.Utils.Array.NumberArray(0, 2),
+      scale: {
+        min: 0.1,
+        max: 0.25
+      },
+      alpha: {
+        start: 0.75,
+        end: 0
+      },
+      speedX: {
+        min: -1200,
+        max: 1200
+      },
+      speedY: {
+        min: -1200,
+        max: 1200
+      },
+      rotate: (p, k, t) => {
+        return ((1 - t) * 360 * 4);
+      },
+      lifespan: 2000,
+      gravityY: 600,
+      gravityX: 1200
+    });
+    this.leavesEmitter.stop();
+
     // Layering
     // this.boomParticle.setDepth(17); // Mech1Shell.js
     // this.fireParticle.setDepth(16); // Mech1Shell.js
@@ -255,7 +283,10 @@ class GameScene2 extends Scene {
     this.cat.mapDetailLayers([
       this.bgd1,
       this.bgd2,
-      this.bgd3
+      this.bgd3,
+      this.leaves,
+      this.leavesBG1,
+      this.leavesBG2
     ]);
 
     this.dummy.mapTarget(this.cat);
@@ -263,7 +294,10 @@ class GameScene2 extends Scene {
     this.dummy.mapDetailLayers([
       this.bgd1,
       this.bgd2,
-      this.bgd3
+      this.bgd3,
+      this.leaves,
+      this.leavesBG1,
+      this.leavesBG2
     ]);
 
     // Game data
@@ -809,6 +843,12 @@ class GameScene2 extends Scene {
     else if (tile.index === 138) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+    }
+
+    // Leaves
+    else if ([51, 52, 53, 54, 61, 62, 63, 71, 72, 73].includes(tile.index)) {
+      layer.removeTileAt(tile.x, tile.y, false, true);
+      this.leavesEmitter.explode(50, intersection.x, intersection.y);
     }
   }
 

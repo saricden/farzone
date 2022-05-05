@@ -20,6 +20,12 @@ class MenuScene extends Scene {
       },
       'oswald': {
         voiceKey: 'mitch-oswald'
+      },
+      'montserrat': {
+        voiceKey: 'mitch-montserrat'
+      },
+      'fira': {
+        voiceKey: 'mitch-fira'
       }
     };
 

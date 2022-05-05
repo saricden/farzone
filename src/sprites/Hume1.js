@@ -475,12 +475,24 @@ class Hume1 extends Container {
         this.resetLunge();
       }
       else {
-        const tiles = this.scene.ground.getTilesWithinWorldXY(this.x + this.atkBox.x - 100, this.y + this.atkBox.y - 100, 300, 300);
+        const layers = [
+          this.scene.ground,
+          this.scene.bgd1,
+          this.scene.bgd2,
+          this.scene.bgd3,
+          this.scene.leaves,
+          this.scene.leavesBG1,
+          this.scene.leavesBG2
+        ];
 
-        tiles.forEach((tile) => {
-          for (let i = 0; i < 5; i++) {
-            this.scene.damageTile(tile, { x: tile.pixelX, y: tile.pixelY }, this.scene.ground);
-          }
+        layers.forEach((layer) => {
+          const tiles = layer.getTilesWithinWorldXY(this.x + this.atkBox.x - 100, this.y + this.atkBox.y - 100, 300, 300);
+  
+          tiles.forEach((tile) => {
+            for (let i = 0; i < 5; i++) {
+              this.scene.damageTile(tile, { x: tile.pixelX, y: tile.pixelY }, this.scene.ground);
+            }
+          });
         });
       }
     }

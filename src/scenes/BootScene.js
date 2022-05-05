@@ -71,6 +71,8 @@ class BootScene extends Scene {
     this.load.audio('mitch-oswald', 'assets/sfx/mitch/oswald.mp3');
     this.load.audio('mitch-ready', 'assets/sfx/mitch/ready.mp3');
     this.load.audio('mitch-go', 'assets/sfx/mitch/go.mp3');
+    this.load.audio('mitch-montserrat', 'assets/sfx/mitch/montserrat.mp3');
+    this.load.audio('mitch-fira', 'assets/sfx/mitch/fira.mp3');
 
     // VFX
     this.load.spritesheet('particles-dirt', 'assets/sprites/particles-dirt.png', { frameWidth: 192, frameHeight: 228 });
@@ -79,6 +81,7 @@ class BootScene extends Scene {
     this.load.image('particle-explosion', 'assets/particles/explosion.png');
     this.load.spritesheet('particles-brick', 'assets/particles/brick.png', { frameWidth: 205, frameHeight: 78 });
     this.load.spritesheet('particles-wood', 'assets/particles/wood-splinters.png', { frameWidth: 24, frameHeight: 243 });
+    this.load.spritesheet('particles-leaves', 'assets/particles/leaves.png', { frameWidth: 111, frameHeight: 281 });
 
     // UI
     this.load.image('ui-mech1', 'assets/ui/mech1-head-icon.png');
