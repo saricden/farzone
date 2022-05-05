@@ -6,8 +6,8 @@ class Hume1 extends Container {
     super(scene, x, y, []);
 
     this.scene = scene;
-    this.speed = 950;
-    this.jumpForce = 950;
+    this.speed = 1200;
+    this.jumpForce = 1200;
     this.lungeDistance = 2500;
     this.isDead = false;
     this.hasDoubleJumped = false;
@@ -59,7 +59,6 @@ class Hume1 extends Container {
 
     this.body.setSize(85, 400);
     this.body.setOffset(-70, -100);
-    this.body.setMaxVelocity(this.jumpForce);
     this.isKnocked = false;
 
     this.cursors = this.scene.input.keyboard.addKeys({
@@ -105,7 +104,7 @@ class Hume1 extends Container {
         this.isLunging = true;
   
         this.body.setAllowGravity(false);
-        this.scene.physics.moveTo(this, worldX, worldY, this.speed);
+        this.scene.physics.moveTo(this, worldX, worldY, this.speed * 2);
         this.lungeStartPos.x = this.x;
         this.lungeStartPos.y = this.y;
 

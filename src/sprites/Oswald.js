@@ -38,7 +38,6 @@ class Oswald extends Container {
 
     this.body.setSize(100, 600);
     this.body.setOffset(-70, -287);
-    this.body.setMaxVelocity(950);
 
     this.cursors = this.scene.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,

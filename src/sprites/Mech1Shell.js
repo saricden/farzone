@@ -17,7 +17,7 @@ class Mech1Shell extends Container {
     this.setRotation(rotation);
     const speed = this.scene.physics.velocityFromRotation(
       this.rotation,
-      950,
+      1200,
       new pMath.Vector2(this.body.velocity.x, this.body.velocity.y)
     );
 
@@ -158,7 +158,7 @@ class Mech1Shell extends Container {
 
               v.setToPolar(angle, 100);
 
-              sprite.body.setVelocity(v.x * 500, v.y * 500);
+              sprite.body.setVelocity(v.x * 13, v.y * 13);
               sprite.body.blocked.none = true;
               sprite.isKnocked = true;
 

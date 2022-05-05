@@ -73,7 +73,7 @@ class OswaldGrendade extends Image {
 
               v.setToPolar(angle, 100);
 
-              sprite.body.setVelocity(v.x * 500, v.y * 500);
+              sprite.body.setVelocity(v.x * 13, v.y * 13);
               sprite.body.blocked.none = true;
               sprite.isKnocked = true;
 

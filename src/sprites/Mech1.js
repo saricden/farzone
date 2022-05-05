@@ -44,7 +44,6 @@ class Mech1 extends Container {
 
     this.body.setSize(140, 320);
     this.body.setOffset(-70, -200);
-    this.body.setMaxVelocity(this.jumpForce);
     this.isKnocked = false;
 
     this.bulletGfx = this.scene.add.graphics();
