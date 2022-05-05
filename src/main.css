@@ -554,7 +554,7 @@ canvas {
 }
 
 .characters.computer button {
-  cursor: not-allowed;
+  /* cursor: not-allowed; */
 }
 
 .characters button:hover {

@@ -303,7 +303,7 @@ class Hume1 extends Container {
   }
 
   update(time, delta) {
-    const {left, right, up} = this.cursors;
+    const {left, right} = this.cursors;
     const {mousePointer} = this.scene.input;
 
     if (!this.isDead) {

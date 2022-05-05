@@ -22,6 +22,13 @@ class BootScene extends Scene {
     this.load.image('hume1-shield-arm', 'assets/sprites/hume1-shield-arm-aim.png');
     this.load.image('hume1-shield-arm-block', 'assets/sprites/hume1-shield-arm-block.png');
 
+    // Oswald
+    this.load.multiatlas('oswald', 'assets/sprites/oswald.json', 'assets/sprites');
+    this.load.image('oswald-head', 'assets/sprites/oswald-head.png');
+    this.load.image('oswald-arm-l', 'assets/sprites/oswald-arm-l.png');
+    this.load.image('oswald-arm-r', 'assets/sprites/oswald-arm-r.png');
+    this.load.image('oswald-grenade', 'assets/sprites/grenade.png');
+
     // Maps
     this.load.image('tileset-grassland-ex', 'assets/maps/tileset-grassland-ex.png');
     this.load.tilemapTiledJSON('map-level1', 'assets/maps/level1.json');
@@ -54,6 +61,9 @@ class BootScene extends Scene {
     this.load.audio('sfx-hume1-yah', 'assets/sfx/hume1-yah.mp3');
     this.load.audio('sfx-hume1-huah', 'assets/sfx/hume1-huah.mp3');
     this.load.audio('sfx-narrator-begin', 'assets/sfx/narrator-begin.wav');
+    this.load.audio('sfx-time-slow', 'assets/sfx/time_stop.mp3');
+    this.load.audio('sfx-sniper', 'assets/sfx/rifle.wav');
+    this.load.audio('sfx-grenade-bounce', 'assets/sfx/ring_inventory.wav');
 
     // Mitch voiceovers
     this.load.audio('mitch-roboto', 'assets/sfx/mitch/roboto.mp3');
@@ -74,6 +84,7 @@ class BootScene extends Scene {
     this.load.image('ui-mech1', 'assets/ui/mech1-head-icon.png');
     this.load.image('ui-mech1-shell', 'assets/ui/mech1-shell-icon.png');
     this.load.image('ui-hume1', 'assets/ui/hume1-head-icon.png');
+    this.load.image('ui-oswald', 'assets/ui/oswald-head-icon.png');
 
     // DOM UI
     this.load.html('dom-title', 'assets/ui-dom/title.html');
@@ -335,7 +346,7 @@ class BootScene extends Scene {
       frames: this.anims.generateFrameNames('hume1', {
         start: 0,
         end: 59,
-        prefix: 'fall-', // will need to change this
+        prefix: 'fall-',
         suffix: '.png',
         zeroPad: 2
       }),
@@ -378,6 +389,108 @@ class BootScene extends Scene {
       repeat: 0
     });
 
+    // Oswald animations
+    this.anims.create({
+      key: 'oswald-idle',
+      frames: this.anims.generateFrameNames('oswald', {
+        start: 0,
+        end: 59,
+        prefix: 'idle-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'oswald-run-forwards',
+      frames: this.anims.generateFrameNames('oswald', {
+        start: 0,
+        end: 59,
+        prefix: 'run-forwards-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'oswald-run-backwards',
+      frames: this.anims.generateFrameNames('oswald', {
+        start: 0,
+        end: 59,
+        prefix: 'run-backwards-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'oswald-aim',
+      frames: [
+        { key: 'oswald', frame: 'aim.png' }
+      ],
+      frameRate: 0,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'oswald-up',
+      frames: [
+        { key: 'oswald', frame: 'up.png' }
+      ],
+      frameRate: 0,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'oswald-down',
+      frames: [
+        { key: 'oswald', frame: 'down.png' }
+      ],
+      frameRate: 0,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'oswald-down-aim',
+      frames: [
+        { key: 'oswald', frame: 'down-aim.png' }
+      ],
+      frameRate: 0,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'oswald-throw',
+      frames: this.anims.generateFrameNames('oswald', {
+        start: 0,
+        end: 9,
+        prefix: 'throw-',
+        suffix: '.png',
+        zeroPad: 0
+      }),
+      frameRate: 60,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'oswald-down-throw',
+      frames: this.anims.generateFrameNames('oswald', {
+        start: 0,
+        end: 9,
+        prefix: 'down-throw-',
+        suffix: '.png',
+        zeroPad: 0
+      }),
+      frameRate: 60,
+      repeat: 0
+    });
+
     this.input.mouse.disableContextMenu();
 
     this.fadeGfx = this.add.graphics();
@@ -386,6 +499,7 @@ class BootScene extends Scene {
     this.fadeGfx.setAlpha(0);
 
     // this.sound.setVolume(0);
+    // this.sound.setVolume(0.25);
 
     this.sound.play('sfx-electro-click1');
 
@@ -397,7 +511,7 @@ class BootScene extends Scene {
         repeat: 0,
         onComplete: () => {
           this.scene.start('scene-menu');
-          // this.scene.start('scene-game', { levelKey: 'map1', p1Key: 'arial' });
+          // this.scene.start('scene-game', { levelKey: 'map1', p1Key: 'oswald' });
         }
       });
     });

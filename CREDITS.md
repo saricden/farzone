@@ -6,3 +6,6 @@
 - https://opengameart.org/content/ui-sound-effects-library
 - https://opengameart.org/content/female-warrior-grunts
 - https://opengameart.org/content/voiceover-pack-fighter-40-taunts
+- https://opengameart.org/content/time-slow
+- https://opengameart.org/content/chaingun-pistol-rifle-shotgun-shots
+- https://opengameart.org/content/inventory-sound-effects

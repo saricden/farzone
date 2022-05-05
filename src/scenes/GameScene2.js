@@ -1,7 +1,8 @@
-import {Scene, Math as pMath} from 'phaser';
+import {Scene, Math as pMath, Display} from 'phaser';
 import Mech1 from '../sprites/Mech1';
 import Mech1NPC from '../sprites/Mech1NPC';
 import Hume1 from '../sprites/Hume1';
+import Oswald from '../sprites/Oswald';
 
 class GameScene2 extends Scene {
   constructor() {
@@ -65,6 +66,9 @@ class GameScene2 extends Scene {
     else if (this.p1Key === 'arial') {
       this.cat = new Hume1(this, 0, 0);
     }
+    else if (this.p1Key === 'oswald') {
+      this.cat = new Oswald(this, 0, 0);
+    }
     this.catSpeed = 500;
     this.catSpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
     
@@ -92,6 +96,8 @@ class GameScene2 extends Scene {
     });
 
     // Physics colliders
+    this.physics.world.TILE_BIAS = 175;
+
     this.ground.setCollisionBetween(1, 5);
     this.ground.setCollisionBetween(11, 15);
     this.ground.setCollisionBetween(21, 25);
@@ -265,6 +271,10 @@ class GameScene2 extends Scene {
       this.registry.playerMaxHP = 700;
       this.registry.playerHP = this.registry.playerMaxHP;
     }
+    else if (this.p1Key === 'oswald') {
+      this.registry.playerMaxHP = 850;
+      this.registry.playerHP = this.registry.playerMaxHP;
+    }
 
     this.registry.enemyMaxHP = 1200;
     this.registry.enemyHP = this.registry.enemyMaxHP;
@@ -282,7 +292,7 @@ class GameScene2 extends Scene {
     this.camZoomLerp = 0.05;
 
     this.cameras.main.setBackgroundColor(0x5555FF);
-    this.cameras.main.setZoom(0.3);
+    this.cameras.main.setZoom(1);
     // this.cameras.main.setBounds(0, 0, this.tilemap.widthInPixels, this.tilemap.heightInPixels);
     
     this.cameraMid = new pMath.Vector2();
@@ -297,6 +307,64 @@ class GameScene2 extends Scene {
     // Stats
     this.startTime = Date.now();
     this.tilesDestroyed = 0;
+
+    // Timescale
+    this.scaleTime = 1;
+
+    // Particle effects
+    this.fireParticle = this.add.particles('particle-fire');
+    this.boomParticle = this.add.particles('particle-explosion');
+    this.boomEmitter = this.boomParticle.createEmitter({
+      alpha: {
+        start: 1,
+        end: 0
+      },
+      rotate: (p, k, t) => {
+        return ((1 - t) * 360) * 4;
+      },
+      tint: (particle, key, t) => {
+        const g = ((1 - t) / 1 * 255);
+        return Display.Color.GetColor(255, g, 0);
+      },
+      speedX: {
+        min: -400,
+        max: 400
+      },
+      speedY: {
+        min: -400,
+        max: 400
+      },
+      scale: {
+        start: 0.5,
+        end: 1
+      },
+      lifespan: {
+        min: 250,
+        max: 750
+      }
+    });
+    this.boomEmitter.stop();
+
+    this.boomEmitter2 = this.fireParticle.createEmitter({
+      alpha: {
+        start: 0.5,
+        end: 0
+      },
+      rotate: (p, k, t) => {
+        return ((1 - t) * 360) * 4;
+      },
+      speedX: {
+        min: -500,
+        max: 500
+      },
+      speedY: {
+        min: -500,
+        max: 500
+      },
+      gravityX: 200,
+      lifespan: 2000
+    });
+    this.boomEmitter2.stop();
   }
 
   damageTile(tile, intersection, layer) {
@@ -740,6 +808,19 @@ class GameScene2 extends Scene {
   }
 
   update(time, delta) {
+    if (this.dirtEmitter.timeScale !== this.scaleTime) {
+      this.dirtEmitter.timeScale = this.scaleTime;
+    }
+    if (this.grassEmitter.timeScale !== this.scaleTime) {
+      this.grassEmitter.timeScale = this.scaleTime;
+    }
+    if (this.brickEmitter.timeScale !== this.scaleTime) {
+      this.brickEmitter.timeScale = this.scaleTime;
+    }
+    if (this.woodEmitter.timeScale !== this.scaleTime) {
+      this.woodEmitter.timeScale = this.scaleTime;
+    }
+
     this.cat.update(time, delta);
     this.dummy.update(time, delta);
 

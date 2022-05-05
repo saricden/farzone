@@ -105,31 +105,31 @@ class MenuScene extends Scene {
       });
     });
 
-    // charBtnsComputer.forEach((btn) => {
-    //   btn.addEventListener('mouseenter', () => {
-    //     this.sound.play('sfx-click');
-    //   });
+    charBtnsComputer.forEach((btn) => {
+      btn.addEventListener('mouseenter', () => {
+        this.sound.play('sfx-click');
+      });
 
-    //   btn.addEventListener('click', () => {
-    //     this.sound.play('sfx-click');
-    //     const charKey = btn.getAttribute('data-character-computer');
-    //     const {voiceKey} = charData[charKey];
+      btn.addEventListener('click', () => {
+        this.sound.play('sfx-click');
+        const charKey = btn.getAttribute('data-character-computer');
+        const {voiceKey} = charData[charKey];
 
-    //     charBtnsComputer.forEach((btn2) => {
-    //       btn2.classList.remove('selected');
-    //     });
+        charBtnsComputer.forEach((btn2) => {
+          btn2.classList.remove('selected');
+        });
 
-    //     btn.classList.add('selected');
+        btn.classList.add('selected');
 
-    //     profileComputer.setAttribute('src', `/assets/ui-dom/profiles/${charKey}.png`);
+        profileComputer.setAttribute('src', `/assets/ui-dom/profiles/${charKey}.png`);
 
-    //     computerInfo.querySelector('header').innerHTML = charKey;
+        computerInfo.querySelector('header').innerHTML = charKey;
 
-    //     this.p2Key = charKey;
+        this.p2Key = charKey;
 
-    //     this.sound.play(voiceKey);
-    //   });
-    // });
+        this.sound.play(voiceKey);
+      });
+    });
 
     mapBtns.forEach((btn) => {
       btn.addEventListener('mouseenter', () => {

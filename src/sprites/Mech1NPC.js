@@ -282,6 +282,11 @@ class Mech1NPC extends Container {
   update(time, delta) {
     const {target} = this;
 
+    // Adjust timescale when needed
+    if (this.scene.scaleTime !== this.torsoLegs.anims.timeScale) {
+      this.torsoLegs.anims.timeScale = this.scene.scaleTime;
+    }
+
     if (!this.isDead && !this.isPaused) {
       // Run towards player
       const d2p = pMath.Distance.Between(this.x, this.y, target.x, target.y);

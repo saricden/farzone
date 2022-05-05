@@ -19,6 +19,9 @@ class BattleHUD extends Scene {
     else if (this.p1Key === 'arial') {
       this.playerIcon = this.add.image(20, window.innerHeight - 20, 'ui-hume1');
     }
+    else if (this.p1Key === 'oswald') {
+      this.playerIcon = this.add.image(20, window.innerHeight - 20, 'ui-oswald');
+    }
     this.playerIcon.setScale(0.1);
     this.playerIcon.setOrigin(0, 1);
     
