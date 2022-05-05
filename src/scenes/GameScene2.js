@@ -395,8 +395,8 @@ class GameScene2 extends Scene {
 
       this.tilesDestroyed++;
       
-      this.dirtEmitter.explode(40, intersection.x, intersection.y);
-      this.grassEmitter.explode(200, intersection.x, intersection.y);
+      this.dirtEmitter.explode(10, intersection.x, intersection.y);
+      this.grassEmitter.explode(20, intersection.x, intersection.y);
 
       if (tileUnder) {
         if (tileUnder.index === 2) {
@@ -435,19 +435,19 @@ class GameScene2 extends Scene {
     // Dirt (side)
     else if (tile.index === 2) {
       layer.putTileAt(12, tile.x, tile.y, true);
-      this.dirtEmitter.explode(10, intersection.x, intersection.y);
+      this.dirtEmitter.explode(2, intersection.x, intersection.y);
     }
     else if (tile.index === 12) {
       layer.putTileAt(22, tile.x, tile.y, true);
-      this.dirtEmitter.explode(50, intersection.x, intersection.y);
+      this.dirtEmitter.explode(3, intersection.x, intersection.y);
     }
     else if (tile.index === 22) {
       layer.putTileAt(32, tile.x, tile.y, true);
-      this.dirtEmitter.explode(100, intersection.x, intersection.y);
+      this.dirtEmitter.explode(4, intersection.x, intersection.y);
     }
     else if (tile.index === 32) {
       layer.putTileAt(42, tile.x, tile.y, true);
-      this.dirtEmitter.explode(100, intersection.x, intersection.y);
+      this.dirtEmitter.explode(6, intersection.x, intersection.y);
     }
     else if (tile.index === 42) {
       layer.removeTileAt(tile.x, tile.y, false, true);
@@ -455,7 +455,7 @@ class GameScene2 extends Scene {
 
       this.tilesDestroyed++;
 
-      this.dirtEmitter.explode(500, intersection.x, intersection.y);
+      this.dirtEmitter.explode(10, intersection.x, intersection.y);
 
       if (tileUnder) {
         if (tileUnder.index === 2) {
@@ -494,19 +494,19 @@ class GameScene2 extends Scene {
     // Dirt (top)
     else if (tile.index === 3) {
       layer.putTileAt(13, tile.x, tile.y, true);
-      this.dirtEmitter.explode(10, intersection.x, intersection.y);
+      this.dirtEmitter.explode(2, intersection.x, intersection.y);
     }
     else if (tile.index === 13) {
       layer.putTileAt(23, tile.x, tile.y, true);
-      this.dirtEmitter.explode(50, intersection.x, intersection.y);
+      this.dirtEmitter.explode(3, intersection.x, intersection.y);
     }
     else if (tile.index === 23) {
       layer.putTileAt(33, tile.x, tile.y, true);
-      this.dirtEmitter.explode(100, intersection.x, intersection.y);
+      this.dirtEmitter.explode(4, intersection.x, intersection.y);
     }
     else if (tile.index === 33) {
       layer.putTileAt(43, tile.x, tile.y, true);
-      this.dirtEmitter.explode(100, intersection.x, intersection.y);
+      this.dirtEmitter.explode(6, intersection.x, intersection.y);
     }
     else if (tile.index === 43) {
       layer.removeTileAt(tile.x, tile.y, false, true);
@@ -514,7 +514,7 @@ class GameScene2 extends Scene {
 
       this.tilesDestroyed++;
 
-      this.dirtEmitter.explode(500, intersection.x, intersection.y);
+      this.dirtEmitter.explode(10, intersection.x, intersection.y);
 
       if (tileUnder) {
         if (tileUnder.index === 2) {
@@ -553,19 +553,19 @@ class GameScene2 extends Scene {
     // Brick (top)
     else if (tile.index === 4) {
       layer.putTileAt(14, tile.x, tile.y, true);
-      this.brickEmitter.explode(10, intersection.x, intersection.y);
+      this.brickEmitter.explode(2, intersection.x, intersection.y);
     }
     else if (tile.index === 14) {
       layer.putTileAt(24, tile.x, tile.y, true);
-      this.brickEmitter.explode(10, intersection.x, intersection.y);
+      this.brickEmitter.explode(3, intersection.x, intersection.y);
     }
     else if (tile.index === 24) {
       layer.putTileAt(34, tile.x, tile.y, true);
-      this.brickEmitter.explode(10, intersection.x, intersection.y);
+      this.brickEmitter.explode(4, intersection.x, intersection.y);
     }
     else if (tile.index === 34) {
       layer.putTileAt(44, tile.x, tile.y, true);
-      this.brickEmitter.explode(10, intersection.x, intersection.y);
+      this.brickEmitter.explode(6, intersection.x, intersection.y);
     }
     else if (tile.index === 44) {
       layer.removeTileAt(tile.x, tile.y, false, true);
@@ -573,7 +573,7 @@ class GameScene2 extends Scene {
 
       this.tilesDestroyed++;
 
-      this.brickEmitter.explode(25, intersection.x, intersection.y);
+      this.brickEmitter.explode(10, intersection.x, intersection.y);
 
       if (tileUnder) {
         if (tileUnder.index === 2) {
@@ -612,19 +612,19 @@ class GameScene2 extends Scene {
     // Brick (side)
     else if (tile.index === 5) {
       layer.putTileAt(15, tile.x, tile.y, true);
-      this.brickEmitter.explode(10, intersection.x, intersection.y);
+      this.brickEmitter.explode(2, intersection.x, intersection.y);
     }
     else if (tile.index === 15) {
       layer.putTileAt(25, tile.x, tile.y, true);
-      this.brickEmitter.explode(10, intersection.x, intersection.y);
+      this.brickEmitter.explode(3, intersection.x, intersection.y);
     }
     else if (tile.index === 25) {
       layer.putTileAt(35, tile.x, tile.y, true);
-      this.brickEmitter.explode(10, intersection.x, intersection.y);
+      this.brickEmitter.explode(4, intersection.x, intersection.y);
     }
     else if (tile.index === 35) {
       layer.putTileAt(45, tile.x, tile.y, true);
-      this.brickEmitter.explode(10, intersection.x, intersection.y);
+      this.brickEmitter.explode(6, intersection.x, intersection.y);
     }
     else if (tile.index === 45) {
       layer.removeTileAt(tile.x, tile.y, false, true);
@@ -632,7 +632,7 @@ class GameScene2 extends Scene {
 
       this.tilesDestroyed++;
 
-      this.brickEmitter.explode(25, intersection.x, intersection.y);
+      this.brickEmitter.explode(10, intersection.x, intersection.y);
 
       if (tileUnder) {
         if (tileUnder.index === 2) {
