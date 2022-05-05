@@ -207,6 +207,8 @@ class Mech1NPC extends Container {
   }
 
   takeDamage(dmg, intersection) {
+    this.scene.registry.playerDamageInflicted += dmg;
+
     if (this.scene.registry.enemyHP > 0) {
       const txtX = intersection.x + pMath.Between(-200, 200);
       const txtY = intersection.y + pMath.Between(-200, 200);

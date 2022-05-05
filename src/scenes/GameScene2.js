@@ -315,6 +315,16 @@ class GameScene2 extends Scene {
       this.registry.playerHP = this.registry.playerMaxHP;
     }
 
+    this.registry.p1Key = this.p1Key;
+    this.registry.playerTotalAttacks = 0;
+    this.registry.playerAttacksHit = 0;
+    this.registry.playerDamageInflicted = 0;
+    this.registry.playerDamageTaken = 0;
+    this.registry.playerDistanceMoved = 0;
+
+    // this.registry.p2Key = this.p2Key;
+    this.registry.p2Key = 'roboto';
+
     this.registry.enemyMaxHP = 1200;
     this.registry.enemyHP = this.registry.enemyMaxHP;
     this.registry.enemyRockets = 2;
@@ -406,7 +416,7 @@ class GameScene2 extends Scene {
     this.boomEmitter2.stop();
   }
 
-  damageTile(tile, intersection, layer) {
+  damageTile(tile, intersection, layer, isPlayer = false) {
     // Grass
     if (tile.index === 1) {
       layer.putTileAt(11, tile.x, tile.y, true);
@@ -432,7 +442,9 @@ class GameScene2 extends Scene {
       layer.removeTileAt(tile.x, tile.y, false, true);
       const tileUnder = layer.getTileAt(tile.x, tile.y + 1, true);
 
-      this.tilesDestroyed++;
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
       
       this.dirtEmitter.explode(10, intersection.x, intersection.y);
       this.grassEmitter.explode(20, intersection.x, intersection.y);
@@ -492,7 +504,9 @@ class GameScene2 extends Scene {
       layer.removeTileAt(tile.x, tile.y, false, true);
       const tileUnder = layer.getTileAt(tile.x, tile.y + 1, true);
 
-      this.tilesDestroyed++;
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
 
       this.dirtEmitter.explode(10, intersection.x, intersection.y);
 
@@ -551,7 +565,9 @@ class GameScene2 extends Scene {
       layer.removeTileAt(tile.x, tile.y, false, true);
       const tileUnder = layer.getTileAt(tile.x, tile.y + 1, true);
 
-      this.tilesDestroyed++;
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
 
       this.dirtEmitter.explode(10, intersection.x, intersection.y);
 
@@ -610,7 +626,9 @@ class GameScene2 extends Scene {
       layer.removeTileAt(tile.x, tile.y, false, true);
       const tileUnder = layer.getTileAt(tile.x, tile.y + 1, true);
 
-      this.tilesDestroyed++;
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
 
       this.brickEmitter.explode(10, intersection.x, intersection.y);
 
@@ -669,7 +687,9 @@ class GameScene2 extends Scene {
       layer.removeTileAt(tile.x, tile.y, false, true);
       const tileUnder = layer.getTileAt(tile.x, tile.y + 1, true);
 
-      this.tilesDestroyed++;
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
 
       this.brickEmitter.explode(10, intersection.x, intersection.y);
 
@@ -715,6 +735,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 85) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 82) {
       layer.putTileAt(86, tile.x, tile.y, true);
@@ -723,6 +747,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 86) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 84) {
       layer.putTileAt(89, tile.x, tile.y, true);
@@ -731,6 +759,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 89) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 85) {
       layer.putTileAt(90, tile.x, tile.y, true);
@@ -739,6 +771,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 90) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 91) {
       layer.putTileAt(96, tile.x, tile.y, true);
@@ -747,6 +783,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 96) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 92) {
       layer.putTileAt(97, tile.x, tile.y, true);
@@ -755,6 +795,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 97) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 93) {
       layer.putTileAt(98, tile.x, tile.y, true);
@@ -763,6 +807,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 98) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 94) {
       layer.putTileAt(98, tile.x, tile.y, true);
@@ -771,6 +819,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 98) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 95) {
       layer.putTileAt(100, tile.x, tile.y, true);
@@ -779,6 +831,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 100) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 101) {
       layer.putTileAt(106, tile.x, tile.y, true);
@@ -787,6 +843,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 106) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 102) {
       layer.putTileAt(107, tile.x, tile.y, true);
@@ -795,6 +855,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 107) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 103) {
       layer.putTileAt(108, tile.x, tile.y, true);
@@ -803,6 +867,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 108) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 104) {
       layer.putTileAt(109, tile.x, tile.y, true);
@@ -811,6 +879,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 109) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 105) {
       layer.putTileAt(110, tile.x, tile.y, true);
@@ -819,6 +891,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 110) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 113) {
       layer.putTileAt(118, tile.x, tile.y, true);
@@ -827,6 +903,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 118) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 123) {
       layer.putTileAt(127, tile.x, tile.y, true);
@@ -835,6 +915,10 @@ class GameScene2 extends Scene {
     else if (tile.index === 127) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
     else if (tile.index === 133) {
       layer.putTileAt(138, tile.x, tile.y, true);
@@ -843,12 +927,20 @@ class GameScene2 extends Scene {
     else if (tile.index === 138) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
 
     // Leaves
     else if ([51, 52, 53, 54, 61, 62, 63, 71, 72, 73].includes(tile.index)) {
       layer.removeTileAt(tile.x, tile.y, false, true);
       this.leavesEmitter.explode(50, intersection.x, intersection.y);
+
+      if (isPlayer) {
+        this.tilesDestroyed++;
+      }
     }
   }
 

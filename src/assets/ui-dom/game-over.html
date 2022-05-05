@@ -1,54 +1,45 @@
 <div id="game-over">
-  <div>
-    <header id="game-heading">GAME OVER</header>
-    
-    <div class="stat-grid">
-      <div style="transition-delay: 5s;">
-        <img src="/assets/ui-dom/icons/lg/clock.svg" alt="" />
-        <label>
-          <header>Match Duration</header>
-          <span id="total-time"></span>
-        </label>
-      </div>
-      <div style="transition-delay: 5.25s;">
-        <img src="/assets/ui-dom/icons/lg/bomb.svg" alt="" />
-        <label>
-          <header>Blocks Destroyed</header>
-          <span id="total-destruction"></span>
-        </label>
-      </div>
-      <div style="transition-delay: 5.5s;">
-        <img src="/assets/ui-dom/icons/lg/bomb.svg" alt="" />
-        <label>
-          <header>Other Stat</header>
-          <span>???</span>
-        </label>
-      </div>
-      <div style="transition-delay: 5.75s;">
-        <img src="/assets/ui-dom/icons/lg/bomb.svg" alt="" />
-        <label>
-          <header>Other Stat</header>
-          <span>???</span>
-        </label>
-      </div>
-      <div style="transition-delay: 6s;">
-        <img src="/assets/ui-dom/icons/lg/bomb.svg" alt="" />
-        <label>
-          <header>Other Stat</header>
-          <span>???</span>
-        </label>
-      </div>
-      <div style="transition-delay: 6.25s;">
-        <img src="/assets/ui-dom/icons/lg/bomb.svg" alt="" />
-        <label>
-          <header>Other Stat</header>
-          <span>???</span>
-        </label>
-      </div>
-    </div>
+  <img id="loser-profile" src="" alt="" />
+  <img id="winner-profile" src="" alt="" />
+  <div id="blur-filter"></div>
+  <header>
+    <small>This game's winner is...</small>
+    <span id="winner-name"></span>
+  </header>
 
-    <button id="btn-next-game">
-      <label>Next Game</label>
+  <div id="game-stats">
+    <div>
+      <img src="/assets/ui-dom/icons/lg/clock.svg" alt="" />
+      <span id="total-time"></span>
+      <label>Total Time</label>
+    </div>
+    <div>
+      <img src="/assets/ui-dom/icons/lg/tile.svg" alt="" />
+      <span id="total-destruction"></span>
+      <label>Blocks Destroyed</label>
+    </div>
+    <div>
+      <img src="/assets/ui-dom/icons/lg/crosshair.svg" alt="" />
+      <span id="accuracy-rating"></span>
+      <label>Accuracy Rating</label>
+    </div>
+    <div>
+      <img src="/assets/ui-dom/icons/lg/bomb.svg" alt="" />
+      <span id="damage-inflicted"></span>
+      <label>Damage Inflicted</label>
+    </div>
+    <div>
+      <img src="/assets/ui-dom/icons/lg/heart-broken.svg" alt="" />
+      <span id="damage-taken"></span>
+      <label>Damage Taken</label>
+    </div>
+    <div>
+      <img src="/assets/ui-dom/icons/lg/ruler.svg" alt="" />
+      <span id="distance-moved"></span>
+      <label>Distance Moved</label>
+    </div>
+    <button id="btn-next-match">
+      <label>Next Match</label>
       <img src="/assets/ui-dom/icons/arrow-right.svg" alt="" />
     </button>
   </div>

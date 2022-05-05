@@ -141,6 +141,7 @@ class BattleHUD extends Scene {
     this.uiLocked = true;
     const totalTime = Date.now() -  this.parentScene.startTime;
     const {tilesDestroyed} = this.parentScene;
+    const {playerTotalAttacks, playerAttacksHit, playerDamageInflicted, playerDamageTaken, playerDistanceMoved} = this.registry;
 
     this.time.addEvent({
       delay: 5000,
@@ -155,7 +156,11 @@ class BattleHUD extends Scene {
             this.scene.start('scene-gameover', {
               playerWon,
               totalTime,
-              tilesDestroyed
+              tilesDestroyed,
+              accuracyRating: (playerAttacksHit / playerTotalAttacks),
+              damageInflicted: playerDamageInflicted,
+              damageTaken: playerDamageTaken,
+              metersMoved: (playerDistanceMoved / 250)
             });
           }
         });

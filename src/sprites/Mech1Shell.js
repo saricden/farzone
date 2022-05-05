@@ -2,7 +2,7 @@ import { GameObjects, Math as pMath, Display } from "phaser";
 const { Container } = GameObjects;
 
 class Mech1Shell extends Container {
-  constructor(scene, x, y, rotation, flipX) {
+  constructor(scene, x, y, rotation, flipX, isPlayer = false) {
     super (scene, x, y, []);
 
     this.scene = scene;
@@ -115,6 +115,10 @@ class Mech1Shell extends Container {
     });
     this.boomEmitter2.stop();
 
+    if (isPlayer) {
+      this.scene.registry.playerTotalAttacks++;
+    }
+
     const layers = [
       this.scene.ground,
       this.scene.bgd1,
@@ -137,7 +141,7 @@ class Mech1Shell extends Container {
             tiles.forEach((tile) => {
               const dmg = pMath.Between(4, 5);
               for (let d = 0; d < dmg; d++) {
-                this.scene.damageTile(tile, { x: this.x, y: this.y }, layer);
+                this.scene.damageTile(tile, { x: this.x, y: this.y }, layer, isPlayer);
               }
             });
           });
@@ -155,6 +159,10 @@ class Mech1Shell extends Container {
             if (spriteInBounds && !sprite.doDamageTiles) {
               const v = new pMath.Vector2();
               const angle = pMath.Angle.Between(this.x, this.y, sprite.x, sprite.y);
+
+              if (isPlayer) {
+                this.scene.registry.playerAttacksHit++;
+              }
 
               v.setToPolar(angle, 100);
 

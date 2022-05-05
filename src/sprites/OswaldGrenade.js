@@ -2,7 +2,7 @@ import { GameObjects, Math as pMath } from "phaser";
 const { Image } = GameObjects;
 
 class OswaldGrendade extends Image {
-  constructor(scene, x, y, rotation) {
+  constructor(scene, x, y, rotation, isPlayer = false) {
     super(scene, x, y, 'oswald-grenade');
 
     this.scene = scene;
@@ -21,6 +21,10 @@ class OswaldGrendade extends Image {
     this.scene.physics.add.collider(this, this.scene.dummy);
 
     this.setDepth(100);
+
+    if (isPlayer) {
+      this.scene.registry.playerTotalAttacks++;
+    }
 
     // Kaboom
     this.scene.time.addEvent({
@@ -49,7 +53,7 @@ class OswaldGrendade extends Image {
             tiles.forEach((tile) => {
               const dmg = pMath.Between(4, 5);
               for (let d = 0; d < dmg; d++) {
-                this.scene.damageTile(tile, { x: this.x, y: this.y }, layer);
+                this.scene.damageTile(tile, { x: this.x, y: this.y }, layer, isPlayer);
               }
             });
           });
@@ -70,6 +74,10 @@ class OswaldGrendade extends Image {
             if (spriteInBounds && !sprite.doDamageTiles) {
               const v = new pMath.Vector2();
               const angle = pMath.Angle.Between(this.x, this.y, sprite.x, sprite.y);
+
+              if (isPlayer) {
+                this.scene.registry.playerAttacksHit++;
+              }
 
               v.setToPolar(angle, 100);
 

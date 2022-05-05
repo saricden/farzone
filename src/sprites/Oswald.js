@@ -71,7 +71,7 @@ class Oswald extends Container {
 
         // Throw grenade
         const angle = pMath.Angle.Between(this.x, this.y, pointer.worldX, pointer.worldY);
-        new OswaldGrendade(this.scene, this.x, this.y, angle);
+        new OswaldGrendade(this.scene, this.x, this.y, angle, true);
       }
       else if (this.canShoot && !this.isThrowing) {
         this.isAiming = true;
@@ -95,6 +95,8 @@ class Oswald extends Container {
         this.scene.time.timeScale = 1;
         this.scene.bgm.setVolume(1);
         this.scene.sound.play('sfx-sniper');
+
+        this.scene.registry.playerTotalAttacks++;
   
         const barrelOffsetY = 23;
         const barrelOffsetX = 275;
@@ -125,12 +127,13 @@ class Oswald extends Container {
 
             tiles.forEach((tile) => {
               for (let i = 0; i < 5; i++) {
-                this.scene.damageTile(tile, intersection, intersection.object);
+                this.scene.damageTile(tile, intersection, intersection.object, true);
               }
             });
           }
           else if (isNPC) {
             intersection.object.takeDamage(pMath.Between(150, 300), intersection);
+            this.scene.registry.playerAttacksHit++;
           }
         }
   
@@ -175,11 +178,17 @@ class Oswald extends Container {
       this.isThrowing = false;
     });
 
+    // For tracking distance stat:
+    this.prevX = this.x;
+    this.prevY = this.y;
+
     // Set data attributes
     this.setData('isPlayer', true);
   }
 
   takeDamage(dmg, intersection) {
+    this.scene.registry.playerDamageTaken += dmg;
+
     if (!this.isDead) {
       if (this.scene.registry.playerHP > 0) {
         const txtX = intersection.x + pMath.Between(-200, 200);
@@ -273,6 +282,15 @@ class Oswald extends Container {
   update(time, delta) {
     const {left, right, up} = this.cursors;
     const {mousePointer} = this.scene.input;
+
+    // Distance tracking...
+    const xDiff = Math.abs(this.x - this.prevX);
+    const yDiff = Math.abs(this.y - this.prevY);
+
+    this.scene.registry.playerDistanceMoved += (xDiff + yDiff);
+
+    this.prevX = this.x;
+    this.prevY = this.y;
 
     if (!this.isDead) {
       if (!this.isKnocked) {

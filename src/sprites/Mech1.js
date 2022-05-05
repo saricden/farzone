@@ -88,13 +88,16 @@ class Mech1 extends Container {
           endX = intersection.x;
           endY = intersection.y;
 
+          this.scene.registry.playerTotalAttacks++;
+
           if (isTile) {
             const tiles = intersection.object.getTilesWithinWorldXY(intersection.x - 1, intersection.y - 1, 2, 2);
 
-            tiles.forEach((tile) => this.scene.damageTile(tile, intersection, intersection.object));
+            tiles.forEach((tile) => this.scene.damageTile(tile, intersection, intersection.object, true));
           }
           else if (isNPC) {
             intersection.object.takeDamage(pMath.Between(1, 5), intersection);
+            this.scene.registry.playerAttacksHit++;
           }
         }
 
@@ -128,7 +131,7 @@ class Mech1 extends Container {
     
             vector.setToPolar(this.armLeft.rotation + angleMod, barrelOffsetX);
     
-            new Mech1Shell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.torsoLegs.flipX);
+            new Mech1Shell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.torsoLegs.flipX, true);
     
             this.armLeft.play('mech1-arm-left-heavy-shot', true);
             this.armRight.play('mech1-arm-right-heavy-shot', true);
@@ -164,6 +167,10 @@ class Mech1 extends Container {
       }
     });
 
+    // For tracking distance stat:
+    this.prevX = this.x;
+    this.prevY = this.y;
+
     // Set data attributes
     this.setData('isPlayer', true);
   }
@@ -185,6 +192,8 @@ class Mech1 extends Container {
   }
 
   takeDamage(dmg, intersection) {
+    this.scene.registry.playerDamageTaken += dmg;
+
     if (!this.isDead) {
       if (this.scene.registry.playerHP > 0) {
         const txtX = intersection.x + pMath.Between(-200, 200);
@@ -262,6 +271,15 @@ class Mech1 extends Container {
   update(time, delta) {
     const {left, right, up} = this.cursors;
     const {mousePointer} = this.scene.input;
+
+    // Distance tracking...
+    const xDiff = Math.abs(this.x - this.prevX);
+    const yDiff = Math.abs(this.y - this.prevY);
+
+    this.scene.registry.playerDistanceMoved += (xDiff + yDiff);
+
+    this.prevX = this.x;
+    this.prevY = this.y;
 
     if (!this.isDead) {
       if (!this.isKnocked) {

@@ -123,6 +123,8 @@ class Hume1 extends Container {
         this.scene.sound.play('sfx-hume1-yah');
 
         this.doDamageTiles = true;
+
+        this.scene.registry.playerTotalAttacks++;
       }
       else if (this.isBlocking) {
         this.isBlocking = false;
@@ -168,6 +170,10 @@ class Hume1 extends Container {
       this.isAirAttacking = false;
     });
 
+    // For tracking distance stat:
+    this.prevX = this.x;
+    this.prevY = this.y;
+
     // Set data attributes
     this.setData('isPlayer', true);
   }
@@ -193,6 +199,7 @@ class Hume1 extends Container {
         t.takeDamage(a.damage, { x: t.x, y: t.y });
         t.body.setVelocity(0, -this.jumpForce);
         this.resetLunge();
+        this.scene.registry.playerAttacksHit++;
       }
     });    
   }
@@ -213,6 +220,8 @@ class Hume1 extends Container {
   }
 
   takeDamage(dmg, intersection) {
+    this.scene.registry.playerDamageTaken += dmg;
+
     if (!this.isDead) {
       if (this.scene.registry.playerHP > 0) {
         const txtX = intersection.x + pMath.Between(-200, 200);
@@ -304,6 +313,15 @@ class Hume1 extends Container {
   update(time, delta) {
     const {left, right} = this.cursors;
     const {mousePointer} = this.scene.input;
+
+    // Distance tracking...
+    const xDiff = Math.abs(this.x - this.prevX);
+    const yDiff = Math.abs(this.y - this.prevY);
+
+    this.scene.registry.playerDistanceMoved += (xDiff + yDiff);
+
+    this.prevX = this.x;
+    this.prevY = this.y;
 
     if (!this.isDead) {
       if (!this.isKnocked) {
@@ -490,7 +508,7 @@ class Hume1 extends Container {
   
           tiles.forEach((tile) => {
             for (let i = 0; i < 5; i++) {
-              this.scene.damageTile(tile, { x: tile.pixelX, y: tile.pixelY }, this.scene.ground);
+              this.scene.damageTile(tile, { x: tile.pixelX, y: tile.pixelY }, this.scene.ground, true);
             }
           });
         });
