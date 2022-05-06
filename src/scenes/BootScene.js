@@ -29,17 +29,11 @@ class BootScene extends Scene {
     this.load.image('oswald-arm-r', 'assets/sprites/oswald-arm-r.png');
     this.load.image('oswald-grenade', 'assets/sprites/grenade.png');
 
-    // Maps
-    this.load.image('tileset-grassland-ex', 'assets/maps/tileset-grassland-ex.png');
-    this.load.tilemapTiledJSON('map-level1', 'assets/maps/level1.json');
-    this.load.tilemapTiledJSON('map-level2', 'assets/maps/level2.json');
-    this.load.tilemapTiledJSON('map-level3', 'assets/maps/level3.json');
-    this.load.tilemapTiledJSON('map-level4', 'assets/maps/level4.json');
-
     // Maps 2.0
     this.load.image('tileset-ex', 'assets/maps/2.0/tileset-ex.png');
     this.load.tilemapTiledJSON('map1', 'assets/maps/2.0/map1.json');
-    this.load.tilemapTiledJSON('map2', 'assets/maps/2.0/map2.json');
+    this.load.tilemapTiledJSON('map2-the-spire', 'assets/maps/2.0/the-spire.json');
+    this.load.tilemapTiledJSON('map2-the-great-wall', 'assets/maps/2.0/the-great-wall.json');
 
     // Music
     this.load.audio('ost-level1', 'assets/music/mech-ost1.mp3');

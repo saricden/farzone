@@ -9,8 +9,9 @@ class GameScene2 extends Scene {
     super("scene-game");
   }
 
-  init({ levelKey, p1Key }) {
+  init({ levelKey, bgColor = null, p1Key }) {
     this.levelKey = levelKey;
+    this.bgColor = bgColor;
     this.p1Key = p1Key;
   }
 
@@ -340,8 +341,13 @@ class GameScene2 extends Scene {
     this.camZoomMax = 0.5;
     this.camZoomLerp = 0.05;
 
-    this.cameras.main.setBackgroundColor(0x5555FF);
-    this.cameras.main.setZoom(1);
+    if (this.bgColor === null) {
+      this.cameras.main.setBackgroundColor(0x5555FF);
+    }
+    else {
+      this.cameras.main.setBackgroundColor(this.bgColor);
+    }
+    this.cameras.main.setZoom(this.camZoomMin);
     // this.cameras.main.setBounds(0, 0, this.tilemap.widthInPixels, this.tilemap.heightInPixels);
     
     this.cameraMid = new pMath.Vector2();

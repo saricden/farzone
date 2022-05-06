@@ -30,6 +30,7 @@ class MenuScene extends Scene {
     };
 
     this.levelKey = null;
+    this.bgColor = null;
     this.p1Key = 'roboto';
     this.p2Key = 'roboto';
 
@@ -79,6 +80,7 @@ class MenuScene extends Scene {
         
           this.scene.start('scene-game', {
             levelKey: this.levelKey,
+            bgColor: this.bgColor,
             p1Key: this.p1Key,
             p2Key: this.p2Key
           });
@@ -144,10 +146,15 @@ class MenuScene extends Scene {
 
       btn.addEventListener('click', () => {
         const levelKey = btn.getAttribute('data-map');
+        const bgColor = btn.getAttribute('data-map-bg-color');
 
         this.sound.play('sfx-electro-click2');
         
         this.levelKey = levelKey;
+
+        if (bgColor) {
+          this.bgColor = bgColor;
+        }
 
         mapSelect.classList.remove('open');
         playerSelect.classList.add('open');

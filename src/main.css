@@ -364,9 +364,9 @@ canvas {
 
 #map-select button {
   position: relative;
-  width: calc(33% - 10px);
+  width: calc(33% - 20px);
   height: 300px;
-  margin-bottom: 20px;
+  margin: 0 10px 20px 10px;
   background-color: transparent;
   border: solid 2px rgba(255, 255, 255, 0.35);
   border-radius: 20px;
@@ -425,7 +425,7 @@ canvas {
   flex-direction: row;
   flex-wrap: wrap;
   align-items: stretch;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 #btn-title {
