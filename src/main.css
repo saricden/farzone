@@ -190,7 +190,13 @@ canvas {
   transition: border-color 0.15s, margin-right 0.35s, background-color 0.35s, opacity 1s, visibility 1s;
 }
 
-.menu--title button:hover {
+.menu--title button:disabled {
+  border-color: transparent;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.menu--title button:not(:disabled):hover {
   margin-right: 15px;
   border-color: #FFF;
   background-color: rgba(0, 0, 0, 0.6);
@@ -376,7 +382,12 @@ canvas {
   transition: border-color 0.35s, background-color 0.35s;
 }
 
-#map-select button:hover {
+#map-select button:disabled {
+  cursor: not-allowed;
+}
+
+#map-select button:not(:disabled):hover,
+#map-select button.remote-hover {
   border-color: #FFF;
   background-color: rgba(255, 255, 255, 0.5);
 }
@@ -395,7 +406,8 @@ canvas {
   transition: opacity 0.35s, transform 0.5s;
 }
 
-#map-select button:hover img {
+#map-select button:not(:disabled):hover img,
+#map-select button.remote-hover img {
   opacity: 1;
   transform: scale(1.05);
 }
@@ -415,7 +427,8 @@ canvas {
   transition: background-color 0.35s;
 }
 
-#map-select button:hover label {
+#map-select button:not(:disabled):hover label,
+#map-select button.remote-hover label {
   background-color: #FFF;
 }
 
@@ -883,4 +896,165 @@ canvas {
 
 #btn-next-match img {
   margin-left: 10px;
+}
+
+/* Multiplayer stuff */
+#multiplayer-connect {
+  z-index: 20;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  background-image: radial-gradient(
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0.85)
+  );
+  backdrop-filter: blur(10px);
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s, visibility 0.5s;
+}
+
+#multiplayer-connect.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+#mp-connecting-loader,
+#multiplayer-connect .option-box,
+#mp-or {
+  display: none;
+}
+
+#mp-connecting-loader.on,
+#multiplayer-connect .option-box.on,
+#mp-or.on {
+  display: block;
+}
+
+#multiplayer-connect .option-box {
+  padding: 20px;
+  border: solid 1px #FFF;
+  border-radius: 20px;
+}
+
+#multiplayer-connect label {
+  display: block;
+  margin-bottom: 10px;
+  font-family: sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+}
+
+#mp-player-id {
+  padding: 20px;
+  border: solid 1px #FFF;
+  border-radius: 20px;
+  font-family: monospace;
+  font-size: 36px;
+  color: #FFF;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+#mp-or {
+  font-size: 50px;
+  margin: 40px 0;
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: 300;
+}
+
+#mp-remote-id {
+  display: block;
+  width: 100%;
+  padding: 20px;
+  border: solid 1px #FFF;
+  border-radius: 20px;
+  font-size: 36px;
+  font-family: monospace;
+  background-color: #FFF;
+  color: #000;
+  outline: none;
+  text-align: center;
+}
+
+#btn-mp-connect {
+  display: block;
+  margin: 20px auto 0 auto;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 20px;
+  font-size: 28px;
+  font-family: sans-serif;
+  background-color: #FFF;
+  color: #000;
+  cursor: pointer;
+}
+
+.loader,
+.loader:before,
+.loader:after {
+  background: #ffffff;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+}
+.loader {
+  color: #ffffff;
+  text-indent: -9999em;
+  margin: 88px auto;
+  position: relative;
+  font-size: 11px;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.loader:before,
+.loader:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+.loader:before {
+  left: -1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.loader:after {
+  left: 1.5em;
+}
+@-webkit-keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
 }

@@ -31,9 +31,13 @@
 </button>
 
 <div id="menu-title" class="menu menu--title">
-  <button id="btn-play" style="animation-delay: 9s;">
+  <button id="btn-play" style="animation-delay: 8.75s;">
     <img src="/assets/ui-dom/icons/play.svg" alt="" />
-    Play Game
+    Single Player
+  </button>
+  <button id="btn-multiplayer" style="animation-delay: 9s;">
+    <img src="/assets/ui-dom/icons/wifi.svg" alt="" />
+    Start Multiplayer
   </button>
   <button id="btn-achievements" style="animation-delay: 9.25s;">
     <img src="/assets/ui-dom/icons/award.svg" alt="" />
@@ -144,3 +148,22 @@
 <button id="btn-start-match">
   <img src="/assets/ui-dom/icons/play.svg" alt="" />
 </button>
+
+<div id="multiplayer-connect">
+  <div>
+    <div id="mp-connecting-loader" class="loader">Loading...</div>
+
+    <div class="option-box">
+      <label>Share this ID with your opponent:</label>
+      <div id="mp-player-id"></div>
+    </div>
+
+    <div id="mp-or">OR</div>
+
+    <div class="option-box">
+      <label>Enter your opponent's ID and press connect:</label>
+      <input type="text" id="mp-remote-id" />
+      <button id="btn-mp-connect">Connect</button>
+    </div>
+  </div>
+</div>

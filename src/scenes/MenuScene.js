@@ -1,5 +1,6 @@
 import { Scene } from "phaser";
 import moment from "moment";
+import Peer from "peerjs";
 
 class MenuScene extends Scene {
   constructor() {
@@ -39,6 +40,7 @@ class MenuScene extends Scene {
     
     // Bind DOM events
     const btnPlay = document.getElementById('btn-play');
+    const btnMultiplayer = document.getElementById('btn-multiplayer');
     const btnSettings = document.getElementById('btn-settings');
     const btnCredits = document.getElementById('btn-credits');
     const btnGitHub = document.getElementById('btn-github');
@@ -51,26 +53,141 @@ class MenuScene extends Scene {
     const titleBG = document.getElementById('title-bg');
     const menuTitle = document.getElementById('menu-title');
 
-    const mapSelect = document.getElementById('map-select');
+    this.mapSelect = document.getElementById('map-select');
     const mapBtns = document.querySelectorAll('[data-map]');
 
-    const playerSelect = document.getElementById('player-select');
+    this.playerSelect = document.getElementById('player-select');
     const profilePlayer = document.getElementById('profile-player');
     const profileComputer = document.getElementById('profile-computer');
     const charBtnsPlayer = document.querySelectorAll('[data-character-player]');
     const charBtnsComputer = document.querySelectorAll('[data-character-computer]');
     const playerInfo = document.getElementById('player-info');
     const computerInfo = document.getElementById('computer-info');
-    const btnStartMatch = document.getElementById('btn-start-match');
+    this.btnStartMatch = document.getElementById('btn-start-match');
+
+    const multiplayerConnect = document.getElementById('multiplayer-connect');
+    const mpConnectingLoader = document.getElementById('mp-connecting-loader');
+    const mpPlayerID = document.getElementById('mp-player-id');
+    const mpOptionBoxes = document.querySelectorAll('#multiplayer-connect .option-box');
+    const mpOr = document.getElementById('mp-or');
+    const mpRemoteID = document.getElementById('mp-remote-id');
+    const mpBtnConnect = document.getElementById('btn-mp-connect');
 
     const credits = document.getElementById('credits');
 
     const btnTitle = document.getElementById('btn-title');
 
-    btnStartMatch.addEventListener('click', () => {
+    this.registry.isMultiplayer = false;
+    this.registry.isMultiplayerHost = false;
+
+    btnMultiplayer.addEventListener('click', () => {
+      multiplayerConnect.classList.add('open');
+      mpConnectingLoader.classList.add('on');
+
+      // Create new Peer
+      if (typeof this.registry.peer === 'undefined') {
+        this.registry.peer = new Peer({
+          host: 'farzone-server.herokuapp.com',
+          port: 443,
+          secure: true,
+          // debug: 3
+          debug: 0
+        });
+  
+        this.registry.peer.on('open', (id) => {
+          mpPlayerID.innerHTML = id;
+          
+          mpConnectingLoader.classList.remove('on');
+  
+          mpOptionBoxes.forEach((box) => {
+            box.classList.add('on');
+          });
+  
+          mpOr.classList.add('on');
+        });
+
+        this.registry.peer.on('connection', (connection) => {
+          this.registry.connection = connection;
+
+          mpConnectingLoader.classList.remove('on');
+          mpOptionBoxes.forEach((box) => {
+            box.classList.remove('on');
+          });
+          mpOr.classList.remove('on');
+          multiplayerConnect.classList.remove('open');
+
+          btnMultiplayer.setAttribute('disabled', true);
+
+          this.registry.connection.on('data', (data) => {
+            this.handleMultiplayerData(data);
+          });
+
+          this.registry.isMultiplayer = true;
+          this.registry.isMultiplayerHost = false;
+
+          // Move to map select
+          titleBG.classList.add('down');
+          menuTitle.classList.add('off');
+          btnUpdate.classList.add('off');
+          this.mapSelect.classList.add('open');
+          btnTitle.classList.add('on');
+
+          // Disable map buttons for non-host
+          mapBtns.forEach((btn) => {
+            btn.setAttribute('disabled', true);
+          });
+
+          // Hide the main menu btn (for now, TODO: change to disconnect btn)
+          btnTitle.style.display = "none";
+        });
+      }
+      else {
+        mpConnectingLoader.classList.remove('on');
+      }
+    });
+
+    mpBtnConnect.addEventListener('click', () => {
+      if (typeof this.registry.peer !== 'undefined') {
+        const remoteID = mpRemoteID.value;
+        this.registry.connection = this.registry.peer.connect(remoteID);
+        
+        mpOptionBoxes.forEach((box) => {
+          box.classList.remove('on');
+        });
+        mpOr.classList.remove('on');
+        
+        mpConnectingLoader.classList.add('on');
+
+        this.registry.connection.on('open', () => {
+          mpConnectingLoader.classList.remove('on');
+          multiplayerConnect.classList.remove('open');
+
+          btnMultiplayer.setAttribute('disabled', true);
+
+          this.registry.connection.on('data', (data) => {
+            this.handleMultiplayerData(data);
+          });
+
+          this.registry.isMultiplayer = true;
+          this.registry.isMultiplayerHost = true; // player initiating connection starts as host
+
+          // Move to the map selection screen
+          titleBG.classList.add('down');
+          menuTitle.classList.add('off');
+          btnUpdate.classList.add('off');
+          this.mapSelect.classList.add('open');
+          btnTitle.classList.add('on');
+
+          // Hide the main menu btn (for now, TODO: change to disconnect btn)
+          btnTitle.style.display = "none";
+        });
+      }
+    });
+
+    this.btnStartMatch.addEventListener('click', () => {
       this.sound.play('mitch-ready');
       
-      btnStartMatch.classList.add('go');
+      this.btnStartMatch.classList.add('go');
 
       this.time.addEvent({
         delay: 600,
@@ -140,12 +257,29 @@ class MenuScene extends Scene {
     });
 
     mapBtns.forEach((btn) => {
+      const levelKey = btn.getAttribute('data-map');
+
       btn.addEventListener('mouseenter', () => {
         this.sound.play('sfx-click');
+
+        if (this.registry.isMultiplayer && this.registry.isMultiplayerHost) {
+          this.registry.connection.send({
+            EVENT: 'map-hover',
+            mapKey: levelKey
+          });
+        }
+      });
+
+      btn.addEventListener('mouseout', () => {
+        if (this.registry.isMultiplayer && this.registry.isMultiplayerHost) {
+          this.registry.connection.send({
+            EVENT: 'map-blur',
+            mapKey: levelKey
+          });
+        }
       });
 
       btn.addEventListener('click', () => {
-        const levelKey = btn.getAttribute('data-map');
         const bgColor = btn.getAttribute('data-map-bg-color');
 
         this.sound.play('sfx-electro-click2');
@@ -156,9 +290,16 @@ class MenuScene extends Scene {
           this.bgColor = bgColor;
         }
 
-        mapSelect.classList.remove('open');
-        playerSelect.classList.add('open');
-        btnStartMatch.classList.add('open');
+        this.mapSelect.classList.remove('open');
+        this.playerSelect.classList.add('open');
+        this.btnStartMatch.classList.add('open');
+
+        if (this.registry.isMultiplayer && this.registry.isMultiplayerHost) {
+          this.registry.connection.send({
+            EVENT: 'map-select',
+            mapKey: levelKey
+          });
+        }
       });
     });
 
@@ -195,7 +336,7 @@ class MenuScene extends Scene {
       titleBG.classList.add('down');
       menuTitle.classList.add('off');
       btnUpdate.classList.add('off');
-      mapSelect.classList.add('open');
+      this.mapSelect.classList.add('open');
       btnTitle.classList.add('on');
     });
 
@@ -203,7 +344,7 @@ class MenuScene extends Scene {
       titleBG.classList.add('down');
       menuTitle.classList.add('off');
       btnUpdate.classList.add('off');
-      mapSelect.classList.add('open');
+      this.mapSelect.classList.add('open');
       btnTitle.classList.add('on');
     }
 
@@ -261,11 +402,40 @@ class MenuScene extends Scene {
       titleBG.classList.remove('down');
       menuTitle.classList.remove('off');
       btnUpdate.classList.remove('off');
-      mapSelect.classList.remove('open');
+      this.mapSelect.classList.remove('open');
       btnTitle.classList.remove('on');
-      playerSelect.classList.remove('open');
-      btnStartMatch.classList.remove('open');
+      this.btnStartMatch.classList.remove('open');
     });
+  }
+
+  handleMultiplayerData(data) {
+    const {EVENT} = data;
+
+    if (EVENT === 'map-hover') {
+      const {mapKey} = data;
+
+      const hoveredMap = document.querySelector(`[data-map="${mapKey}"]`);
+      hoveredMap.classList.add('remote-hover');
+
+      this.sound.play('sfx-click');
+    }
+    else if (EVENT === 'map-blur') {
+      const {mapKey} = data;
+
+      const hoveredMap = document.querySelector(`[data-map="${mapKey}"]`);
+      hoveredMap.classList.remove('remote-hover');
+    }
+    else if (EVENT === 'map-select') {
+      const {mapKey} = data;
+
+      this.levelKey = mapKey;
+
+      console.log('RECEIVED MAP-SELECT');
+
+      this.mapSelect.classList.remove('open');
+      this.playerSelect.classList.add('open');
+      this.btnStartMatch.classList.add('open');
+    }
   }
 }
 

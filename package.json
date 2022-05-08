@@ -27,6 +27,7 @@
   "dependencies": {
     "moment": "^2.29.3",
     "pathfinding": "^0.4.18",
+    "peerjs": "^1.3.2",
     "phaser": "^3.55.2",
     "phaser-raycaster": "^0.10.2"
   }
