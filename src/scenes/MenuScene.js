@@ -12,7 +12,7 @@ class MenuScene extends Scene {
   }
 
   create() {
-    const charData = {
+    this.charData = {
       'roboto': {
         voiceKey: 'mitch-roboto'
       },
@@ -34,6 +34,8 @@ class MenuScene extends Scene {
     this.bgColor = null;
     this.p1Key = 'roboto';
     this.p2Key = 'roboto';
+    this.mpOpponentReadyForMatch = false;
+    this.mpReadyForMatch = false;
 
     this.title = this.add.dom(0, 0, 'div', 'width: 100%;').createFromCache('dom-title');
     this.title.setOrigin(0, 0);
@@ -57,12 +59,12 @@ class MenuScene extends Scene {
     const mapBtns = document.querySelectorAll('[data-map]');
 
     this.playerSelect = document.getElementById('player-select');
-    const profilePlayer = document.getElementById('profile-player');
-    const profileComputer = document.getElementById('profile-computer');
-    const charBtnsPlayer = document.querySelectorAll('[data-character-player]');
-    const charBtnsComputer = document.querySelectorAll('[data-character-computer]');
-    const playerInfo = document.getElementById('player-info');
-    const computerInfo = document.getElementById('computer-info');
+    this.profilePlayer = document.getElementById('profile-player');
+    this.profileComputer = document.getElementById('profile-computer');
+    this.charBtnsPlayer = document.querySelectorAll('[data-character-player]');
+    this.charBtnsComputer = document.querySelectorAll('[data-character-computer]');
+    this.playerInfo = document.getElementById('player-info');
+    this.computerInfo = document.getElementById('computer-info');
     this.btnStartMatch = document.getElementById('btn-start-match');
 
     const multiplayerConnect = document.getElementById('multiplayer-connect');
@@ -185,74 +187,159 @@ class MenuScene extends Scene {
     });
 
     this.btnStartMatch.addEventListener('click', () => {
-      this.sound.play('mitch-ready');
-      
-      this.btnStartMatch.classList.add('go');
+      if (this.registry.isMultiplayer) {
+        if (this.registry.isMultiplayerHost) {
+          document.querySelector('.characters.player').classList.add('ready');
+        }
+        else {
+          document.querySelector('.characters.computer').classList.add('ready');
+        }
 
-      this.time.addEvent({
-        delay: 600,
-        repeat: 0,
-        callback: () => {
-          this.wind.stop();
+        this.mpReadyForMatch = true;
+
+        if (this.mpOpponentReadyForMatch) {
+          this.sound.play('mitch-ready');
         
-          this.scene.start('scene-game', {
-            levelKey: this.levelKey,
-            bgColor: this.bgColor,
-            p1Key: this.p1Key,
-            p2Key: this.p2Key
+          this.btnStartMatch.classList.add('go');
+    
+          this.time.addEvent({
+            delay: 600,
+            repeat: 0,
+            callback: () => {
+              this.wind.stop();
+            
+              this.scene.start('scene-game', {
+                levelKey: this.levelKey,
+                bgColor: this.bgColor,
+                p1Key: this.p1Key,
+                p2Key: this.p2Key
+              });
+            }
+          });
+        }
+        
+        this.registry.connection.send({
+          EVENT: 'player-ready'
+        });
+      }
+      else {
+        this.sound.play('mitch-ready');
+        
+        this.btnStartMatch.classList.add('go');
+  
+        this.time.addEvent({
+          delay: 600,
+          repeat: 0,
+          callback: () => {
+            this.wind.stop();
+          
+            this.scene.start('scene-game', {
+              levelKey: this.levelKey,
+              bgColor: this.bgColor,
+              p1Key: this.p1Key,
+              p2Key: this.p2Key
+            });
+          }
+        });
+      }
+    });
+
+    this.charBtnsPlayer.forEach((btn) => {
+      const charKey = btn.getAttribute('data-character-player');
+
+      btn.addEventListener('mouseenter', () => {
+        this.sound.play('sfx-click');
+
+        if (this.registry.isMultiplayer && this.registry.isMultiplayerHost) {
+          this.registry.connection.send({
+            EVENT: 'character-hover',
+            charKey
+          });
+        }
+      });
+
+      btn.addEventListener('mouseout', () => {
+        if (this.registry.isMultiplayer && this.registry.isMultiplayerHost) {
+          this.registry.connection.send({
+            EVENT: 'character-blur',
+            charKey
+          });
+        }
+      });
+
+      btn.addEventListener('click', () => {
+        const {voiceKey} = this.charData[charKey];
+
+        this.charBtnsPlayer.forEach((btn2) => {
+          btn2.classList.remove('selected');
+        });
+
+        btn.classList.add('selected');
+
+        this.profilePlayer.setAttribute('src', `/assets/ui-dom/profiles/${charKey}.png`);
+
+        this.playerInfo.querySelector('header').innerHTML = charKey;
+
+        this.p1Key = charKey;
+
+        this.sound.play(voiceKey);
+
+        if (this.registry.isMultiplayer) {
+          this.registry.connection.send({
+            EVENT: 'character-select',
+            charKey
           });
         }
       });
     });
 
-    charBtnsPlayer.forEach((btn) => {
+    this.charBtnsComputer.forEach((btn) => {
+      const charKey = btn.getAttribute('data-character-computer');
+
       btn.addEventListener('mouseenter', () => {
         this.sound.play('sfx-click');
+
+        if (this.registry.isMultiplayer && !this.registry.isMultiplayerHost) {
+          this.registry.connection.send({
+            EVENT: 'character-hover',
+            charKey
+          });
+        }
+      });
+
+      btn.addEventListener('mouseout', () => {
+        if (this.registry.isMultiplayer && !this.registry.isMultiplayerHost) {
+          this.registry.connection.send({
+            EVENT: 'character-blur',
+            charKey
+          });
+        }
       });
 
       btn.addEventListener('click', () => {
-        const charKey = btn.getAttribute('data-character-player');
-        const {voiceKey} = charData[charKey];
+        this.sound.play('sfx-click');
+        const {voiceKey} = this.charData[charKey];
 
-        charBtnsPlayer.forEach((btn2) => {
+        this.charBtnsComputer.forEach((btn2) => {
           btn2.classList.remove('selected');
         });
 
         btn.classList.add('selected');
 
-        profilePlayer.setAttribute('src', `/assets/ui-dom/profiles/${charKey}.png`);
+        this.profileComputer.setAttribute('src', `/assets/ui-dom/profiles/${charKey}.png`);
 
-        playerInfo.querySelector('header').innerHTML = charKey;
-
-        this.p1Key = charKey;
-
-        this.sound.play(voiceKey);
-      });
-    });
-
-    charBtnsComputer.forEach((btn) => {
-      btn.addEventListener('mouseenter', () => {
-        this.sound.play('sfx-click');
-      });
-
-      btn.addEventListener('click', () => {
-        this.sound.play('sfx-click');
-        const charKey = btn.getAttribute('data-character-computer');
-        const {voiceKey} = charData[charKey];
-
-        charBtnsComputer.forEach((btn2) => {
-          btn2.classList.remove('selected');
-        });
-
-        btn.classList.add('selected');
-
-        profileComputer.setAttribute('src', `/assets/ui-dom/profiles/${charKey}.png`);
-
-        computerInfo.querySelector('header').innerHTML = charKey;
+        this.computerInfo.querySelector('header').innerHTML = charKey;
 
         this.p2Key = charKey;
 
         this.sound.play(voiceKey);
+
+        if (this.registry.isMultiplayer) {
+          this.registry.connection.send({
+            EVENT: 'character-select',
+            charKey
+          });
+        }
       });
     });
 
@@ -295,6 +382,8 @@ class MenuScene extends Scene {
         this.btnStartMatch.classList.add('open');
 
         if (this.registry.isMultiplayer && this.registry.isMultiplayerHost) {
+          this.charBtnsComputer.forEach((btn) => btn.setAttribute('disabled', true));
+
           this.registry.connection.send({
             EVENT: 'map-select',
             mapKey: levelKey
@@ -430,11 +519,108 @@ class MenuScene extends Scene {
 
       this.levelKey = mapKey;
 
-      console.log('RECEIVED MAP-SELECT');
-
       this.mapSelect.classList.remove('open');
       this.playerSelect.classList.add('open');
       this.btnStartMatch.classList.add('open');
+
+      this.charBtnsPlayer.forEach((btn) => btn.setAttribute('disabled', true));
+    }
+    else if (EVENT === 'character-hover') {
+      const {charKey} = data;
+
+      if (this.registry.isMultiplayerHost) {
+        const hoveredCharacter = document.querySelector(`[data-character-computer="${charKey}"]`);
+        hoveredCharacter.classList.add('remote-hover');
+      }
+      else {
+        const hoveredCharacter = document.querySelector(`[data-character-player="${charKey}"]`);
+        hoveredCharacter.classList.add('remote-hover');
+      }
+    }
+    else if (EVENT === 'character-blur') {
+      const {charKey} = data;
+
+      if (this.registry.isMultiplayerHost) {
+        const hoveredCharacter = document.querySelector(`[data-character-computer="${charKey}"]`);
+        hoveredCharacter.classList.remove('remote-hover');
+      }
+      else {
+        const hoveredCharacter = document.querySelector(`[data-character-player="${charKey}"]`);
+        hoveredCharacter.classList.remove('remote-hover');
+      }
+    }
+    else if (EVENT === 'character-select') {
+      const {charKey} = data;
+
+      if (this.registry.isMultiplayerHost) {
+        const computerCharacters = document.querySelectorAll('[data-character-computer]');
+        const selectedCharacter = document.querySelector(`[data-character-computer="${charKey}"]`);
+
+        computerCharacters.forEach((btn) => {
+          btn.classList.remove('selected');
+        });
+        selectedCharacter.classList.add('selected');
+
+        const {voiceKey} = this.charData[charKey];
+
+        this.profileComputer.setAttribute('src', `/assets/ui-dom/profiles/${charKey}.png`);
+
+        this.computerInfo.querySelector('header').innerHTML = charKey;
+
+        this.p2Key = charKey;
+
+        this.sound.play(voiceKey);
+      }
+      else {
+        const playerCharacters = document.querySelectorAll('[data-character-player]');
+        const selectedCharacter = document.querySelector(`[data-character-player="${charKey}"]`);
+
+        playerCharacters.forEach((btn) => {
+          btn.classList.remove('selected');
+        });
+        selectedCharacter.classList.add('selected');
+
+        const {voiceKey} = this.charData[charKey];
+
+        this.profilePlayer.setAttribute('src', `/assets/ui-dom/profiles/${charKey}.png`);
+
+        this.playerInfo.querySelector('header').innerHTML = charKey;
+
+        this.p1Key = charKey;
+
+        this.sound.play(voiceKey);
+      }
+    }
+    else if (EVENT === 'player-ready') {
+      if (this.registry.isMultiplayerHost) {
+        document.querySelector('.characters.computer').classList.add('ready');
+      }
+      else {
+        document.querySelector('.characters.player').classList.add('ready');
+      }
+
+      this.mpOpponentReadyForMatch = true;
+
+      if (this.mpReadyForMatch) {
+        this.sound.play('mitch-ready');
+        
+        this.btnStartMatch.classList.add('go');
+  
+        this.time.addEvent({
+          delay: 600,
+          repeat: 0,
+          callback: () => {
+            this.wind.stop();
+          
+            this.scene.start('scene-game', {
+              levelKey: this.levelKey,
+              bgColor: this.bgColor,
+              p1Key: this.p1Key,
+              p2Key: this.p2Key
+            });
+          }
+        });
+      }
     }
   }
 }

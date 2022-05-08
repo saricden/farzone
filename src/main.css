@@ -570,8 +570,13 @@ canvas {
   /* cursor: not-allowed; */
 }
 
-.characters button:hover {
+.characters button:not(:disabled):hover,
+.characters button.remote-hover {
   background-color: rgba(255, 255, 255, 0.75);
+}
+
+.characters button:disabled {
+  cursor: not-allowed;
 }
 
 .characters.player button.selected {
@@ -585,6 +590,7 @@ canvas {
 }
 
 .characters button img {
+  z-index: 1;
   position: absolute;
   top: 0;
   left: 0;
@@ -596,6 +602,10 @@ canvas {
 
 .characters.computer button img {
   filter: hue-rotate(90deg);
+}
+
+.characters.ready button:not(.selected) {
+  opacity: 0;
 }
 
 #player-info,
