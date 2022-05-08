@@ -566,10 +566,6 @@ canvas {
   margin-bottom: 0;
 }
 
-.characters.computer button {
-  /* cursor: not-allowed; */
-}
-
 .characters button:not(:disabled):hover,
 .characters button.remote-hover {
   background-color: rgba(255, 255, 255, 0.75);

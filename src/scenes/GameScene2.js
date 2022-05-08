@@ -5,6 +5,7 @@ import Hume1 from '../sprites/Hume1';
 import Oswald from '../sprites/Oswald';
 import Hume1NPC from '../sprites/Hume1NPC';
 import PF from 'pathfinding';
+import Mech1Peer from '../sprites/Mech1Peer';
 
 const { Grid } = PF;
 
@@ -70,31 +71,83 @@ class GameScene2 extends Scene {
     this.leavesBG1.setPosition(this.leavesBG1Pos);
     this.leavesBG2.setPosition(this.leavesBG2Pos);
 
-    // Add, scale, and make up a speed for our creature
-    // this.cat = new Mech1(this, 0, 0);
-    if (this.p1Key === 'roboto') {
-      this.cat = new Mech1(this, 0, 0);
-    }
-    else if (this.p1Key === 'arial') {
-      this.cat = new Hume1(this, 0, 0);
-    }
-    else if (this.p1Key === 'oswald') {
-      this.cat = new Oswald(this, 0, 0);
-    }
-    this.catSpeed = 500;
-    this.catSpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
-    
-    if (this.p2Key === 'roboto') {
-      this.dummy = new Mech1NPC(this, 0, 0);
-    }
-    else if (this.p2Key === 'arial') {
-      this.dummy = new Hume1NPC(this, 0, 0);
-    }
-    this.dummySpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
+    // If game is multiplayer...
+    if (this.registry.isMultiplayer) {
+      // If this client is player 1...
+      if (this.registry.isMultiplayerHost) {
+        // Make player 1 a controllable sprite
+        if (this.p1Key === 'roboto') {
+          this.cat = new Mech1(this, 0, 0);
+        }
+        else if (this.p1Key === 'arial') {
+          this.cat = new Hume1(this, 0, 0);
+        }
+        else if (this.p1Key === 'oswald') {
+          this.cat = new Oswald(this, 0, 0);
+        }
 
-    if (this.soloTest) {
-      this.dummy.isPaused = true;
+        // Make player 2 a peer sprite sprite
+        if (this.p2Key === 'roboto') {
+          this.dummy = new Mech1Peer(this, 0, 0);
+        }
+        else if (this.p2Key === 'arial') {
+          // this.dummy = new Hume1NPC(this, 0, 0);
+        }
+      }
+      // If this client is player 2...
+      else {
+        // Make player 1 a peer sprite
+        if (this.p1Key === 'roboto') {
+          this.cat = new Mech1Peer(this, 0, 0);
+        }
+        else if (this.p1Key === 'arial') {
+          // this.cat = new Hume1(this, 0, 0);
+        }
+        else if (this.p1Key === 'oswald') {
+          // this.cat = new Oswald(this, 0, 0);
+        }
+
+        // Make player 2 a controllable sprite
+        if (this.p2Key === 'roboto') {
+          this.dummy = new Mech1(this, 0, 0);
+        }
+        else if (this.p2Key === 'arial') {
+          this.dummy = new Hume1(this, 0, 0);
+        }
+        else if (this.p2Key === 'oswald') {
+          this.dummy = new Oswald(this, 0, 0);
+        }
+      }
     }
+    // Otherwise, single player against a CPU...
+    else {
+      if (this.p1Key === 'roboto') {
+        this.cat = new Mech1(this, 0, 0);
+      }
+      else if (this.p1Key === 'arial') {
+        this.cat = new Hume1(this, 0, 0);
+      }
+      else if (this.p1Key === 'oswald') {
+        this.cat = new Oswald(this, 0, 0);
+      }
+      
+      if (this.p2Key === 'roboto') {
+        this.dummy = new Mech1NPC(this, 0, 0);
+      }
+      else if (this.p2Key === 'arial') {
+        this.dummy = new Hume1NPC(this, 0, 0);
+      }
+  
+      if (this.soloTest) {
+        this.dummy.isPaused = true;
+      }
+    }
+
+    // Apply player 2 colour
+    // this.dummy.setHueRotate(180.25);
+
+    this.catSpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
+    this.dummySpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
 
     // Make sure we don't spawn both players at same point
     while (this.catSpawnpoint === this.dummySpawnpoint) {
@@ -464,6 +517,19 @@ class GameScene2 extends Scene {
       lifespan: 2000
     });
     this.boomEmitter2.stop();
+
+    if (this.registry.isMultiplayer) {
+      // Multiplayer stuff
+      this.p1PrevX = this.cat.x;
+      this.p1PrevY = this.cat.y;
+      this.p2PrevX = this.dummy.x;
+      this.p2PrevY = this.dummy.y;
+  
+      // Handle incoming broadcasts
+      this.registry.connection.on('data', (data) => {
+        this.handleMultiplayerData(data);
+      });
+    }
   }
 
   damageTile(tile, intersection, layer, isPlayer = false) {
@@ -994,7 +1060,61 @@ class GameScene2 extends Scene {
     }
   }
 
+  handleMultiplayerData(data) {
+    const {EVENT} = data;
+    const isPlayer1 = this.registry.isMultiplayerHost;
+
+    if (EVENT === 'player-position-change') {
+      const {x, y} = data;
+
+      if (isPlayer1) {
+        this.dummy.setPosition(x, y);
+      }
+      else {
+        this.cat.setPosition(x, y);
+      }
+    }
+  }
+
   update(time, delta) {
+    // Track/broadcast updates if multiplayer
+    if (this.registry.isMultiplayer) {
+      const isPlayer1 = this.registry.isMultiplayerHost;
+
+      if (isPlayer1) {
+        const positionChanged = (this.p1PrevX !== this.cat.x || this.p1PrevY !== this.cat.y);
+
+        if (positionChanged) {
+          // Broadcast new position
+          this.registry.connection.send({
+            EVENT: 'player-position-change',
+            x: this.cat.x,
+            y: this.cat.y
+          });
+        }
+
+        // Update previous position for next frame
+        this.p1PrevX = this.cat.x;
+        this.p1PrevY = this.cat.y;
+      }
+      else {
+        const positionChanged = (this.p2PrevX !== this.dummy.x || this.p2PrevY !== this.dummy.y);
+
+        if (positionChanged) {
+          // Broadcast new position
+          this.registry.connection.send({
+            EVENT: 'player-position-change',
+            x: this.dummy.x,
+            y: this.dummy.y
+          });
+        }
+
+        // Update previous position for next frame
+        this.p2PrevX = this.dummy.x;
+        this.p2PrevY = this.dummy.y;
+      }
+    }
+
     // Apply timescale
     if (this.dirtEmitter.timeScale !== this.scaleTime) {
       this.dirtEmitter.timeScale = this.scaleTime;
