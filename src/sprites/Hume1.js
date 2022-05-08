@@ -508,7 +508,7 @@ class Hume1 extends Container {
   
           tiles.forEach((tile) => {
             for (let i = 0; i < 5; i++) {
-              this.scene.damageTile(tile, { x: tile.pixelX, y: tile.pixelY }, this.scene.ground, true);
+              this.scene.damageTile(tile, { x: tile.pixelX, y: tile.pixelY }, layer, true);
             }
           });
         });

@@ -499,7 +499,7 @@ class BootScene extends Scene {
     this.fadeGfx.fillRect(0, 0, window.innerWidth, window.innerHeight);
     this.fadeGfx.setAlpha(0);
 
-    // this.sound.setVolume(0);
+    this.sound.setVolume(0);
     // this.sound.setVolume(0.25);
 
     this.sound.play('sfx-electro-click1');
@@ -513,7 +513,7 @@ class BootScene extends Scene {
         onComplete: () => {
           this.scene.start('scene-menu');
 
-          // this.scene.start('scene-game', { levelKey: 'map1', p1Key: 'oswald' });
+          // this.scene.start('scene-game', { levelKey: 'map1', p1Key: 'arial', p2Key: 'arial' });
 
           // this.registry.p1Key = 'oswald';
           // this.registry.p2Key = 'roboto';

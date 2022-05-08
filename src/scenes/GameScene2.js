@@ -3,16 +3,21 @@ import Mech1 from '../sprites/Mech1';
 import Mech1NPC from '../sprites/Mech1NPC';
 import Hume1 from '../sprites/Hume1';
 import Oswald from '../sprites/Oswald';
+import Hume1NPC from '../sprites/Hume1NPC';
+import PF from 'pathfinding';
+
+const { Grid } = PF;
 
 class GameScene2 extends Scene {
   constructor() {
     super("scene-game");
   }
 
-  init({ levelKey, bgColor = null, p1Key }) {
+  init({ levelKey, bgColor = null, p1Key, p2Key }) {
     this.levelKey = levelKey;
     this.bgColor = bgColor;
     this.p1Key = p1Key;
+    this.p2Key = p2Key;
   }
 
   create() {
@@ -21,7 +26,8 @@ class GameScene2 extends Scene {
     // Launch HUD ui
     this.scene.launch('ui-battlehud', {
       parentScene: this,
-      p1Key: this.p1Key
+      p1Key: this.p1Key,
+      p2Key: this.p2Key
     });
 
     this.tilemap = this.add.tilemap(this.levelKey);
@@ -78,7 +84,12 @@ class GameScene2 extends Scene {
     this.catSpeed = 500;
     this.catSpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
     
-    this.dummy = new Mech1NPC(this, 0, 0);
+    if (this.p2Key === 'roboto') {
+      this.dummy = new Mech1NPC(this, 0, 0);
+    }
+    else if (this.p2Key === 'arial') {
+      this.dummy = new Hume1NPC(this, 0, 0);
+    }
     this.dummySpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
 
     if (this.soloTest) {
@@ -125,7 +136,13 @@ class GameScene2 extends Scene {
 
       return true;
     });
-    this.physics.add.collider(this.dummy, this.ground);
+    this.physics.add.collider(this.dummy, this.ground, null, () => {
+      if (typeof this.dummy.processGround === 'function') {
+        return this.dummy.processGround();
+      }
+
+      return true;
+    });
     this.physics.add.collider(this.dummy, this.cat);
 
     // Particle effects
@@ -301,6 +318,23 @@ class GameScene2 extends Scene {
       this.leavesBG2
     ]);
 
+    // Init pathfinding
+    let matrix = [];
+
+    this.tilemap.forEachTile((tile) => {
+      const {x, y} = tile;
+
+      if (!Array.isArray(matrix[y])) {
+        matrix[y] = [];
+      }
+
+      matrix[y][x] = (tile.index > 0 ? 1 : 0);
+    }, this, 0, 0, this.tilemap.width, this.tilemap.height, {}, this.ground);
+
+    this.pfGrid = new Grid(matrix);
+    this.pfMatrix = matrix;
+
+
     // Game data
     if (this.p1Key === 'roboto') {
       this.registry.playerMaxHP = 1200;
@@ -323,12 +357,22 @@ class GameScene2 extends Scene {
     this.registry.playerDamageTaken = 0;
     this.registry.playerDistanceMoved = 0;
 
-    // this.registry.p2Key = this.p2Key;
-    this.registry.p2Key = 'roboto';
+    this.registry.p2Key = this.p2Key;
+    // this.registry.p2Key = 'roboto';
 
-    this.registry.enemyMaxHP = 1200;
-    this.registry.enemyHP = this.registry.enemyMaxHP;
-    this.registry.enemyRockets = 2;
+    if (this.p2Key === 'roboto') {
+      this.registry.enemyMaxHP = 1200;
+      this.registry.enemyHP = this.registry.enemyMaxHP;
+      this.registry.enemyRockets = 2;
+    }
+    else if (this.p2Key === 'arial') {
+      this.registry.enemyMaxHP = 700;
+      this.registry.enemyHP = this.registry.enemyMaxHP;
+    }
+    else if (this.p2Key === 'oswald') {
+      this.registry.enemyMaxHP = 850;
+      this.registry.enemyHP = this.registry.enemyMaxHP;
+    }
 
     // Music
     this.bgm = this.sound.add('ost-level1d', { loop: true });

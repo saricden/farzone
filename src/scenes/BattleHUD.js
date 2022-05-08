@@ -5,9 +5,10 @@ class BattleHUD extends Scene {
     super('ui-battlehud');
   }
 
-  init({ parentScene, p1Key }) {
+  init({ parentScene, p1Key, p2Key }) {
     this.parentScene = parentScene;
     this.p1Key = p1Key;
+    this.p2Key = p2Key;
   }
 
   create() {
@@ -25,7 +26,12 @@ class BattleHUD extends Scene {
     this.playerIcon.setScale(0.1);
     this.playerIcon.setOrigin(0, 1);
     
-    this.enemyIcon = this.add.image(window.innerWidth - 20, window.innerHeight - 20, 'ui-mech1');
+    if (this.p2Key === 'roboto') {
+      this.enemyIcon = this.add.image(window.innerWidth - 20, window.innerHeight - 20, 'ui-mech1');
+    }
+    else if (this.p2Key === 'arial') {
+      this.enemyIcon = this.add.image(window.innerWidth - 20, window.innerHeight - 20, 'ui-hume1');
+    }
     this.enemyIcon.setScale(0.1);
     this.enemyIcon.setOrigin(1, 1);
     this.enemyIcon.setFlipX(true);
@@ -68,12 +74,15 @@ class BattleHUD extends Scene {
     this.playerSpecialIcon = this.add.image(500 - 20, window.innerHeight - 20, 'ui-mech1-shell');
     this.playerSpecialIcon.setOrigin(1, 1);
     this.playerSpecialIcon.setScale(0.15);
-    this.playerSpecialIcon.setVisible(false);
 
     this.playerSpecialIcon2 = this.add.image(500 - 20 - this.playerSpecialIcon.displayWidth - 20, window.innerHeight - 20, 'ui-mech1-shell');
     this.playerSpecialIcon2.setOrigin(1, 1);
     this.playerSpecialIcon2.setScale(0.15);
-    this.playerSpecialIcon2.setVisible(false);
+
+    if (this.p1Key !== 'roboto') {
+      this.playerSpecialIcon.setVisible(false);
+      this.playerSpecialIcon2.setVisible(false);
+    }
 
     this.enemySpecialIcon = this.add.image(window.innerWidth - 500 + 20, window.innerHeight - 20, 'ui-mech1-shell');
     this.enemySpecialIcon.setOrigin(0, 1);
@@ -82,6 +91,11 @@ class BattleHUD extends Scene {
     this.enemySpecialIcon2 = this.add.image(window.innerWidth - 500  + 20 + this.enemySpecialIcon.displayWidth + 20, window.innerHeight - 20, 'ui-mech1-shell');
     this.enemySpecialIcon2.setOrigin(0, 1);
     this.enemySpecialIcon2.setScale(0.15);
+
+    if (this.p2Key !== 'roboto') {
+      this.enemySpecialIcon.setVisible(false);
+      this.enemySpecialIcon2.setVisible(false);
+    }
 
     this.gameOverText = this.add.text(window.innerWidth / 2, window.innerHeight / 2 + 100, '', {
       fontFamily: 'monospace',
@@ -123,7 +137,7 @@ class BattleHUD extends Scene {
     this.playerHPText.setPosition(20 + this.playerIcon.displayWidth + 20, height - 20);
     this.enemyHPText.setPosition(width - 20 - this.enemyIcon.displayWidth - 20, height - 20);
     this.playerSpecialIcon.setPosition(500 - 20, height - 20);
-    this.playerSpecialIcon2.setPosition(500 - 20 - this.playerSpecialIcon.displayWidth - 20);
+    this.playerSpecialIcon2.setPosition(500 - 20 - this.playerSpecialIcon.displayWidth - 20, height - 20);
     this.enemySpecialIcon.setPosition(width - 500 + 20, height - 20);
     this.enemySpecialIcon2.setPosition(width - 500  + 20 + this.enemySpecialIcon.displayWidth + 20, height - 20);
 
