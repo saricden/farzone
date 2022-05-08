@@ -39,6 +39,7 @@ class Mech1Peer extends Container {
     this.scene.physics.world.enable(this);
 
     this.body.setAllowGravity(false);
+    this.body.setImmovable(true);
 
     this.body.setSize(140, 320);
     this.body.setOffset(-70, -200);
