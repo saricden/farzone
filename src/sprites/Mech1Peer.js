@@ -146,6 +146,9 @@ class Mech1Peer extends Container {
   }
 
   update(time, delta) {
+    // disable any velocity being set
+    this.body.setVelocity(0, 0);
+
     if (!this.isDead) {
       // Animation logic
       if (this.body.onFloor()) {
