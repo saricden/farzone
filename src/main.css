@@ -89,6 +89,11 @@ canvas {
   transition: font-size 2s;
 }
 
+body.skip-intro .menubg--title .title h1 {
+  animation: none;
+  width: 100%;
+}
+
 .menubg--title .cliffs {
   z-index: 3;
   position: absolute;
@@ -127,7 +132,13 @@ canvas {
   background-color: #000;
   opacity: 1;
   visibility: visible;
-  pointer-events: none;
+  user-select: none;
+}
+
+body.skip-intro .fadein {
+  animation: none;
+  opacity: 0;
+  visibility: hidden;
 }
 
 @keyframes fadeInWhite {
@@ -190,6 +201,11 @@ canvas {
   transition: border-color 0.15s, margin-right 0.35s, background-color 0.35s, opacity 1s, visibility 1s;
 }
 
+body.skip-intro .menu--title button {
+  animation: none;
+  transform: translateX(0);
+}
+
 .menu--title button:disabled {
   border-color: transparent;
   opacity: 0.5;
@@ -238,6 +254,10 @@ canvas {
 
 .last-update.on {
   transform: translateY(0);
+}
+
+body.skip-intro .last-update {
+  transition: none;
 }
 
 .last-update:hover > div {

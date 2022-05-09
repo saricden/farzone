@@ -41,7 +41,7 @@ class MenuScene extends Scene {
     this.title = this.add.dom(0, 0, 'div', 'width: 100%;').createFromCache('dom-title');
     this.title.setOrigin(0, 0);
     
-    // Bind DOM events
+    // Bind DOM objects
     const btnPlay = document.getElementById('btn-play');
     const btnMultiplayer = document.getElementById('btn-multiplayer');
     const btnSettings = document.getElementById('btn-settings');
@@ -79,6 +79,13 @@ class MenuScene extends Scene {
     const credits = document.getElementById('credits');
 
     const btnTitle = document.getElementById('btn-title');
+
+    const fadeIn = document.getElementById('fadein');
+
+    // Skip intro
+    fadeIn.addEventListener('click', () => {
+      document.body.classList.add('skip-intro');
+    });
 
     this.registry.isMultiplayer = false;
     this.registry.isMultiplayerHost = false;
