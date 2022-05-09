@@ -44,7 +44,7 @@ class NetworkHandler extends EventTarget{
                 side:"incoming"
             }
         }));
-  
+        this.connection.serialization="lokl"
         this.connection.on("data", this.reciveData.bind(this));
       });
     });
@@ -104,7 +104,7 @@ class NetworkHandler extends EventTarget{
   };
 
   emit(data) {
-    this.connection.send(data);
+    this.connection.dataChannel.send(data);
   }
 
   connectTo(remotePeerID) {
@@ -112,6 +112,7 @@ class NetworkHandler extends EventTarget{
       if (this.connection === null) {
         this.connection = this.peer.connect(remotePeerID);
         
+        this.connection.serialization="lokl"
         this.dispatchEvent(new CustomEvent("connection",{
             detail:{
                 side:"outgoing"

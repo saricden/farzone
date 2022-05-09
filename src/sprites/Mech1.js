@@ -172,7 +172,7 @@ class Mech1 extends Container {
     this.prevY = this.y;
 
     // Aim world vector for multiplayer
-    this.aim = new pMath.Vector2();
+    this.angle = 0;
 
     // Set data attributes
     this.setData('isPlayer', true);
@@ -279,13 +279,6 @@ class Mech1 extends Container {
     const xDiff = Math.abs(this.x - this.prevX);
     const yDiff = Math.abs(this.y - this.prevY);
 
-    if (this.scene.registry.isMultiplayer) {
-      const {worldX, worldY} = mousePointer;
-
-      this.aim.x = worldX;
-      this.aim.y = worldY;
-    }
-
     this.scene.registry.playerDistanceMoved += (xDiff + yDiff);
 
     this.prevX = this.x;
@@ -316,7 +309,7 @@ class Mech1 extends Container {
       const relX = ((this.x - worldView.x) * zoom);
       const relY = ((this.y - worldView.y) * zoom);
   
-      const angle = pMath.Angle.Between(relX + (this.armLeft.x * zoom), relY + (this.armLeft.y * zoom), mousePointer.x, mousePointer.y);
+      this.angle = pMath.Angle.Between(relX + (this.armLeft.x * zoom), relY + (this.armLeft.y * zoom), mousePointer.x, mousePointer.y);
   
       let angleMod = 2 * Math.PI;
       let headAngleMod = 0.35;
@@ -346,10 +339,10 @@ class Mech1 extends Container {
         this.head.setX(-12);
       }
   
-      this.armLeft.setRotation(angle + angleMod);
-      this.armRight.setRotation(angle + angleMod);
-      // this.head.setRotation(angle * headAngleMod + angleMod);
-      this.head.setRotation(angle + angleMod);
+      this.armLeft.setRotation(this.angle + angleMod);
+      this.armRight.setRotation(this.angle + angleMod);
+      // this.head.setRotation(this.angle * headAngleMod + angleMod);
+      this.head.setRotation(this.angle + angleMod);
   
       // Animation logic
       if (this.body.onFloor()) {

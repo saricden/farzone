@@ -48,7 +48,8 @@ class Mech1Peer extends Container {
     this.bulletGfx = this.scene.add.graphics();
     this.bulletGfx.setDepth(10);
 
-    this.aim = new pMath.Vector2();
+    this.angle = 0;
+    this.flipX = false;
 
     // Set data attributes
     this.setData('isPeer', true);
@@ -147,11 +148,6 @@ class Mech1Peer extends Container {
     }
   }
 
-  setAim(aimX, aimY) {
-    this.aim.x = aimX;
-    this.aim.y = aimY;
-  }
-
   update(time, delta) {
     // Disable any velocity being set
     this.body.setVelocity(0, 0);
@@ -187,16 +183,10 @@ class Mech1Peer extends Container {
       }
 
       // Aiming logic
-      const {zoom, worldView} = this.scene.cameras.main;
-      const relX = ((this.x - worldView.x) * zoom);
-      const relY = ((this.y - worldView.y) * zoom);
-
-      const angle = pMath.Angle.Between(relX + (this.armLeft.x * zoom), relY + (this.armLeft.y * zoom), this.aim.x, this.aim.y);
-  
       let angleMod = 2 * Math.PI;
       let headAngleMod = 0.35;
   
-      if (this.aim.x <= relX) {
+      if (this.flipX) {
         this.core.setFlipX(true);
         this.armLeft.setFlipX(true);
         this.armRight.setFlipX(true);
@@ -221,10 +211,10 @@ class Mech1Peer extends Container {
         this.head.setX(-12);
       }
   
-      this.armLeft.setRotation(angle + angleMod);
-      this.armRight.setRotation(angle + angleMod);
+      this.armLeft.setRotation(this.angle + angleMod);
+      this.armRight.setRotation(this.angle + angleMod);
       // this.head.setRotation(angle * headAngleMod + angleMod);
-      this.head.setRotation(angle + angleMod);
+      this.head.setRotation(this.angle + angleMod);
     }
     // Spin body parts around when dead
     else {

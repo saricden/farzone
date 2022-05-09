@@ -174,6 +174,9 @@ class Hume1 extends Container {
     this.prevX = this.x;
     this.prevY = this.y;
 
+    // Multiplayer
+    this.aim = new pMath.Vector2();
+
     // Set data attributes
     this.setData('isPlayer', true);
   }

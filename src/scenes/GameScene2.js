@@ -527,17 +527,21 @@ class GameScene2 extends Scene {
       this.p2PrevY = this.dummy.y;
   
       // Handle incoming broadcasts
-      network.on('player-position-change', ({x, y, aimX, aimY}) => {
+      network.on('player-position-change', ({x, y, angle, flipX}) => {
         const isPlayer1 = this.registry.isMultiplayerHost;
 
         if (isPlayer1) {
           this.dummy.setPosition(x, y);
-          this.dummy.setAim(aimX, aimY);
+          this.dummy.angle = angle;
+          this.dummy.flipX = flipX;
         }
         else {
           this.cat.setPosition(x, y);
-          this.cat.setAim(aimX, aimY);
+          this.cat.angle = angle;
+          this.cat.flipX = flipX;
         }
+
+        // console.log(aimX);
       });
     }
   }
@@ -1076,34 +1080,26 @@ class GameScene2 extends Scene {
       const isPlayer1 = this.registry.isMultiplayerHost;
 
       if (isPlayer1) {
-        const positionChanged = (this.p1PrevX !== this.cat.x || this.p1PrevY !== this.cat.y);
-
-        if (positionChanged) {
-          // Broadcast new position
-          network.send('player-position-change', {
-            x: this.cat.x,
-            y: this.cat.y,
-            aimX: this.cat.aim.x,
-            aimY: this.cat.aim.y
-          });
-        }
+        // Broadcast new position
+        network.send('player-position-change', {
+          x: this.cat.x,
+          y: this.cat.y,
+          angle: this.cat.angle,
+          flipX: this.cat.core.flipX
+        });
 
         // Update previous position for next frame
         this.p1PrevX = this.cat.x;
         this.p1PrevY = this.cat.y;
       }
       else {
-        const positionChanged = (this.p2PrevX !== this.dummy.x || this.p2PrevY !== this.dummy.y);
-
-        if (positionChanged) {
-          // Broadcast new position
-          network.send('player-position-change', {
-            x: this.dummy.x,
-            y: this.dummy.y,
-            aimX: this.cat.aim.x,
-            aimY: this.cat.aim.y
-          });
-        }
+        // Broadcast new position
+        network.send('player-position-change', {
+          x: this.dummy.x,
+          y: this.dummy.y,
+          angle: this.dummy.angle,
+          flipX: this.dummy.core.flipX
+        });
 
         // Update previous position for next frame
         this.p2PrevX = this.dummy.x;
@@ -1139,6 +1135,7 @@ class GameScene2 extends Scene {
     );
 
     // Call player update functions
+    // debugger;
     this.cat.update(time, delta);
     this.dummy.update(time, delta);
 
