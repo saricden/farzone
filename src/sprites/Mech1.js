@@ -13,9 +13,9 @@ class Mech1 extends Container {
     this.jumpAnimLock = false;
     this.isDead = false;
 
-    this.torsoLegs = this.scene.physics.add.sprite(0, 0, 'mech1');
-    this.torsoLegs.play('mech1-idle');
-    this.torsoLegs.body.setAllowGravity(false);
+    this.core = this.scene.physics.add.sprite(0, 0, 'mech1');
+    this.core.play('mech1-idle');
+    this.core.body.setAllowGravity(false);
 
     this.armLeft = this.scene.physics.add.sprite(-20, -148, 'mech1-arm-left');
     this.armLeft.play('mech1-arm-left-idle');
@@ -34,7 +34,7 @@ class Mech1 extends Container {
 
     this.add([
       this.armLeft,
-      this.torsoLegs,
+      this.core,
       this.head,
       this.armRight
     ]);
@@ -69,7 +69,7 @@ class Mech1 extends Container {
         const vector = new pMath.Vector2();
         let angleMod = 2 * Math.PI;
 
-        if (this.torsoLegs.flipX) {
+        if (this.core.flipX) {
           angleMod = Math.PI;
         }
 
@@ -125,13 +125,13 @@ class Mech1 extends Container {
             const vector = new pMath.Vector2();
             let angleMod = 2 * Math.PI;
     
-            if (this.torsoLegs.flipX) {
+            if (this.core.flipX) {
               angleMod = Math.PI;
             }
     
             vector.setToPolar(this.armLeft.rotation + angleMod, barrelOffsetX);
     
-            new Mech1Shell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.torsoLegs.flipX, true);
+            new Mech1Shell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.core.flipX, true);
     
             this.armLeft.play('mech1-arm-left-heavy-shot', true);
             this.armRight.play('mech1-arm-right-heavy-shot', true);
@@ -170,6 +170,9 @@ class Mech1 extends Container {
     // For tracking distance stat:
     this.prevX = this.x;
     this.prevY = this.y;
+
+    // Aim world vector for multiplayer
+    this.aim = new pMath.Vector2();
 
     // Set data attributes
     this.setData('isPlayer', true);
@@ -256,8 +259,8 @@ class Mech1 extends Container {
         this.head.body.setAllowGravity(true);
         this.head.body.setVelocity(pMath.Between(-maxDeathBurst, maxDeathBurst), pMath.Between(-maxDeathBurst * 2, -maxDeathBurst));
   
-        this.torsoLegs.body.setAllowGravity(true);
-        this.torsoLegs.body.setVelocity(pMath.Between(-maxDeathBurst, maxDeathBurst), pMath.Between(-maxDeathBurst * 2, -maxDeathBurst));
+        this.core.body.setAllowGravity(true);
+        this.core.body.setVelocity(pMath.Between(-maxDeathBurst, maxDeathBurst), pMath.Between(-maxDeathBurst * 2, -maxDeathBurst));
   
         this.armLeft.body.setAllowGravity(true);
         this.armLeft.body.setVelocity(pMath.Between(-maxDeathBurst, maxDeathBurst), pMath.Between(-maxDeathBurst * 2, -maxDeathBurst));
@@ -275,6 +278,13 @@ class Mech1 extends Container {
     // Distance tracking...
     const xDiff = Math.abs(this.x - this.prevX);
     const yDiff = Math.abs(this.y - this.prevY);
+
+    if (this.scene.registry.isMultiplayer) {
+      const {worldX, worldY} = mousePointer;
+
+      this.aim.x = worldX;
+      this.aim.y = worldY;
+    }
 
     this.scene.registry.playerDistanceMoved += (xDiff + yDiff);
 
@@ -312,7 +322,7 @@ class Mech1 extends Container {
       let headAngleMod = 0.35;
   
       if (mousePointer.x <= relX) {
-        this.torsoLegs.setFlipX(true);
+        this.core.setFlipX(true);
         this.armLeft.setFlipX(true);
         this.armRight.setFlipX(true);
         this.head.setFlipX(true);
@@ -325,7 +335,7 @@ class Mech1 extends Container {
         headAngleMod = 0.35;
       }
       else {
-        this.torsoLegs.setFlipX(false);
+        this.core.setFlipX(false);
         this.armLeft.setFlipX(false);
         this.armRight.setFlipX(false);
         this.head.setFlipX(false);
@@ -346,26 +356,26 @@ class Mech1 extends Container {
         this.jumpAnimLock = false;
   
         if (this.body.velocity.x !== 0) {
-          if (this.torsoLegs.flipX && this.body.velocity.x > 0 || !this.torsoLegs.flipX && this.body.velocity.x < 0) {
-            this.torsoLegs.playReverse('mech1-run', true);
+          if (this.core.flipX && this.body.velocity.x > 0 || !this.core.flipX && this.body.velocity.x < 0) {
+            this.core.playReverse('mech1-run', true);
           }
           else {
-            this.torsoLegs.play('mech1-run', true);
+            this.core.play('mech1-run', true);
           }
         }
         else {
-          this.torsoLegs.play('mech1-idle', true);
+          this.core.play('mech1-idle', true);
         }
       }
       else {
         if (this.body.velocity.y < -this.jumpAnimBuffer) {
-          this.torsoLegs.play('mech1-up', true);
+          this.core.play('mech1-up', true);
         }
         else if (this.body.velocity.y > this.jumpAnimBuffer) {
-          this.torsoLegs.play('mech1-down', true);
+          this.core.play('mech1-down', true);
         }
         else if (!this.jumpAnimLock) {
-          this.torsoLegs.play('mech1-up-down', true);
+          this.core.play('mech1-up-down', true);
           this.jumpAnimLock = true;
         }
       }
@@ -392,12 +402,12 @@ class Mech1 extends Container {
       const flipRot = 5 * Math.PI * (delta / 1000);
       
       this.head.setOrigin(0.5);
-      this.torsoLegs.setOrigin(0.5);
+      this.core.setOrigin(0.5);
       this.armLeft.setOrigin(0.5);
       this.armRight.setOrigin(0.5);
 
       this.head.rotation -= flipRot;
-      this.torsoLegs.rotation += flipRot;
+      this.core.rotation += flipRot;
       this.armLeft.rotation -= flipRot;
       this.armRight.rotation += flipRot;
     }

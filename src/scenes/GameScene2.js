@@ -6,6 +6,7 @@ import Oswald from '../sprites/Oswald';
 import Hume1NPC from '../sprites/Hume1NPC';
 import PF from 'pathfinding';
 import Mech1Peer from '../sprites/Mech1Peer';
+import {network} from '../network';
 
 const { Grid } = PF;
 
@@ -526,8 +527,17 @@ class GameScene2 extends Scene {
       this.p2PrevY = this.dummy.y;
   
       // Handle incoming broadcasts
-      this.registry.connection.on('data', (data) => {
-        this.handleMultiplayerData(data);
+      network.on('player-position-change', ({x, y, aimX, aimY}) => {
+        const isPlayer1 = this.registry.isMultiplayerHost;
+
+        if (isPlayer1) {
+          this.dummy.setPosition(x, y);
+          this.dummy.setAim(aimX, aimY);
+        }
+        else {
+          this.cat.setPosition(x, y);
+          this.cat.setAim(aimX, aimY);
+        }
       });
     }
   }
@@ -1060,22 +1070,6 @@ class GameScene2 extends Scene {
     }
   }
 
-  handleMultiplayerData(data) {
-    const {EVENT} = data;
-    const isPlayer1 = this.registry.isMultiplayerHost;
-
-    if (EVENT === 'player-position-change') {
-      const {x, y} = data;
-
-      if (isPlayer1) {
-        this.dummy.setPosition(x, y);
-      }
-      else {
-        this.cat.setPosition(x, y);
-      }
-    }
-  }
-
   update(time, delta) {
     // Track/broadcast updates if multiplayer
     if (this.registry.isMultiplayer) {
@@ -1086,10 +1080,11 @@ class GameScene2 extends Scene {
 
         if (positionChanged) {
           // Broadcast new position
-          this.registry.connection.send({
-            EVENT: 'player-position-change',
+          network.send('player-position-change', {
             x: this.cat.x,
-            y: this.cat.y
+            y: this.cat.y,
+            aimX: this.cat.aim.x,
+            aimY: this.cat.aim.y
           });
         }
 
@@ -1102,10 +1097,11 @@ class GameScene2 extends Scene {
 
         if (positionChanged) {
           // Broadcast new position
-          this.registry.connection.send({
-            EVENT: 'player-position-change',
+          network.send('player-position-change', {
             x: this.dummy.x,
-            y: this.dummy.y
+            y: this.dummy.y,
+            aimX: this.cat.aim.x,
+            aimY: this.cat.aim.y
           });
         }
 

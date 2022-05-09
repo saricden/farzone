@@ -9,9 +9,9 @@ class Mech1Peer extends Container {
     this.scene = scene;
     this.isDead = false;
 
-    this.torsoLegs = this.scene.physics.add.sprite(0, 0, 'mech1');
-    this.torsoLegs.play('mech1-idle');
-    this.torsoLegs.body.setAllowGravity(false);
+    this.core = this.scene.physics.add.sprite(0, 0, 'mech1');
+    this.core.play('mech1-idle');
+    this.core.body.setAllowGravity(false);
 
     this.armLeft = this.scene.physics.add.sprite(-20, -148, 'mech1-arm-left');
     this.armLeft.play('mech1-arm-left-idle');
@@ -30,7 +30,7 @@ class Mech1Peer extends Container {
 
     this.add([
       this.armLeft,
-      this.torsoLegs,
+      this.core,
       this.head,
       this.armRight
     ]);
@@ -47,6 +47,8 @@ class Mech1Peer extends Container {
 
     this.bulletGfx = this.scene.add.graphics();
     this.bulletGfx.setDepth(10);
+
+    this.aim = new pMath.Vector2();
 
     // Set data attributes
     this.setData('isPeer', true);
@@ -133,8 +135,8 @@ class Mech1Peer extends Container {
         this.head.body.setAllowGravity(true);
         this.head.body.setVelocity(pMath.Between(-maxDeathBurst, maxDeathBurst), pMath.Between(-maxDeathBurst * 2, -maxDeathBurst));
   
-        this.torsoLegs.body.setAllowGravity(true);
-        this.torsoLegs.body.setVelocity(pMath.Between(-maxDeathBurst, maxDeathBurst), pMath.Between(-maxDeathBurst * 2, -maxDeathBurst));
+        this.core.body.setAllowGravity(true);
+        this.core.body.setVelocity(pMath.Between(-maxDeathBurst, maxDeathBurst), pMath.Between(-maxDeathBurst * 2, -maxDeathBurst));
   
         this.armLeft.body.setAllowGravity(true);
         this.armLeft.body.setVelocity(pMath.Between(-maxDeathBurst, maxDeathBurst), pMath.Between(-maxDeathBurst * 2, -maxDeathBurst));
@@ -145,8 +147,13 @@ class Mech1Peer extends Container {
     }
   }
 
+  setAim(aimX, aimY) {
+    this.aim.x = aimX;
+    this.aim.y = aimY;
+  }
+
   update(time, delta) {
-    // disable any velocity being set
+    // Disable any velocity being set
     this.body.setVelocity(0, 0);
 
     if (!this.isDead) {
@@ -155,41 +162,81 @@ class Mech1Peer extends Container {
         this.jumpAnimLock = false;
   
         if (this.body.velocity.x !== 0) {
-          if (this.torsoLegs.flipX && this.body.velocity.x > 0 || !this.torsoLegs.flipX && this.body.velocity.x < 0) {
-            this.torsoLegs.playReverse('mech1-run', true);
+          if (this.core.flipX && this.body.velocity.x > 0 || !this.core.flipX && this.body.velocity.x < 0) {
+            this.core.playReverse('mech1-run', true);
           }
           else {
-            this.torsoLegs.play('mech1-run', true);
+            this.core.play('mech1-run', true);
           }
         }
         else {
-          this.torsoLegs.play('mech1-idle', true);
+          this.core.play('mech1-idle', true);
         }
       }
       else {
         if (this.body.velocity.y < -this.jumpAnimBuffer) {
-          this.torsoLegs.play('mech1-up', true);
+          this.core.play('mech1-up', true);
         }
         else if (this.body.velocity.y > this.jumpAnimBuffer) {
-          this.torsoLegs.play('mech1-down', true);
+          this.core.play('mech1-down', true);
         }
         else if (!this.jumpAnimLock) {
-          this.torsoLegs.play('mech1-up-down', true);
+          this.core.play('mech1-up-down', true);
           this.jumpAnimLock = true;
         }
       }
+
+      // Aiming logic
+      const {zoom, worldView} = this.scene.cameras.main;
+      const relX = ((this.x - worldView.x) * zoom);
+      const relY = ((this.y - worldView.y) * zoom);
+
+      const angle = pMath.Angle.Between(relX + (this.armLeft.x * zoom), relY + (this.armLeft.y * zoom), this.aim.x, this.aim.y);
+  
+      let angleMod = 2 * Math.PI;
+      let headAngleMod = 0.35;
+  
+      if (this.aim.x <= relX) {
+        this.core.setFlipX(true);
+        this.armLeft.setFlipX(true);
+        this.armRight.setFlipX(true);
+        this.head.setFlipX(true);
+        this.armLeft.setOrigin(1 - 0.19, 0.29);
+        this.armRight.setOrigin(1 - 0.21, 0.28);
+        this.armLeft.setX(20);
+        this.armRight.setX(20);
+        this.head.setX(12);
+        angleMod = Math.PI;
+        headAngleMod = 0.35;
+      }
+      else {
+        this.core.setFlipX(false);
+        this.armLeft.setFlipX(false);
+        this.armRight.setFlipX(false);
+        this.head.setFlipX(false);
+        this.armLeft.setOrigin(0.19, 0.29);
+        this.armRight.setOrigin(0.21, 0.28);
+        this.armLeft.setX(-20);
+        this.armRight.setX(-20);
+        this.head.setX(-12);
+      }
+  
+      this.armLeft.setRotation(angle + angleMod);
+      this.armRight.setRotation(angle + angleMod);
+      // this.head.setRotation(angle * headAngleMod + angleMod);
+      this.head.setRotation(angle + angleMod);
     }
     // Spin body parts around when dead
     else {
       const flipRot = 5 * Math.PI * (delta / 1000);
       
       this.head.setOrigin(0.5);
-      this.torsoLegs.setOrigin(0.5);
+      this.core.setOrigin(0.5);
       this.armLeft.setOrigin(0.5);
       this.armRight.setOrigin(0.5);
 
       this.head.rotation -= flipRot;
-      this.torsoLegs.rotation += flipRot;
+      this.core.rotation += flipRot;
       this.armLeft.rotation -= flipRot;
       this.armRight.rotation += flipRot;
     }

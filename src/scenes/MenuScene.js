@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 import moment from "moment";
 import Peer from "peerjs";
+import { network } from "../network";
 
 class MenuScene extends Scene {
   constructor() {
@@ -87,16 +88,8 @@ class MenuScene extends Scene {
       mpConnectingLoader.classList.add('on');
 
       // Create new Peer
-      if (typeof this.registry.peer === 'undefined') {
-        this.registry.peer = new Peer({
-          host: 'farzone-server.herokuapp.com',
-          port: 443,
-          secure: true,
-          // debug: 3
-          debug: 0
-        });
-  
-        this.registry.peer.on('open', (id) => {
+      if (!network.isOpen()) {
+        network.open().then((id) => {
           mpPlayerID.innerHTML = id;
           
           mpConnectingLoader.classList.remove('on');
@@ -107,40 +100,42 @@ class MenuScene extends Scene {
   
           mpOr.classList.add('on');
         });
+        this.registerNetworkEvents();
 
-        this.registry.peer.on('connection', (connection) => {
-          this.registry.connection = connection;
+        // this.registry.peer.on('connection', (connection) => {
+        // this.registry.connection = connection;
 
-          mpConnectingLoader.classList.remove('on');
-          mpOptionBoxes.forEach((box) => {
-            box.classList.remove('on');
-          });
-          mpOr.classList.remove('on');
-          multiplayerConnect.classList.remove('open');
-
-          btnMultiplayer.setAttribute('disabled', true);
-
-          this.registry.connection.on('data', (data) => {
-            this.handleMultiplayerData(data);
-          });
-
-          this.registry.isMultiplayer = true;
-          this.registry.isMultiplayerHost = false;
-
-          // Move to map select
-          titleBG.classList.add('down');
-          menuTitle.classList.add('off');
-          btnUpdate.classList.add('off');
-          this.mapSelect.classList.add('open');
-          btnTitle.classList.add('on');
-
-          // Disable map buttons for non-host
-          mapBtns.forEach((btn) => {
-            btn.setAttribute('disabled', true);
-          });
-
-          // Hide the main menu btn (for now, TODO: change to disconnect btn)
-          btnTitle.style.display = "none";
+        network.addEventListener('connection', (e) => {
+          console.log(e);
+          if (e.detail.side === 'incoming') {
+            // if (e.detail.side === '')
+            mpConnectingLoader.classList.remove('on');
+            mpOptionBoxes.forEach((box) => {
+              box.classList.remove('on');
+            });
+            mpOr.classList.remove('on');
+            multiplayerConnect.classList.remove('open');
+    
+            btnMultiplayer.setAttribute('disabled', true);
+    
+            this.registry.isMultiplayer = true;
+            this.registry.isMultiplayerHost = false;
+    
+            // Move to map select
+            titleBG.classList.add('down');
+            menuTitle.classList.add('off');
+            btnUpdate.classList.add('off');
+            this.mapSelect.classList.add('open');
+            btnTitle.classList.add('on');
+    
+            // Disable map buttons for non-host
+            mapBtns.forEach((btn) => {
+              btn.setAttribute('disabled', true);
+            });
+    
+            // Hide the main menu btn (for now, TODO: change to disconnect btn)
+            btnTitle.style.display = "none";
+          }
         });
       }
       else {
@@ -149,26 +144,14 @@ class MenuScene extends Scene {
     });
 
     mpBtnConnect.addEventListener('click', () => {
-      if (typeof this.registry.peer !== 'undefined') {
+      if (network.isOpen()) {
         const remoteID = mpRemoteID.value;
-        this.registry.connection = this.registry.peer.connect(remoteID);
-        
-        mpOptionBoxes.forEach((box) => {
-          box.classList.remove('on');
-        });
-        mpOr.classList.remove('on');
-        
-        mpConnectingLoader.classList.add('on');
 
-        this.registry.connection.on('open', () => {
+        network.addEventListener('connection', (e) => {
           mpConnectingLoader.classList.remove('on');
           multiplayerConnect.classList.remove('open');
 
           btnMultiplayer.setAttribute('disabled', true);
-
-          this.registry.connection.on('data', (data) => {
-            this.handleMultiplayerData(data);
-          });
 
           this.registry.isMultiplayer = true;
           this.registry.isMultiplayerHost = true; // player initiating connection starts as host
@@ -183,6 +166,16 @@ class MenuScene extends Scene {
           // Hide the main menu btn (for now, TODO: change to disconnect btn)
           btnTitle.style.display = "none";
         });
+
+        network.connectTo(remoteID);
+        this.registerNetworkEvents();
+        
+        mpOptionBoxes.forEach((box) => {
+          box.classList.remove('on');
+        });
+        mpOr.classList.remove('on');
+        
+        mpConnectingLoader.classList.add('on');
       }
     });
 
@@ -217,10 +210,8 @@ class MenuScene extends Scene {
             }
           });
         }
-        
-        this.registry.connection.send({
-          EVENT: 'player-ready'
-        });
+
+        network.send('player-ready');
       }
       else {
         this.sound.play('mitch-ready');
@@ -251,19 +242,13 @@ class MenuScene extends Scene {
         this.sound.play('sfx-click');
 
         if (this.registry.isMultiplayer && this.registry.isMultiplayerHost) {
-          this.registry.connection.send({
-            EVENT: 'character-hover',
-            charKey
-          });
+          network.send('character-hover', charKey);
         }
       });
 
       btn.addEventListener('mouseout', () => {
         if (this.registry.isMultiplayer && this.registry.isMultiplayerHost) {
-          this.registry.connection.send({
-            EVENT: 'character-blur',
-            charKey
-          });
+          network.send('character-blur', charKey);
         }
       });
 
@@ -285,10 +270,7 @@ class MenuScene extends Scene {
         this.sound.play(voiceKey);
 
         if (this.registry.isMultiplayer) {
-          this.registry.connection.send({
-            EVENT: 'character-select',
-            charKey
-          });
+          network.send('character-select', charKey);
         }
       });
     });
@@ -300,19 +282,13 @@ class MenuScene extends Scene {
         this.sound.play('sfx-click');
 
         if (this.registry.isMultiplayer && !this.registry.isMultiplayerHost) {
-          this.registry.connection.send({
-            EVENT: 'character-hover',
-            charKey
-          });
+          network.send('character-hover', charKey);
         }
       });
 
       btn.addEventListener('mouseout', () => {
         if (this.registry.isMultiplayer && !this.registry.isMultiplayerHost) {
-          this.registry.connection.send({
-            EVENT: 'character-blur',
-            charKey
-          });
+          network.send('character-blur', charKey);
         }
       });
 
@@ -335,10 +311,7 @@ class MenuScene extends Scene {
         this.sound.play(voiceKey);
 
         if (this.registry.isMultiplayer) {
-          this.registry.connection.send({
-            EVENT: 'character-select',
-            charKey
-          });
+          network.send('character-select', charKey);
         }
       });
     });
@@ -350,19 +323,13 @@ class MenuScene extends Scene {
         this.sound.play('sfx-click');
 
         if (this.registry.isMultiplayer && this.registry.isMultiplayerHost) {
-          this.registry.connection.send({
-            EVENT: 'map-hover',
-            mapKey: levelKey
-          });
+          network.send('map-hover', levelKey);
         }
       });
 
       btn.addEventListener('mouseout', () => {
         if (this.registry.isMultiplayer && this.registry.isMultiplayerHost) {
-          this.registry.connection.send({
-            EVENT: 'map-blur',
-            mapKey: levelKey
-          });
+          network.send('map-blur', levelKey);
         }
       });
 
@@ -384,10 +351,7 @@ class MenuScene extends Scene {
         if (this.registry.isMultiplayer && this.registry.isMultiplayerHost) {
           this.charBtnsComputer.forEach((btn) => btn.setAttribute('disabled', true));
 
-          this.registry.connection.send({
-            EVENT: 'map-select',
-            mapKey: levelKey
-          });
+          network.send('map-select', levelKey);
         }
       });
     });
@@ -497,26 +461,20 @@ class MenuScene extends Scene {
     });
   }
 
-  handleMultiplayerData(data) {
-    const {EVENT} = data;
-
-    if (EVENT === 'map-hover') {
-      const {mapKey} = data;
-
+  registerNetworkEvents() {
+    network.on('map-hover', (mapKey) => {
       const hoveredMap = document.querySelector(`[data-map="${mapKey}"]`);
       hoveredMap.classList.add('remote-hover');
 
       this.sound.play('sfx-click');
-    }
-    else if (EVENT === 'map-blur') {
-      const {mapKey} = data;
+    });
 
+    network.on('map-blur', (mapKey) => {
       const hoveredMap = document.querySelector(`[data-map="${mapKey}"]`);
       hoveredMap.classList.remove('remote-hover');
-    }
-    else if (EVENT === 'map-select') {
-      const {mapKey} = data;
+    });
 
+    network.on('map-select', (mapKey) => {
       this.levelKey = mapKey;
 
       this.mapSelect.classList.remove('open');
@@ -524,10 +482,9 @@ class MenuScene extends Scene {
       this.btnStartMatch.classList.add('open');
 
       this.charBtnsPlayer.forEach((btn) => btn.setAttribute('disabled', true));
-    }
-    else if (EVENT === 'character-hover') {
-      const {charKey} = data;
+    });
 
+    network.on('character-hover', (charKey) => {
       if (this.registry.isMultiplayerHost) {
         const hoveredCharacter = document.querySelector(`[data-character-computer="${charKey}"]`);
         hoveredCharacter.classList.add('remote-hover');
@@ -536,10 +493,9 @@ class MenuScene extends Scene {
         const hoveredCharacter = document.querySelector(`[data-character-player="${charKey}"]`);
         hoveredCharacter.classList.add('remote-hover');
       }
-    }
-    else if (EVENT === 'character-blur') {
-      const {charKey} = data;
+    });
 
+    network.on('character-blur', (charKey) => {
       if (this.registry.isMultiplayerHost) {
         const hoveredCharacter = document.querySelector(`[data-character-computer="${charKey}"]`);
         hoveredCharacter.classList.remove('remote-hover');
@@ -548,10 +504,9 @@ class MenuScene extends Scene {
         const hoveredCharacter = document.querySelector(`[data-character-player="${charKey}"]`);
         hoveredCharacter.classList.remove('remote-hover');
       }
-    }
-    else if (EVENT === 'character-select') {
-      const {charKey} = data;
+    });
 
+    network.on('character-select', (charKey) => {
       if (this.registry.isMultiplayerHost) {
         const computerCharacters = document.querySelectorAll('[data-character-computer]');
         const selectedCharacter = document.querySelector(`[data-character-computer="${charKey}"]`);
@@ -590,8 +545,9 @@ class MenuScene extends Scene {
 
         this.sound.play(voiceKey);
       }
-    }
-    else if (EVENT === 'player-ready') {
+    });
+
+    network.on('player-ready', () => {
       if (this.registry.isMultiplayerHost) {
         document.querySelector('.characters.computer').classList.add('ready');
       }
@@ -621,7 +577,7 @@ class MenuScene extends Scene {
           }
         });
       }
-    }
+    });
   }
 }
 
