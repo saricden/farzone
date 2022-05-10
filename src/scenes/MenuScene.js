@@ -85,6 +85,7 @@ class MenuScene extends Scene {
     // Skip intro
     fadeIn.addEventListener('click', () => {
       document.body.classList.add('skip-intro');
+      this.introTune.stop();
     });
 
     this.registry.isMultiplayer = false;
@@ -418,7 +419,8 @@ class MenuScene extends Scene {
 
     // Play intro tune
     if (this.skipTo === 'none') {
-      this.sound.play('ost-title');
+      this.introTune = this.sound.add('ost-title');
+      this.introTune.play();
     }
     
     this.wind = this.sound.add('sfx-wind-loop', { loop: true, volume: 0.1 });
