@@ -3,7 +3,7 @@ import PF from 'pathfinding';
 const { Container, Rectangle } = GameObjects;
 const { AStarFinder } = PF;
 
-class Hume1NPC extends Container {
+class ArialNPC extends Container {
   constructor(scene, x, y) {
     super(scene, x, y, []);
 
@@ -662,4 +662,4 @@ class Hume1NPC extends Container {
   }
 }
 
-export default Hume1NPC;
+export default ArialNPC;

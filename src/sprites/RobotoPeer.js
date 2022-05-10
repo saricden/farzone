@@ -2,7 +2,7 @@ import { GameObjects, Math as pMath } from "phaser";
 import Mech1Shell from "./Mech1Shell";
 const { Container } = GameObjects;
 
-class Mech1Peer extends Container {
+class RobotoPeer extends Container {
   constructor(scene, x, y) {
     super(scene, x, y, []);
 
@@ -233,4 +233,4 @@ class Mech1Peer extends Container {
   }
 }
 
-export default Mech1Peer;
+export default RobotoPeer;

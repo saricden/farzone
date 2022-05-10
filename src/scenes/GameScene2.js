@@ -1,11 +1,11 @@
 import {Scene, Math as pMath, Display} from 'phaser';
-import Mech1 from '../sprites/Mech1';
-import Mech1NPC from '../sprites/Mech1NPC';
-import Hume1 from '../sprites/Hume1';
+import Roboto from '../sprites/Roboto';
+import RobotoNPC from '../sprites/RobotoNPC';
+import RobotoPeer from '../sprites/RobotoPeer';
+import Arial from '../sprites/Arial';
+import ArialNPC from '../sprites/ArialNPC';
 import Oswald from '../sprites/Oswald';
-import Hume1NPC from '../sprites/Hume1NPC';
 import PF from 'pathfinding';
-import Mech1Peer from '../sprites/Mech1Peer';
 import {network} from '../network';
 
 const { Grid } = PF;
@@ -78,10 +78,10 @@ class GameScene2 extends Scene {
       if (this.registry.isMultiplayerHost) {
         // Make player 1 a controllable sprite
         if (this.p1Key === 'roboto') {
-          this.cat = new Mech1(this, 0, 0);
+          this.cat = new Roboto(this, 0, 0);
         }
         else if (this.p1Key === 'arial') {
-          this.cat = new Hume1(this, 0, 0);
+          this.cat = new Arial(this, 0, 0);
         }
         else if (this.p1Key === 'oswald') {
           this.cat = new Oswald(this, 0, 0);
@@ -89,20 +89,20 @@ class GameScene2 extends Scene {
 
         // Make player 2 a peer sprite sprite
         if (this.p2Key === 'roboto') {
-          this.dummy = new Mech1Peer(this, 0, 0);
+          this.dummy = new RobotoPeer(this, 0, 0);
         }
         else if (this.p2Key === 'arial') {
-          // this.dummy = new Hume1NPC(this, 0, 0);
+          // this.dummy = new ArialNPC(this, 0, 0);
         }
       }
       // If this client is player 2...
       else {
         // Make player 1 a peer sprite
         if (this.p1Key === 'roboto') {
-          this.cat = new Mech1Peer(this, 0, 0);
+          this.cat = new RobotoPeer(this, 0, 0);
         }
         else if (this.p1Key === 'arial') {
-          // this.cat = new Hume1(this, 0, 0);
+          // this.cat = new Arial(this, 0, 0);
         }
         else if (this.p1Key === 'oswald') {
           // this.cat = new Oswald(this, 0, 0);
@@ -110,10 +110,10 @@ class GameScene2 extends Scene {
 
         // Make player 2 a controllable sprite
         if (this.p2Key === 'roboto') {
-          this.dummy = new Mech1(this, 0, 0);
+          this.dummy = new Roboto(this, 0, 0);
         }
         else if (this.p2Key === 'arial') {
-          this.dummy = new Hume1(this, 0, 0);
+          this.dummy = new Arial(this, 0, 0);
         }
         else if (this.p2Key === 'oswald') {
           this.dummy = new Oswald(this, 0, 0);
@@ -123,20 +123,20 @@ class GameScene2 extends Scene {
     // Otherwise, single player against a CPU...
     else {
       if (this.p1Key === 'roboto') {
-        this.cat = new Mech1(this, 0, 0);
+        this.cat = new Roboto(this, 0, 0);
       }
       else if (this.p1Key === 'arial') {
-        this.cat = new Hume1(this, 0, 0);
+        this.cat = new Arial(this, 0, 0);
       }
       else if (this.p1Key === 'oswald') {
         this.cat = new Oswald(this, 0, 0);
       }
       
       if (this.p2Key === 'roboto') {
-        this.dummy = new Mech1NPC(this, 0, 0);
+        this.dummy = new RobotoNPC(this, 0, 0);
       }
       else if (this.p2Key === 'arial') {
-        this.dummy = new Hume1NPC(this, 0, 0);
+        this.dummy = new ArialNPC(this, 0, 0);
       }
   
       if (this.soloTest) {

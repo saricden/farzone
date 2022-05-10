@@ -1,7 +1,7 @@
 import { GameObjects, Math as pMath } from "phaser";
 const { Container, Rectangle } = GameObjects;
 
-class Hume1 extends Container {
+class Arial extends Container {
   constructor(scene, x, y) {
     super(scene, x, y, []);
 
@@ -538,4 +538,4 @@ class Hume1 extends Container {
   }
 }
 
-export default Hume1;
+export default Arial;
