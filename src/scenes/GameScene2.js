@@ -4,6 +4,7 @@ import RobotoNPC from '../sprites/RobotoNPC';
 import RobotoPeer from '../sprites/RobotoPeer';
 import Arial from '../sprites/Arial';
 import ArialNPC from '../sprites/ArialNPC';
+import ArialPeer from '../sprites/ArialPeer';
 import Oswald from '../sprites/Oswald';
 import PF from 'pathfinding';
 import {network} from '../network';
@@ -92,7 +93,7 @@ class GameScene2 extends Scene {
           this.dummy = new RobotoPeer(this, 0, 0);
         }
         else if (this.p2Key === 'arial') {
-          // this.dummy = new ArialNPC(this, 0, 0);
+          this.dummy = new ArialPeer(this, 0, 0);
         }
       }
       // If this client is player 2...
@@ -102,7 +103,7 @@ class GameScene2 extends Scene {
           this.cat = new RobotoPeer(this, 0, 0);
         }
         else if (this.p1Key === 'arial') {
-          // this.cat = new Arial(this, 0, 0);
+          this.cat = new ArialPeer(this, 0, 0);
         }
         else if (this.p1Key === 'oswald') {
           // this.cat = new Oswald(this, 0, 0);
@@ -527,7 +528,7 @@ class GameScene2 extends Scene {
       this.p2PrevY = this.dummy.y;
   
       // Handle incoming broadcasts
-      network.on('player-update', ({x, y, angle, flipX, frame}) => {
+      network.on('player-update', ({x, y, angle, flipX, frame, state, rotation}) => {
         const isPlayer1 = this.registry.isMultiplayerHost;
 
         if (isPlayer1) {
@@ -535,12 +536,16 @@ class GameScene2 extends Scene {
           this.dummy.aimAngle = angle;
           this.dummy.flipX = flipX;
           this.dummy.core.setFrame(frame);
+          this.dummy.playerState = state;
+          this.dummy.setRotation(rotation);
         }
         else {
           this.cat.setPosition(x, y);
           this.cat.aimAngle = angle;
           this.cat.flipX = flipX;
           this.cat.core.setFrame(frame);
+          this.cat.playerState = state;
+          this.cat.setRotation(rotation);
         }
       });
 
@@ -1122,7 +1127,9 @@ class GameScene2 extends Scene {
           y: this.cat.y,
           angle: this.cat.aimAngle,
           flipX: this.cat.core.flipX,
-          frame: this.cat.core.frame.name
+          frame: this.cat.core.frame.name,
+          state: this.cat.playerState,
+          rotation: this.cat.rotation
         });
 
         // Update previous position for next frame
@@ -1136,7 +1143,9 @@ class GameScene2 extends Scene {
           y: this.dummy.y,
           angle: this.dummy.aimAngle,
           flipX: this.dummy.core.flipX,
-          frame: this.dummy.core.frame.name
+          frame: this.dummy.core.frame.name,
+          state: this.dummy.playerState,
+          rotation: this.dummy.rotation
         });
 
         // Update previous position for next frame

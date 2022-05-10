@@ -173,11 +173,10 @@ class Roboto extends Container {
 
     // Aim world vector for multiplayer
     this.aimAngle = 0;
+    this.playerState = '';
 
     // Set data attributes
     this.setData('isPlayer', true);
-
-    console.log(this.core);
   }
 
   mapTarget(target) {

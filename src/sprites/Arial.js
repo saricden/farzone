@@ -174,8 +174,9 @@ class Arial extends Container {
     this.prevX = this.x;
     this.prevY = this.y;
 
-    // Multiplayer
-    this.aim = new pMath.Vector2();
+    // Aim world vector for multiplayer
+    this.aimAngle = 0;
+    this.playerState = '';
 
     // Set data attributes
     this.setData('isPlayer', true);
@@ -355,7 +356,7 @@ class Arial extends Container {
       const relX = ((this.x - worldView.x) * zoom);
       const relY = ((this.y - worldView.y) * zoom);
   
-      const angle = pMath.Angle.Between(relX + (this.head.x * zoom), relY + (this.head.y * zoom), mousePointer.x, mousePointer.y);
+      this.aimAngle = pMath.Angle.Between(relX + (this.head.x * zoom), relY + (this.head.y * zoom), mousePointer.x, mousePointer.y);
   
       let angleMod = Math.PI / 4;
       let shieldArmAngleMod = Math.PI / 4 * 2;
@@ -392,9 +393,9 @@ class Arial extends Container {
         this.aimArmSword.setOrigin(0.24, 0.45);
       }
   
-      this.aimArmShield.setRotation(angle + shieldArmAngleMod);
-      this.aimArmSword.setRotation(angle + swordArmAngleMod);
-      this.blockArmShield.setRotation(angle + shieldArmAngleMod);
+      this.aimArmShield.setRotation(this.aimAngle + shieldArmAngleMod);
+      this.aimArmSword.setRotation(this.aimAngle + swordArmAngleMod);
+      this.blockArmShield.setRotation(this.aimAngle + shieldArmAngleMod);
 
       if (this.isAiming) {
         this.aimArmShield.setVisible(true);
@@ -418,22 +419,32 @@ class Arial extends Container {
         this.head.setY(-72);
       }
 
-      if ((angle + angleMod) / 3 > 1) {
-        this.head.setRotation(((angle + angleMod) / 3) - 2);
+      if ((this.aimAngle + angleMod) / 3 > 1) {
+        this.head.setRotation(((this.aimAngle + angleMod) / 3) - 2);
       }
       else {
-        this.head.setRotation((angle + angleMod) / 3);
+        this.head.setRotation((this.aimAngle + angleMod) / 3);
       }
 
       // Animation logic
       if (!this.isAirAttacking) {
+        this.playerState = '';
+
         if (this.isLunging) {
           this.head.setVisible(false);
           this.core.play('hume1-lunge', true);
+          this.playerState = 'lunge';
         }
         else if (this.body.onFloor()) {
           this.rotation = 0;
           this.head.setVisible(true);
+
+          if (this.isAiming) {
+            this.playerState = 'aim';
+          }
+          else if (this.isBlocking) {
+            this.playerState = 'block';
+          }
   
           if (this.isAiming || this.isBlocking ) {
             this.core.play('hume1-aim', true);
@@ -451,10 +462,13 @@ class Arial extends Container {
           }
         }
         else {
+          this.playerState = '';
+
           if (this.body.velocity.y < 0) {
             if (this.hasDoubleJumped) {
               this.core.play('hume1-flip', true);
               this.head.setVisible(false);
+              this.playerState = 'flip';
   
               const flipRot = 5 * Math.PI * (delta / 1000);
     

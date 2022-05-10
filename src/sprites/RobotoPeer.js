@@ -153,35 +153,6 @@ class RobotoPeer extends Container {
     this.body.setVelocity(0, 0);
 
     if (!this.isDead) {
-      // Animation logic
-      if (this.body.onFloor()) {
-        this.jumpAnimLock = false;
-  
-        if (this.body.velocity.x !== 0) {
-          if (this.core.flipX && this.body.velocity.x > 0 || !this.core.flipX && this.body.velocity.x < 0) {
-            this.core.playReverse('mech1-run', true);
-          }
-          else {
-            this.core.play('mech1-run', true);
-          }
-        }
-        else {
-          this.core.play('mech1-idle', true);
-        }
-      }
-      else {
-        if (this.body.velocity.y < -this.jumpAnimBuffer) {
-          this.core.play('mech1-up', true);
-        }
-        else if (this.body.velocity.y > this.jumpAnimBuffer) {
-          this.core.play('mech1-down', true);
-        }
-        else if (!this.jumpAnimLock) {
-          this.core.play('mech1-up-down', true);
-          this.jumpAnimLock = true;
-        }
-      }
-
       // Aiming logic
       let angleMod = 2 * Math.PI;
       let headAngleMod = 0.35;
