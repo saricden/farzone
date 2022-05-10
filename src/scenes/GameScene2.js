@@ -527,18 +527,20 @@ class GameScene2 extends Scene {
       this.p2PrevY = this.dummy.y;
   
       // Handle incoming broadcasts
-      network.on('player-position-change', ({x, y, angle, flipX}) => {
+      network.on('player-update', ({x, y, angle, flipX, frame}) => {
         const isPlayer1 = this.registry.isMultiplayerHost;
 
         if (isPlayer1) {
           this.dummy.setPosition(x, y);
           this.dummy.aimAngle = angle;
           this.dummy.flipX = flipX;
+          this.dummy.core.setFrame(frame);
         }
         else {
           this.cat.setPosition(x, y);
           this.cat.aimAngle = angle;
           this.cat.flipX = flipX;
+          this.cat.core.setFrame(frame);
         }
       });
 
@@ -1109,19 +1111,18 @@ class GameScene2 extends Scene {
   }
 
   update(time, delta) {
-    const isPlayer1 = this.registry.isMultiplayerHost;
-
     // Track/broadcast updates if multiplayer
     if (this.registry.isMultiplayer) {
       const isPlayer1 = this.registry.isMultiplayerHost;
 
       if (isPlayer1) {
         // Broadcast new position
-        network.send('player-position-change', {
+        network.send('player-update', {
           x: this.cat.x,
           y: this.cat.y,
           angle: this.cat.aimAngle,
-          flipX: this.cat.core.flipX
+          flipX: this.cat.core.flipX,
+          frame: this.cat.core.frame.name
         });
 
         // Update previous position for next frame
@@ -1130,11 +1131,12 @@ class GameScene2 extends Scene {
       }
       else {
         // Broadcast new position
-        network.send('player-position-change', {
+        network.send('player-update', {
           x: this.dummy.x,
           y: this.dummy.y,
           angle: this.dummy.aimAngle,
-          flipX: this.dummy.core.flipX
+          flipX: this.dummy.core.flipX,
+          frame: this.dummy.core.frame.name
         });
 
         // Update previous position for next frame

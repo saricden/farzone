@@ -176,6 +176,8 @@ class Mech1 extends Container {
 
     // Set data attributes
     this.setData('isPlayer', true);
+
+    console.log(this.core);
   }
 
   mapTarget(target) {
