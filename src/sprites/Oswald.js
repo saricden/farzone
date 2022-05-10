@@ -182,6 +182,10 @@ class Oswald extends Container {
     this.prevX = this.x;
     this.prevY = this.y;
 
+    // Aim world vector for multiplayer
+    this.aimAngle = 0;
+    this.playerState = '';
+
     // Set data attributes
     this.setData('isPlayer', true);
   }
@@ -325,7 +329,7 @@ class Oswald extends Container {
       const relX = ((this.x - worldView.x) * zoom);
       const relY = ((this.y - worldView.y) * zoom);
   
-      const angle = pMath.Angle.Between(relX + (this.head.x * zoom), relY + (this.head.y * zoom), mousePointer.x, mousePointer.y);
+      this.aimAngle = pMath.Angle.Between(relX + (this.head.x * zoom), relY + (this.head.y * zoom), mousePointer.x, mousePointer.y);
   
       let angleMod = Math.PI / 4;
       let armAngleMod = 2 * Math.PI - 0.1;
@@ -355,8 +359,8 @@ class Oswald extends Container {
         this.armR.setOrigin(0.075, 0.33);    
       }
 
-      this.armL.setRotation(angle + armAngleMod);
-      this.armR.setRotation(angle + armAngleMod);
+      this.armL.setRotation(this.aimAngle + armAngleMod);
+      this.armR.setRotation(this.aimAngle + armAngleMod);
 
       if (this.isAiming) {
         this.armL.setVisible(true);
@@ -367,11 +371,23 @@ class Oswald extends Container {
         this.armR.setVisible(false);
       }
 
-      if ((angle + angleMod) / 3 > 1) {
-        this.head.setRotation(((angle + angleMod) / 3) - 2);
+      if ((this.aimAngle + angleMod) / 3 > 1) {
+        this.head.setRotation(((this.aimAngle + angleMod) / 3) - 2);
       }
       else {
-        this.head.setRotation((angle + angleMod) / 3);
+        this.head.setRotation((this.aimAngle + angleMod) / 3);
+      }
+
+      if (this.isAiming) {
+        if (this.body.onFloor()) {
+          this.playerState = 'aim-floor';
+        }
+        else {
+          this.playerState = 'aim-air';
+        }
+      }
+      else {
+        this.playerState = '';
       }
 
       // Animation logic

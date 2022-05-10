@@ -6,6 +6,7 @@ import Arial from '../sprites/Arial';
 import ArialNPC from '../sprites/ArialNPC';
 import ArialPeer from '../sprites/ArialPeer';
 import Oswald from '../sprites/Oswald';
+import OswaldPeer from '../sprites/OswaldPeer';
 import PF from 'pathfinding';
 import {network} from '../network';
 
@@ -95,6 +96,9 @@ class GameScene2 extends Scene {
         else if (this.p2Key === 'arial') {
           this.dummy = new ArialPeer(this, 0, 0);
         }
+        else if (this.p2Key === 'oswald') {
+          this.dummy = new OswaldPeer(this, 0, 0);
+        }
       }
       // If this client is player 2...
       else {
@@ -106,7 +110,7 @@ class GameScene2 extends Scene {
           this.cat = new ArialPeer(this, 0, 0);
         }
         else if (this.p1Key === 'oswald') {
-          // this.cat = new Oswald(this, 0, 0);
+          this.cat = new OswaldPeer(this, 0, 0);
         }
 
         // Make player 2 a controllable sprite
