@@ -532,45 +532,79 @@ class GameScene2 extends Scene {
 
         if (isPlayer1) {
           this.dummy.setPosition(x, y);
-          this.dummy.angle = angle;
+          this.dummy.aimAngle = angle;
           this.dummy.flipX = flipX;
         }
         else {
           this.cat.setPosition(x, y);
-          this.cat.angle = angle;
+          this.cat.aimAngle = angle;
           this.cat.flipX = flipX;
         }
+      });
 
-        // console.log(aimX);
+      network.on('damage-tile', ({tileIndex, tileX, tileY, layerName}) => {
+        let layer = this.ground;
+        if (layerName === 'bgd1') layer = this.bgd1;
+        else if (layerName === 'bgd2') layer = this.bgd2;
+        else if (layerName === 'bgd3') layer = this.bgd3;
+        else if (layerName === 'leaves') layer = this.leaves;
+        else if (layerName === 'leavesBG1') layer = this.leavesBG1;
+        else if (layerName === 'leavesBG2') layer = this.leavesBG2;
+        
+        const tile = layer.getTileAt(tileX, tileY, true);
+
+        this.damageTile(
+          {
+            index: tileIndex,
+            x: tileX,
+            y: tileY
+          },
+          {
+            x: tile.pixelX,
+            y: tile.pixelY
+          },
+          layer,
+          false,
+          false
+        );
       });
     }
   }
 
-  damageTile(tile, intersection, layer, isPlayer = false) {
+  damageTile({index, x, y}, intersection, layer, isPlayer = false, sendChange = true) {
+    if (sendChange && this.registry.isMultiplayer) {
+      network.send('damage-tile', {
+        tileIndex: index,
+        tileX: x,
+        tileY: y,
+        layerName: layer.layer.name
+      });
+    }
+
     // Grass
-    if (tile.index === 1) {
-      layer.putTileAt(11, tile.x, tile.y, true);
+    if (index === 1) {
+      layer.putTileAt(11, x, y, true);
       this.dirtEmitter.explode(2, intersection.x, intersection.y);
       this.grassEmitter.explode(pMath.Between(5, 10), intersection.x, intersection.y);
     }
-    else if (tile.index === 11) {
-      layer.putTileAt(21, tile.x, tile.y, true);
+    else if (index === 11) {
+      layer.putTileAt(21, x, y, true);
       this.dirtEmitter.explode(3, intersection.x, intersection.y);
       this.grassEmitter.explode(pMath.Between(5, 10), intersection.x, intersection.y);
     }
-    else if (tile.index === 21) {
-      layer.putTileAt(31, tile.x, tile.y, true);
+    else if (index === 21) {
+      layer.putTileAt(31, x, y, true);
       this.dirtEmitter.explode(4, intersection.x, intersection.y);
       this.grassEmitter.explode(pMath.Between(10, 20), intersection.x, intersection.y);
     }
-    else if (tile.index === 31) {
-      layer.putTileAt(41, tile.x, tile.y, true);
+    else if (index === 31) {
+      layer.putTileAt(41, x, y, true);
       this.dirtEmitter.explode(6, intersection.x, intersection.y);
       this.grassEmitter.explode(pMath.Between(5, 10), intersection.x, intersection.y);
     }
-    else if (tile.index === 41) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
-      const tileUnder = layer.getTileAt(tile.x, tile.y + 1, true);
+    else if (index === 41) {
+      layer.removeTileAt(x, y, false, true);
+      const tileUnder = layer.getTileAt(x, y + 1, true);
 
       if (isPlayer) {
         this.tilesDestroyed++;
@@ -581,58 +615,58 @@ class GameScene2 extends Scene {
 
       if (tileUnder) {
         if (tileUnder.index === 2) {
-          layer.putTileAt(3, tile.x, tile.y + 1, true);
+          layer.putTileAt(3, x, y + 1, true);
         }
         else if (tileUnder.index === 12) {
-          layer.putTileAt(13, tile.x, tile.y + 1, true);
+          layer.putTileAt(13, x, y + 1, true);
         }
         else if (tileUnder.index === 22) {
-          layer.putTileAt(23, tile.x, tile.y + 1, true);
+          layer.putTileAt(23, x, y + 1, true);
         }
         else if (tileUnder.index === 32) {
-          layer.putTileAt(33, tile.x, tile.y + 1, true);
+          layer.putTileAt(33, x, y + 1, true);
         }
         else if (tileUnder.index === 42) {
-          layer.putTileAt(43, tile.x, tile.y + 1, true);
+          layer.putTileAt(43, x, y + 1, true);
         }
         else if (tileUnder.index === 5) {
-          layer.putTileAt(4, tile.x, tile.y + 1, true);
+          layer.putTileAt(4, x, y + 1, true);
         }
         else if (tileUnder.index === 15) {
-          layer.putTileAt(14, tile.x, tile.y + 1, true);
+          layer.putTileAt(14, x, y + 1, true);
         }
         else if (tileUnder.index === 25) {
-          layer.putTileAt(23, tile.x, tile.y + 1, true);
+          layer.putTileAt(23, x, y + 1, true);
         }
         else if (tileUnder.index === 35) {
-          layer.putTileAt(34, tile.x, tile.y + 1, true);
+          layer.putTileAt(34, x, y + 1, true);
         }
         else if (tileUnder.index === 45) {
-          layer.putTileAt(44, tile.x, tile.y + 1, true);
+          layer.putTileAt(44, x, y + 1, true);
         }
       }
     }
 
     // Dirt (side)
-    else if (tile.index === 2) {
-      layer.putTileAt(12, tile.x, tile.y, true);
+    else if (index === 2) {
+      layer.putTileAt(12, x, y, true);
       this.dirtEmitter.explode(2, intersection.x, intersection.y);
     }
-    else if (tile.index === 12) {
-      layer.putTileAt(22, tile.x, tile.y, true);
+    else if (index === 12) {
+      layer.putTileAt(22, x, y, true);
       this.dirtEmitter.explode(3, intersection.x, intersection.y);
     }
-    else if (tile.index === 22) {
-      layer.putTileAt(32, tile.x, tile.y, true);
+    else if (index === 22) {
+      layer.putTileAt(32, x, y, true);
       this.dirtEmitter.explode(4, intersection.x, intersection.y);
     }
-    else if (tile.index === 32) {
-      layer.putTileAt(42, tile.x, tile.y, true);
+    else if (index === 32) {
+      layer.putTileAt(42, x, y, true);
       this.dirtEmitter.explode(6, intersection.x, intersection.y);
     }
-    else if (tile.index === 42) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
-      const tileUnder = layer.getTileAt(tile.x, tile.y + 1, true);
+    else if (index === 42) {
+      layer.removeTileAt(x, y, false, true);
+      const tileUnder = layer.getTileAt(x, y + 1, true);
 
       if (isPlayer) {
         this.tilesDestroyed++;
@@ -642,58 +676,58 @@ class GameScene2 extends Scene {
 
       if (tileUnder) {
         if (tileUnder.index === 2) {
-          layer.putTileAt(3, tile.x, tile.y + 1, true);
+          layer.putTileAt(3, x, y + 1, true);
         }
         else if (tileUnder.index === 12) {
-          layer.putTileAt(13, tile.x, tile.y + 1, true);
+          layer.putTileAt(13, x, y + 1, true);
         }
         else if (tileUnder.index === 22) {
-          layer.putTileAt(23, tile.x, tile.y + 1, true);
+          layer.putTileAt(23, x, y + 1, true);
         }
         else if (tileUnder.index === 32) {
-          layer.putTileAt(33, tile.x, tile.y + 1, true);
+          layer.putTileAt(33, x, y + 1, true);
         }
         else if (tileUnder.index === 42) {
-          layer.putTileAt(43, tile.x, tile.y + 1, true);
+          layer.putTileAt(43, x, y + 1, true);
         }
         else if (tileUnder.index === 5) {
-          layer.putTileAt(4, tile.x, tile.y + 1, true);
+          layer.putTileAt(4, x, y + 1, true);
         }
         else if (tileUnder.index === 15) {
-          layer.putTileAt(14, tile.x, tile.y + 1, true);
+          layer.putTileAt(14, x, y + 1, true);
         }
         else if (tileUnder.index === 25) {
-          layer.putTileAt(23, tile.x, tile.y + 1, true);
+          layer.putTileAt(23, x, y + 1, true);
         }
         else if (tileUnder.index === 35) {
-          layer.putTileAt(34, tile.x, tile.y + 1, true);
+          layer.putTileAt(34, x, y + 1, true);
         }
         else if (tileUnder.index === 45) {
-          layer.putTileAt(44, tile.x, tile.y + 1, true);
+          layer.putTileAt(44, x, y + 1, true);
         }
       }
     }
 
     // Dirt (top)
-    else if (tile.index === 3) {
-      layer.putTileAt(13, tile.x, tile.y, true);
+    else if (index === 3) {
+      layer.putTileAt(13, x, y, true);
       this.dirtEmitter.explode(2, intersection.x, intersection.y);
     }
-    else if (tile.index === 13) {
-      layer.putTileAt(23, tile.x, tile.y, true);
+    else if (index === 13) {
+      layer.putTileAt(23, x, y, true);
       this.dirtEmitter.explode(3, intersection.x, intersection.y);
     }
-    else if (tile.index === 23) {
-      layer.putTileAt(33, tile.x, tile.y, true);
+    else if (index === 23) {
+      layer.putTileAt(33, x, y, true);
       this.dirtEmitter.explode(4, intersection.x, intersection.y);
     }
-    else if (tile.index === 33) {
-      layer.putTileAt(43, tile.x, tile.y, true);
+    else if (index === 33) {
+      layer.putTileAt(43, x, y, true);
       this.dirtEmitter.explode(6, intersection.x, intersection.y);
     }
-    else if (tile.index === 43) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
-      const tileUnder = layer.getTileAt(tile.x, tile.y + 1, true);
+    else if (index === 43) {
+      layer.removeTileAt(x, y, false, true);
+      const tileUnder = layer.getTileAt(x, y + 1, true);
 
       if (isPlayer) {
         this.tilesDestroyed++;
@@ -703,58 +737,58 @@ class GameScene2 extends Scene {
 
       if (tileUnder) {
         if (tileUnder.index === 2) {
-          layer.putTileAt(3, tile.x, tile.y + 1, true);
+          layer.putTileAt(3, x, y + 1, true);
         }
         else if (tileUnder.index === 12) {
-          layer.putTileAt(13, tile.x, tile.y + 1, true);
+          layer.putTileAt(13, x, y + 1, true);
         }
         else if (tileUnder.index === 22) {
-          layer.putTileAt(23, tile.x, tile.y + 1, true);
+          layer.putTileAt(23, x, y + 1, true);
         }
         else if (tileUnder.index === 32) {
-          layer.putTileAt(33, tile.x, tile.y + 1, true);
+          layer.putTileAt(33, x, y + 1, true);
         }
         else if (tileUnder.index === 42) {
-          layer.putTileAt(43, tile.x, tile.y + 1, true);
+          layer.putTileAt(43, x, y + 1, true);
         }
         else if (tileUnder.index === 5) {
-          layer.putTileAt(4, tile.x, tile.y + 1, true);
+          layer.putTileAt(4, x, y + 1, true);
         }
         else if (tileUnder.index === 15) {
-          layer.putTileAt(14, tile.x, tile.y + 1, true);
+          layer.putTileAt(14, x, y + 1, true);
         }
         else if (tileUnder.index === 25) {
-          layer.putTileAt(23, tile.x, tile.y + 1, true);
+          layer.putTileAt(23, x, y + 1, true);
         }
         else if (tileUnder.index === 35) {
-          layer.putTileAt(34, tile.x, tile.y + 1, true);
+          layer.putTileAt(34, x, y + 1, true);
         }
         else if (tileUnder.index === 45) {
-          layer.putTileAt(44, tile.x, tile.y + 1, true);
+          layer.putTileAt(44, x, y + 1, true);
         }
       }
     }
 
     // Brick (top)
-    else if (tile.index === 4) {
-      layer.putTileAt(14, tile.x, tile.y, true);
+    else if (index === 4) {
+      layer.putTileAt(14, x, y, true);
       this.brickEmitter.explode(2, intersection.x, intersection.y);
     }
-    else if (tile.index === 14) {
-      layer.putTileAt(24, tile.x, tile.y, true);
+    else if (index === 14) {
+      layer.putTileAt(24, x, y, true);
       this.brickEmitter.explode(3, intersection.x, intersection.y);
     }
-    else if (tile.index === 24) {
-      layer.putTileAt(34, tile.x, tile.y, true);
+    else if (index === 24) {
+      layer.putTileAt(34, x, y, true);
       this.brickEmitter.explode(4, intersection.x, intersection.y);
     }
-    else if (tile.index === 34) {
-      layer.putTileAt(44, tile.x, tile.y, true);
+    else if (index === 34) {
+      layer.putTileAt(44, x, y, true);
       this.brickEmitter.explode(6, intersection.x, intersection.y);
     }
-    else if (tile.index === 44) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
-      const tileUnder = layer.getTileAt(tile.x, tile.y + 1, true);
+    else if (index === 44) {
+      layer.removeTileAt(x, y, false, true);
+      const tileUnder = layer.getTileAt(x, y + 1, true);
 
       if (isPlayer) {
         this.tilesDestroyed++;
@@ -764,58 +798,58 @@ class GameScene2 extends Scene {
 
       if (tileUnder) {
         if (tileUnder.index === 2) {
-          layer.putTileAt(3, tile.x, tile.y + 1, true);
+          layer.putTileAt(3, x, y + 1, true);
         }
         else if (tileUnder.index === 12) {
-          layer.putTileAt(13, tile.x, tile.y + 1, true);
+          layer.putTileAt(13, x, y + 1, true);
         }
         else if (tileUnder.index === 22) {
-          layer.putTileAt(23, tile.x, tile.y + 1, true);
+          layer.putTileAt(23, x, y + 1, true);
         }
         else if (tileUnder.index === 32) {
-          layer.putTileAt(33, tile.x, tile.y + 1, true);
+          layer.putTileAt(33, x, y + 1, true);
         }
         else if (tileUnder.index === 42) {
-          layer.putTileAt(43, tile.x, tile.y + 1, true);
+          layer.putTileAt(43, x, y + 1, true);
         }
         else if (tileUnder.index === 5) {
-          layer.putTileAt(4, tile.x, tile.y + 1, true);
+          layer.putTileAt(4, x, y + 1, true);
         }
         else if (tileUnder.index === 15) {
-          layer.putTileAt(14, tile.x, tile.y + 1, true);
+          layer.putTileAt(14, x, y + 1, true);
         }
         else if (tileUnder.index === 25) {
-          layer.putTileAt(23, tile.x, tile.y + 1, true);
+          layer.putTileAt(23, x, y + 1, true);
         }
         else if (tileUnder.index === 35) {
-          layer.putTileAt(34, tile.x, tile.y + 1, true);
+          layer.putTileAt(34, x, y + 1, true);
         }
         else if (tileUnder.index === 45) {
-          layer.putTileAt(44, tile.x, tile.y + 1, true);
+          layer.putTileAt(44, x, y + 1, true);
         }
       }
     }
 
     // Brick (side)
-    else if (tile.index === 5) {
-      layer.putTileAt(15, tile.x, tile.y, true);
+    else if (index === 5) {
+      layer.putTileAt(15, x, y, true);
       this.brickEmitter.explode(2, intersection.x, intersection.y);
     }
-    else if (tile.index === 15) {
-      layer.putTileAt(25, tile.x, tile.y, true);
+    else if (index === 15) {
+      layer.putTileAt(25, x, y, true);
       this.brickEmitter.explode(3, intersection.x, intersection.y);
     }
-    else if (tile.index === 25) {
-      layer.putTileAt(35, tile.x, tile.y, true);
+    else if (index === 25) {
+      layer.putTileAt(35, x, y, true);
       this.brickEmitter.explode(4, intersection.x, intersection.y);
     }
-    else if (tile.index === 35) {
-      layer.putTileAt(45, tile.x, tile.y, true);
+    else if (index === 35) {
+      layer.putTileAt(45, x, y, true);
       this.brickEmitter.explode(6, intersection.x, intersection.y);
     }
-    else if (tile.index === 45) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
-      const tileUnder = layer.getTileAt(tile.x, tile.y + 1, true);
+    else if (index === 45) {
+      layer.removeTileAt(x, y, false, true);
+      const tileUnder = layer.getTileAt(x, y + 1, true);
 
       if (isPlayer) {
         this.tilesDestroyed++;
@@ -825,237 +859,237 @@ class GameScene2 extends Scene {
 
       if (tileUnder) {
         if (tileUnder.index === 2) {
-          layer.putTileAt(3, tile.x, tile.y + 1, true);
+          layer.putTileAt(3, x, y + 1, true);
         }
         else if (tileUnder.index === 12) {
-          layer.putTileAt(13, tile.x, tile.y + 1, true);
+          layer.putTileAt(13, x, y + 1, true);
         }
         else if (tileUnder.index === 22) {
-          layer.putTileAt(23, tile.x, tile.y + 1, true);
+          layer.putTileAt(23, x, y + 1, true);
         }
         else if (tileUnder.index === 32) {
-          layer.putTileAt(33, tile.x, tile.y + 1, true);
+          layer.putTileAt(33, x, y + 1, true);
         }
         else if (tileUnder.index === 42) {
-          layer.putTileAt(43, tile.x, tile.y + 1, true);
+          layer.putTileAt(43, x, y + 1, true);
         }
         else if (tileUnder.index === 5) {
-          layer.putTileAt(4, tile.x, tile.y + 1, true);
+          layer.putTileAt(4, x, y + 1, true);
         }
         else if (tileUnder.index === 15) {
-          layer.putTileAt(14, tile.x, tile.y + 1, true);
+          layer.putTileAt(14, x, y + 1, true);
         }
         else if (tileUnder.index === 25) {
-          layer.putTileAt(23, tile.x, tile.y + 1, true);
+          layer.putTileAt(23, x, y + 1, true);
         }
         else if (tileUnder.index === 35) {
-          layer.putTileAt(34, tile.x, tile.y + 1, true);
+          layer.putTileAt(34, x, y + 1, true);
         }
         else if (tileUnder.index === 45) {
-          this.ground.putTileAt(44, tile.x, tile.y + 1, true);
+          this.ground.putTileAt(44, x, y + 1, true);
         }
       }
     }
 
     // Tree trunks/branches
-    else if (tile.index === 81) {
-      layer.putTileAt(85, tile.x, tile.y, true);
+    else if (index === 81) {
+      layer.putTileAt(85, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 85) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 85) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 82) {
-      layer.putTileAt(86, tile.x, tile.y, true);
+    else if (index === 82) {
+      layer.putTileAt(86, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 86) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 86) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 84) {
-      layer.putTileAt(89, tile.x, tile.y, true);
+    else if (index === 84) {
+      layer.putTileAt(89, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 89) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 89) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 85) {
-      layer.putTileAt(90, tile.x, tile.y, true);
+    else if (index === 85) {
+      layer.putTileAt(90, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 90) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 90) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 91) {
-      layer.putTileAt(96, tile.x, tile.y, true);
+    else if (index === 91) {
+      layer.putTileAt(96, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 96) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 96) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 92) {
-      layer.putTileAt(97, tile.x, tile.y, true);
+    else if (index === 92) {
+      layer.putTileAt(97, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 97) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 97) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 93) {
-      layer.putTileAt(98, tile.x, tile.y, true);
+    else if (index === 93) {
+      layer.putTileAt(98, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 98) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 98) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 94) {
-      layer.putTileAt(98, tile.x, tile.y, true);
+    else if (index === 94) {
+      layer.putTileAt(98, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 98) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 98) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 95) {
-      layer.putTileAt(100, tile.x, tile.y, true);
+    else if (index === 95) {
+      layer.putTileAt(100, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 100) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 100) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 101) {
-      layer.putTileAt(106, tile.x, tile.y, true);
+    else if (index === 101) {
+      layer.putTileAt(106, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 106) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 106) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 102) {
-      layer.putTileAt(107, tile.x, tile.y, true);
+    else if (index === 102) {
+      layer.putTileAt(107, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 107) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 107) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 103) {
-      layer.putTileAt(108, tile.x, tile.y, true);
+    else if (index === 103) {
+      layer.putTileAt(108, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 108) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 108) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 104) {
-      layer.putTileAt(109, tile.x, tile.y, true);
+    else if (index === 104) {
+      layer.putTileAt(109, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 109) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 109) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 105) {
-      layer.putTileAt(110, tile.x, tile.y, true);
+    else if (index === 105) {
+      layer.putTileAt(110, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 110) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 110) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 113) {
-      layer.putTileAt(118, tile.x, tile.y, true);
+    else if (index === 113) {
+      layer.putTileAt(118, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 118) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 118) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 123) {
-      layer.putTileAt(127, tile.x, tile.y, true);
+    else if (index === 123) {
+      layer.putTileAt(127, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 127) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 127) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
         this.tilesDestroyed++;
       }
     }
-    else if (tile.index === 133) {
-      layer.putTileAt(138, tile.x, tile.y, true);
+    else if (index === 133) {
+      layer.putTileAt(138, x, y, true);
       this.woodEmitter.explode(10, intersection.x, intersection.y);
     }
-    else if (tile.index === 138) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if (index === 138) {
+      layer.removeTileAt(x, y, false, true);
       this.woodEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
@@ -1064,8 +1098,8 @@ class GameScene2 extends Scene {
     }
 
     // Leaves
-    else if ([51, 52, 53, 54, 61, 62, 63, 71, 72, 73].includes(tile.index)) {
-      layer.removeTileAt(tile.x, tile.y, false, true);
+    else if ([51, 52, 53, 54, 61, 62, 63, 71, 72, 73].includes(index)) {
+      layer.removeTileAt(x, y, false, true);
       this.leavesEmitter.explode(50, intersection.x, intersection.y);
 
       if (isPlayer) {
@@ -1075,6 +1109,8 @@ class GameScene2 extends Scene {
   }
 
   update(time, delta) {
+    const isPlayer1 = this.registry.isMultiplayerHost;
+
     // Track/broadcast updates if multiplayer
     if (this.registry.isMultiplayer) {
       const isPlayer1 = this.registry.isMultiplayerHost;
@@ -1084,7 +1120,7 @@ class GameScene2 extends Scene {
         network.send('player-position-change', {
           x: this.cat.x,
           y: this.cat.y,
-          angle: this.cat.angle,
+          angle: this.cat.aimAngle,
           flipX: this.cat.core.flipX
         });
 
@@ -1097,7 +1133,7 @@ class GameScene2 extends Scene {
         network.send('player-position-change', {
           x: this.dummy.x,
           y: this.dummy.y,
-          angle: this.dummy.angle,
+          angle: this.dummy.aimAngle,
           flipX: this.dummy.core.flipX
         });
 

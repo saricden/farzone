@@ -48,7 +48,7 @@ class Mech1Peer extends Container {
     this.bulletGfx = this.scene.add.graphics();
     this.bulletGfx.setDepth(10);
 
-    this.angle = 0;
+    this.aimAngle = 0;
     this.flipX = false;
 
     // Set data attributes
@@ -211,10 +211,10 @@ class Mech1Peer extends Container {
         this.head.setX(-12);
       }
   
-      this.armLeft.setRotation(this.angle + angleMod);
-      this.armRight.setRotation(this.angle + angleMod);
+      this.armLeft.setRotation(this.aimAngle + angleMod);
+      this.armRight.setRotation(this.aimAngle + angleMod);
       // this.head.setRotation(angle * headAngleMod + angleMod);
-      this.head.setRotation(this.angle + angleMod);
+      this.head.setRotation(this.aimAngle + angleMod);
     }
     // Spin body parts around when dead
     else {

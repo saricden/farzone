@@ -136,5 +136,3 @@ export const network = new NetworkHandler({
   // debug: 3
   debug: 0,
 });
-globalThis.test = network;
-console.log("NETWORK HANDLER",network)
