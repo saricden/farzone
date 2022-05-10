@@ -32,6 +32,9 @@ class BattleHUD extends Scene {
     else if (this.p2Key === 'arial') {
       this.enemyIcon = this.add.image(window.innerWidth - 20, window.innerHeight - 20, 'ui-hume1');
     }
+    else if (this.p2Key === 'oswald') {
+      this.enemyIcon = this.add.image(window.innerWidth - 20, window.innerHeight - 20, 'ui-oswald');
+    }
     this.enemyIcon.setScale(0.1);
     this.enemyIcon.setOrigin(1, 1);
     this.enemyIcon.setFlipX(true);
