@@ -8,6 +8,7 @@ import ArialNPC from '../sprites/ArialNPC';
 import ArialPeer from '../sprites/ArialPeer';
 import Oswald from '../sprites/Oswald';
 import OswaldPeer from '../sprites/OswaldPeer';
+import OswaldGrendade from '../sprites/OswaldGrenade';
 import PF from 'pathfinding';
 import {network} from '../network';
 
@@ -664,6 +665,41 @@ class GameScene2 extends Scene {
               });
             }
           });
+        }
+      });
+
+      this.grenades = {};
+
+      network.on('oswald-grenade-create', ({id, x, y}) => {
+        if (!(id in this.grenades)) {
+          this.grenades[id] = new OswaldGrendade(
+            this,
+            x,
+            y,
+            0,
+            false,
+            true
+          );
+        }
+      });
+
+      network.on('oswald-grenade-move', ({id, x, y, rotation}) => {
+        if (typeof this.grenades[id] !== 'undefined') {
+          this.grenades[id].setPosition(x, y);
+          this.grenades[id].setRotation(rotation);
+        }
+      });
+
+      network.on('oswald-grenade-bounce', ({id}) => {
+        if (typeof this.grenades[id] !== 'undefined') {
+          this.sound.play('sfx-grenade-bounce');
+        }
+      });
+
+      network.on('oswald-grenade-detonate', ({id, x, y}) => {
+        if (typeof this.grenades[id] !== 'undefined') {
+          this.grenades[id].detonate();
+          delete this.grenades[id];
         }
       });
     }
