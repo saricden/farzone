@@ -169,8 +169,6 @@ class RobotoShell extends Container {
     if (!isNetworkControlled) {
       this.networkID = Date.now();
 
-      console.log('sending rocket create event');
-  
       network.send('roboto-shell-create', {
         id: this.networkID,
         x,

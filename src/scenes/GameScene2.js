@@ -602,17 +602,17 @@ class GameScene2 extends Scene {
       this.shells = {};
 
       network.on('roboto-shell-create', ({id, x, y, rotation, flipX}) => {
-        console.log('the enemy shot a rocket');
-
-        this.shells[id] = new RobotoShell(
-          this,
-          x,
-          y,
-          rotation,
-          flipX,
-          false,
-          true
-        );
+        if (!(id in this.shells)) {
+          this.shells[id] = new RobotoShell(
+            this,
+            x,
+            y,
+            rotation,
+            flipX,
+            false,
+            true
+          );
+        }
       });
 
       network.on('roboto-shell-move', ({id, x, y}) => {
