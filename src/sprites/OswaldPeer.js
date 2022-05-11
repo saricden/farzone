@@ -1,5 +1,4 @@
 import { GameObjects, Math as pMath } from "phaser";
-import OswaldGrendade from "./OswaldGrenade";
 const { Container } = GameObjects;
 
 class OswaldPeer extends Container {
@@ -38,9 +37,6 @@ class OswaldPeer extends Container {
 
     this.body.setSize(100, 600);
     this.body.setOffset(-70, -287);
-
-    this.bulletGfx = this.scene.add.graphics();
-    this.bulletGfx.setDepth(10);
 
     this.isAiming = false;
     this.canShoot = true;

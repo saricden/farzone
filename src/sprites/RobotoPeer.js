@@ -45,9 +45,6 @@ class RobotoPeer extends Container {
     this.body.setOffset(-70, -200);
     this.isKnocked = false;
 
-    this.bulletGfx = this.scene.add.graphics();
-    this.bulletGfx.setDepth(10);
-
     this.aimAngle = 0;
     this.flipX = false;
 

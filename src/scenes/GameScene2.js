@@ -597,6 +597,36 @@ class GameScene2 extends Scene {
           });
         }
       });
+
+      network.on('oswald-shoot', ({sx, sy, ex, ey}) => {
+        if (typeof this !== 'undefined') {
+          this.peerBulletGfx.lineStyle(4, 0xFBF236, 1);
+          this.peerBulletGfx.lineBetween(sx, sy, ex, ey);
+
+          this.time.addEvent({
+            delay: 100,
+            repeat: 0,
+            callback: () => {
+              this.peerBulletGfx.clear();
+              this.peerBulletGfx.lineStyle(8, 0xCCCCCC, 1);
+              this.peerBulletGfx.lineBetween(sx, sy, ex, ey);
+  
+              this.tweens.add({
+                targets: [this.peerBulletGfx],
+                alpha: 0,
+                x: 100,
+                y: -100,
+                duration: 2500,
+                onComplete: () => {
+                  this.peerBulletGfx.clear();
+                  this.peerBulletGfx.setPosition(0, 0);
+                  this.peerBulletGfx.setAlpha(1);
+                }
+              });
+            }
+          });
+        }
+      });
     }
   }
 

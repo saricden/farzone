@@ -1,4 +1,5 @@
 import { GameObjects, Math as pMath } from "phaser";
+import { network } from "../network";
 import OswaldGrendade from "./OswaldGrenade";
 const { Container } = GameObjects;
 
@@ -54,7 +55,6 @@ class Oswald extends Container {
     this.isAiming = false;
     this.canShoot = true;
     this.isThrowing = false;
-    this.bulletOP = new pMath.Vector2();
 
     this.scene.input.on('pointerdown', (pointer) => {
       if (pointer.rightButtonDown()) {
@@ -140,11 +140,15 @@ class Oswald extends Container {
         this.bulletGfx.lineStyle(4, 0xFBF236, 1);
         this.bulletGfx.lineBetween(this.x + this.armL.x + vector.x, this.y + this.armL.y + vector.y - barrelOffsetY, endX, endY);
 
-        this.bulletOP.x = this.bulletGfx.x;
-        this.bulletOP.y = this.bulletGfx.y;
+        network.send('oswald-shoot', {
+          sx: this.x + this.armL.x + vector.x,
+          sy: this.y + this.armL.y + vector.y - barrelOffsetY,
+          ex: endX,
+          ey: endY
+        });
   
         this.scene.time.addEvent({
-          delay: 25,
+          delay: 100,
           repeat: 0,
           callback: () => {
             this.bulletGfx.clear();
