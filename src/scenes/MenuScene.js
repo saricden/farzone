@@ -1,6 +1,5 @@
 import { Scene } from "phaser";
 import moment from "moment";
-import Peer from "peerjs";
 import { network } from "../network";
 
 class MenuScene extends Scene {
@@ -467,6 +466,7 @@ class MenuScene extends Scene {
       this.mapSelect.classList.remove('open');
       btnTitle.classList.remove('on');
       this.btnStartMatch.classList.remove('open');
+      this.playerSelect.classList.remove('open');
     });
   }
 
