@@ -1,5 +1,6 @@
 import { GameObjects, Math as pMath } from "phaser";
 import Mech1Shell from "./Mech1Shell";
+import { network } from "../network";
 const { Container } = GameObjects;
 
 class Roboto extends Container {
@@ -104,8 +105,15 @@ class Roboto extends Container {
         this.bulletGfx.lineStyle(4, 0xFBF236, 1);
         this.bulletGfx.lineBetween(this.x + this.armLeft.x + vector.x, this.y + this.armLeft.y + vector.y - barrelOffsetY, endX, endY);
 
+        network.send('render-bullet', {
+          sx: this.x + this.armLeft.x + vector.x,
+          sy: this.y + this.armLeft.y + vector.y - barrelOffsetY,
+          ex: endX,
+          ey: endY
+        });
+
         this.scene.time.addEvent({
-          delay: 10,
+          delay: 100,
           repeat: 0,
           callback: () => {
             this.bulletGfx.clear();
