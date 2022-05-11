@@ -2,6 +2,7 @@ import {Scene, Math as pMath, Display} from 'phaser';
 import Roboto from '../sprites/Roboto';
 import RobotoNPC from '../sprites/RobotoNPC';
 import RobotoPeer from '../sprites/RobotoPeer';
+import RobotoShell from '../sprites/RobotoShell';
 import Arial from '../sprites/Arial';
 import ArialNPC from '../sprites/ArialNPC';
 import ArialPeer from '../sprites/ArialPeer';
@@ -80,13 +81,13 @@ class GameScene2 extends Scene {
       if (this.registry.isMultiplayerHost) {
         // Make player 1 a controllable sprite
         if (this.p1Key === 'roboto') {
-          this.cat = new Roboto(this, 0, 0);
+          this.cat = new Roboto(this, 0, 0, 'p1');
         }
         else if (this.p1Key === 'arial') {
-          this.cat = new Arial(this, 0, 0);
+          this.cat = new Arial(this, 0, 0, 'p1');
         }
         else if (this.p1Key === 'oswald') {
-          this.cat = new Oswald(this, 0, 0);
+          this.cat = new Oswald(this, 0, 0, 'p1');
         }
 
         // Make player 2 a peer sprite sprite
@@ -115,26 +116,26 @@ class GameScene2 extends Scene {
 
         // Make player 2 a controllable sprite
         if (this.p2Key === 'roboto') {
-          this.dummy = new Roboto(this, 0, 0);
+          this.dummy = new Roboto(this, 0, 0, 'p2');
         }
         else if (this.p2Key === 'arial') {
-          this.dummy = new Arial(this, 0, 0);
+          this.dummy = new Arial(this, 0, 0, 'p2');
         }
         else if (this.p2Key === 'oswald') {
-          this.dummy = new Oswald(this, 0, 0);
+          this.dummy = new Oswald(this, 0, 0, 'p2');
         }
       }
     }
     // Otherwise, single player against a CPU...
     else {
       if (this.p1Key === 'roboto') {
-        this.cat = new Roboto(this, 0, 0);
+        this.cat = new Roboto(this, 0, 0, 'p1');
       }
       else if (this.p1Key === 'arial') {
-        this.cat = new Arial(this, 0, 0);
+        this.cat = new Arial(this, 0, 0, 'p1');
       }
       else if (this.p1Key === 'oswald') {
-        this.cat = new Oswald(this, 0, 0);
+        this.cat = new Oswald(this, 0, 0, 'p1');
       }
       
       if (this.p2Key === 'roboto') {
@@ -595,6 +596,44 @@ class GameScene2 extends Scene {
               this.peerBulletGfx.clear();
             }
           });
+        }
+      });
+
+      this.shells = {};
+
+      network.on('roboto-shell-create', ({id, x, y, rotation, flipX}) => {
+        console.log('the enemy shot a rocket');
+
+        this.shells[id] = new RobotoShell(
+          this,
+          x,
+          y,
+          rotation,
+          flipX,
+          false,
+          true
+        );
+      });
+
+      network.on('roboto-shell-move', ({id, x, y}) => {
+        if (typeof this.shells[id] !== 'undefined') {
+          this.shells[id].setPosition(x, y);
+        }
+      });
+
+      network.on('roboto-shell-detonate', ({id, x, y}) => {
+        if (typeof this.shells[id] !== 'undefined') {
+          this.shells[id].setPosition(x, y);
+          this.shells[id].detonate();
+          delete this.shells[id];
+        }
+      });
+
+      network.on('roboto-shell-offmap', ({id, x, y}) => {
+        if (typeof this.shells[id] !== 'undefined') {
+          this.shells[id].setPosition(x, y);
+          this.shells[id].offmap();
+          delete this.shells[id];
         }
       });
 

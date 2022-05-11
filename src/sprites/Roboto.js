@@ -1,10 +1,10 @@
 import { GameObjects, Math as pMath } from "phaser";
-import Mech1Shell from "./Mech1Shell";
+import RobotoShell from "./RobotoShell";
 import { network } from "../network";
 const { Container } = GameObjects;
 
 class Roboto extends Container {
-  constructor(scene, x, y) {
+  constructor(scene, x, y, playerID) {
     super(scene, x, y, []);
 
     this.scene = scene;
@@ -139,7 +139,7 @@ class Roboto extends Container {
     
             vector.setToPolar(this.armLeft.rotation + angleMod, barrelOffsetX);
     
-            new Mech1Shell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.core.flipX, true);
+            new RobotoShell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.core.flipX, true);
     
             this.armLeft.play('mech1-arm-left-heavy-shot', true);
             this.armRight.play('mech1-arm-right-heavy-shot', true);
