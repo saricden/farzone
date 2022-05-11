@@ -51,23 +51,6 @@ class RobotoPeer extends Container {
     this.aimAngle = 0;
     this.flipX = false;
 
-    // Network event handlers
-    network.on('render-bullet', ({sx, sy, ex, ey}) => {
-      // Again sometimes scene is undefined...?
-      if (typeof this.scene !== 'undefined') {
-        this.bulletGfx.lineStyle(8, 0xFBF236, 1);
-        this.bulletGfx.lineBetween(sx, sy, ex, ey);
-  
-        this.scene.time.addEvent({
-          delay: 100,
-          repeat: 0,
-          callback: () => {
-            this.bulletGfx.clear();
-          }
-        });
-      }
-    });
-
     // Set data attributes
     this.setData('isPeer', true);
   }

@@ -579,6 +579,24 @@ class GameScene2 extends Scene {
           false
         );
       });
+
+      this.peerBulletGfx = this.add.graphics();
+      this.peerBulletGfx.setDepth(10);
+
+      network.on('roboto-shoot', ({sx, sy, ex, ey}) => {
+        if (typeof this !== 'undefined') {
+          this.peerBulletGfx.lineStyle(8, 0xFBF236, 1);
+          this.peerBulletGfx.lineBetween(sx, sy, ex, ey);
+    
+          this.time.addEvent({
+            delay: 100,
+            repeat: 0,
+            callback: () => {
+              this.peerBulletGfx.clear();
+            }
+          });
+        }
+      });
     }
   }
 

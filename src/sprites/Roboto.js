@@ -105,7 +105,7 @@ class Roboto extends Container {
         this.bulletGfx.lineStyle(4, 0xFBF236, 1);
         this.bulletGfx.lineBetween(this.x + this.armLeft.x + vector.x, this.y + this.armLeft.y + vector.y - barrelOffsetY, endX, endY);
 
-        network.send('render-bullet', {
+        network.send('roboto-shoot', {
           sx: this.x + this.armLeft.x + vector.x,
           sy: this.y + this.armLeft.y + vector.y - barrelOffsetY,
           ex: endX,
