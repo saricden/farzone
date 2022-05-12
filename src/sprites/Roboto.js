@@ -86,6 +86,7 @@ class Roboto extends Container {
         if (intersection) {
           const isTile = (intersection.object && typeof intersection.object.getTilesWithinWorldXY === 'function');
           const isNPC = (intersection.object && intersection.object.getData('isNPC') === true);
+          const isPeer = (intersection.object && intersection.object.getData('isPeer') === true);
           endX = intersection.x;
           endY = intersection.y;
 
@@ -97,8 +98,14 @@ class Roboto extends Container {
             tiles.forEach((tile) => this.scene.damageTile(tile, intersection, intersection.object, true));
           }
           else if (isNPC) {
-            intersection.object.takeDamage(pMath.Between(1, 5), intersection);
+            const damage = pMath.Between(1, 5);
+            intersection.object.takeDamage(damage, intersection);
             this.scene.registry.playerAttacksHit++;
+          }
+          else if (isPeer) {
+            const damage = pMath.Between(1, 5);
+            // network.send('damage-player', { damage, x: intersection.x, y: intersection.y });
+            intersection.object.takeDamage(damage, intersection);
           }
         }
 
@@ -203,16 +210,34 @@ class Roboto extends Container {
     });
   }
 
+  applyHueRotation() {
+    // Apply hue rotate
+    const hueRotatePipeline = this.scene.renderer.pipelines.get('HueRotate');
+    this.list.forEach((obj) => {
+      if (obj.getData('isHitbox') !== true) {
+        obj.setPipeline(hueRotatePipeline);
+      }
+    });
+    hueRotatePipeline.time = 180.25; // magic numbers ftw
+  }
+
   takeDamage(dmg, intersection) {
     this.scene.registry.playerDamageTaken += dmg;
 
     if (!this.isDead) {
-      if (this.scene.registry.playerHP > 0) {
+      const {isMultiplayerHost: isPlayer1} = this.scene.registry;
+
+      if (
+        isPlayer1 && this.scene.registry.playerHP > 0 ||
+        !isPlayer1 && this.scene.registry.enemyHP > 0 
+      ) {
+        const maxHP = (isPlayer1 ? this.scene.registry.playerHP : this.scene.registry.enemyHP);
+        
         const txtX = intersection.x + pMath.Between(-200, 200);
         const txtY = intersection.y + pMath.Between(-200, 200);
         const dmgLabel = this.scene.add.text(txtX, txtY, `${dmg}`, {
           fontFamily: 'monospace',
-          fontSize: (dmg < this.scene.registry.playerMaxHP * 0.05 ? 60 : 120),
+          fontSize: (dmg < maxHP * 0.05 ? 60 : 120),
           color: '#FFF',
           stroke: '#000',
           strokeThickness: 4
@@ -231,11 +256,19 @@ class Roboto extends Container {
         });
       }
   
-      if (this.scene.registry.playerHP - dmg > 0) {
+      if (isPlayer1 && this.scene.registry.playerHP - dmg > 0) {
         this.scene.registry.playerHP -= dmg;
       }
+      else if (!isPlayer1 && this.scene.registry.enemyHP - dmg > 0) {
+        this.scene.registry.enemyHP -= dmg;
+      }
       else {
-        this.scene.registry.playerHP = 0;
+        if (isPlayer1) {
+          this.scene.registry.playerHP = 0;
+        }
+        else {
+          this.scene.registry.enemyHP = 0;
+        }
         
         this.isDead = true;
   

@@ -221,7 +221,7 @@ class RobotoShell extends Container {
           sprite.body.blocked.none = true;
           sprite.isKnocked = true;
 
-          if (typeof sprite.takeDamage === 'function') {
+          if (typeof sprite.takeDamage === 'function' && !this.isNetworkControlled) {
             sprite.takeDamage(pMath.Between(50, 100), {x: this.x, y: this.y});
           }
         }

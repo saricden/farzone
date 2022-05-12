@@ -68,16 +68,40 @@ class RobotoPeer extends Container {
     // });
   }
 
+  applyHueRotation() {
+    // Apply hue rotate
+    const hueRotatePipeline = this.scene.renderer.pipelines.get('HueRotate');
+    this.list.forEach((obj) => {
+      if (obj.getData('isHitbox') !== true) {
+        obj.setPipeline(hueRotatePipeline);
+      }
+    });
+    hueRotatePipeline.time = 180.25; // magic numbers ftw
+  }
+
   takeDamage(dmg, intersection) {
-    this.scene.registry.playerDamageTaken += dmg;
+    this.scene.registry.playerDamageInflicted += dmg;
+
+    network.send('damage-player', {
+      damage: dmg,
+      x: intersection.x,
+      y: intersection.y
+    });
 
     if (!this.isDead) {
-      if (this.scene.registry.playerHP > 0) {
+      const {isMultiplayerHost: isPlayer1} = this.scene.registry;
+
+      if (
+        isPlayer1 && this.scene.registry.enemyHP > 0 ||
+        !isPlayer1 && this.scene.registry.playerHP > 0
+      ) {
+        const maxHP = (isPlayer1 ? this.scene.registry.enemyHP : this.scene.registry.playerHP);
+
         const txtX = intersection.x + pMath.Between(-200, 200);
         const txtY = intersection.y + pMath.Between(-200, 200);
         const dmgLabel = this.scene.add.text(txtX, txtY, `${dmg}`, {
           fontFamily: 'monospace',
-          fontSize: (dmg < this.scene.registry.playerMaxHP * 0.05 ? 60 : 120),
+          fontSize: (dmg < maxHP * 0.05 ? 60 : 120),
           color: '#FFF',
           stroke: '#000',
           strokeThickness: 4
@@ -96,11 +120,19 @@ class RobotoPeer extends Container {
         });
       }
   
-      if (this.scene.registry.playerHP - dmg > 0) {
+      if (isPlayer1 && this.scene.registry.enemyHP - dmg > 0) {
+        this.scene.registry.enemyHP -= dmg;
+      }
+      else if (!isPlayer1 && this.scene.registry.playerHP - dmg > 0) {
         this.scene.registry.playerHP -= dmg;
       }
       else {
-        this.scene.registry.playerHP = 0;
+        if (isPlayer1) {
+          this.scene.registry.enemyHP = 0;
+        }
+        else {
+          this.scene.registry.playerHP = 0;
+        }
         
         this.isDead = true;
   

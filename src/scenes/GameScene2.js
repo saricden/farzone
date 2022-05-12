@@ -152,7 +152,7 @@ class GameScene2 extends Scene {
     }
 
     // Apply player 2 colour
-    // this.dummy.setHueRotate(180.25);
+    this.dummy.applyHueRotation();
 
     this.catSpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
     this.dummySpawnpoint = `spawnpoint${pMath.Between(1, 4)}`;
@@ -700,6 +700,18 @@ class GameScene2 extends Scene {
         if (typeof this.grenades[id] !== 'undefined') {
           this.grenades[id].detonate();
           delete this.grenades[id];
+        }
+      });
+
+      // Receiving damage from the other player
+      network.on('damage-player', ({damage, x, y}) => {
+        const isPlayer1 = this.registry.isMultiplayerHost;
+
+        if (isPlayer1) {
+          this.cat.takeDamage(damage, { x, y });
+        }
+        else {
+          this.dummy.takeDamage(damage, { x, y })
         }
       });
     }
