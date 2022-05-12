@@ -299,6 +299,11 @@ class ArialNPC extends Container {
       }
     });
 
+    // Set data attributes
+    this.setData('isNPC', true);
+  }
+
+  applyHueRotation() {
     // Apply hue rotate
     const hueRotatePipeline = this.scene.renderer.pipelines.get('HueRotate');
     this.list.forEach((obj) => {
@@ -307,9 +312,6 @@ class ArialNPC extends Container {
       }
     });
     hueRotatePipeline.time = 180.25; // magic numbers ftw
-
-    // Set data attributes
-    this.setData('isNPC', true);
   }
 
   processGround() {
