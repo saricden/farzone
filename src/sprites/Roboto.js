@@ -221,7 +221,7 @@ class Roboto extends Container {
     hueRotatePipeline.time = 180.25; // magic numbers ftw
   }
 
-  takeDamage(dmg, intersection) {
+  takeDamage(dmg, intersection, isNetworkControlled = false) {
     this.scene.registry.playerDamageTaken += dmg;
 
     if (!this.isDead) {

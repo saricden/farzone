@@ -113,7 +113,6 @@ class MenuScene extends Scene {
         // this.registry.connection = connection;
 
         network.addEventListener('connection', (e) => {
-          console.log(e);
           if (e.detail.side === 'incoming') {
             // if (e.detail.side === '')
             mpConnectingLoader.classList.remove('on');
@@ -175,7 +174,6 @@ class MenuScene extends Scene {
         });
 
         network.connectTo(remoteID);
-        this.registerNetworkEvents();
         
         mpOptionBoxes.forEach((box) => {
           box.classList.remove('on');
@@ -207,7 +205,7 @@ class MenuScene extends Scene {
             repeat: 0,
             callback: () => {
               this.wind.stop();
-            
+
               this.scene.start('scene-game', {
                 levelKey: this.levelKey,
                 bgColor: this.bgColor,

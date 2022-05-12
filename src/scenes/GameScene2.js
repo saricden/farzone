@@ -708,10 +708,10 @@ class GameScene2 extends Scene {
         const isPlayer1 = this.registry.isMultiplayerHost;
 
         if (isPlayer1) {
-          this.cat.takeDamage(damage, { x, y });
+          this.cat.takeDamage(damage, { x, y }, true);
         }
         else {
-          this.dummy.takeDamage(damage, { x, y })
+          this.dummy.takeDamage(damage, { x, y }, true);
         }
       });
     }

@@ -9,7 +9,7 @@ class NetworkHandler extends EventTarget{
     this.queue = [];
     this.lastPackedCache = Object.create(null);
     this.hasScheduledPush = false;
-    this.alwaysSendTypes = [];
+    this.alwaysSendTypes = ['damage-player'];
     this.onRecievePacket = Object.create(null);
     this.connection = null;
     this.peer = null;

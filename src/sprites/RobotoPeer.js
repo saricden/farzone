@@ -79,14 +79,17 @@ class RobotoPeer extends Container {
     hueRotatePipeline.time = 180.25; // magic numbers ftw
   }
 
-  takeDamage(dmg, intersection) {
+  takeDamage(dmg, intersection, isNetworkControlled = false) {
     this.scene.registry.playerDamageInflicted += dmg;
 
-    network.send('damage-player', {
-      damage: dmg,
-      x: intersection.x,
-      y: intersection.y
-    });
+
+    if (!isNetworkControlled) {
+      network.send('damage-player', {
+        damage: dmg,
+        x: intersection.x,
+        y: intersection.y
+      });
+    }
 
     if (!this.isDead) {
       const {isMultiplayerHost: isPlayer1} = this.scene.registry;
