@@ -2,6 +2,7 @@
 	"textures": [
 		{
 			"image": "mech1-left-arm.png",
+			"normalMap": "mech1-left-arm_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 838,
@@ -10,7 +11,7 @@
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "heavy-11.png",
+					"filename": "l-heavy-11.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -31,7 +32,7 @@
 					}
 				},
 				{
-					"filename": "heavy-13.png",
+					"filename": "l-heavy-13.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -52,7 +53,7 @@
 					}
 				},
 				{
-					"filename": "heavy-12.png",
+					"filename": "l-heavy-12.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -73,7 +74,7 @@
 					}
 				},
 				{
-					"filename": "heavy-09.png",
+					"filename": "l-heavy-09.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -94,7 +95,7 @@
 					}
 				},
 				{
-					"filename": "heavy-15.png",
+					"filename": "l-heavy-15.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -115,7 +116,7 @@
 					}
 				},
 				{
-					"filename": "idle.png",
+					"filename": "l-idle.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -136,7 +137,7 @@
 					}
 				},
 				{
-					"filename": "light-0.png",
+					"filename": "l-light-0.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -157,7 +158,7 @@
 					}
 				},
 				{
-					"filename": "light-1.png",
+					"filename": "l-light-1.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -178,7 +179,7 @@
 					}
 				},
 				{
-					"filename": "light-5.png",
+					"filename": "l-light-5.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -199,7 +200,7 @@
 					}
 				},
 				{
-					"filename": "light-2.png",
+					"filename": "l-light-2.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -220,7 +221,7 @@
 					}
 				},
 				{
-					"filename": "light-4.png",
+					"filename": "l-light-4.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -241,7 +242,7 @@
 					}
 				},
 				{
-					"filename": "light-3.png",
+					"filename": "l-light-3.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -262,7 +263,7 @@
 					}
 				},
 				{
-					"filename": "heavy-07.png",
+					"filename": "l-heavy-07.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -283,7 +284,7 @@
 					}
 				},
 				{
-					"filename": "heavy-10.png",
+					"filename": "l-heavy-10.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -304,7 +305,7 @@
 					}
 				},
 				{
-					"filename": "heavy-14.png",
+					"filename": "l-heavy-14.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -325,7 +326,7 @@
 					}
 				},
 				{
-					"filename": "heavy-08.png",
+					"filename": "l-heavy-08.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -346,7 +347,7 @@
 					}
 				},
 				{
-					"filename": "heavy-16.png",
+					"filename": "l-heavy-16.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -367,7 +368,7 @@
 					}
 				},
 				{
-					"filename": "heavy-17.png",
+					"filename": "l-heavy-17.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -388,7 +389,7 @@
 					}
 				},
 				{
-					"filename": "heavy-02.png",
+					"filename": "l-heavy-02.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -409,7 +410,7 @@
 					}
 				},
 				{
-					"filename": "heavy-22.png",
+					"filename": "l-heavy-22.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -430,7 +431,7 @@
 					}
 				},
 				{
-					"filename": "heavy-06.png",
+					"filename": "l-heavy-06.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -451,7 +452,7 @@
 					}
 				},
 				{
-					"filename": "heavy-00.png",
+					"filename": "l-heavy-00.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -472,7 +473,7 @@
 					}
 				},
 				{
-					"filename": "heavy-01.png",
+					"filename": "l-heavy-01.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -493,7 +494,7 @@
 					}
 				},
 				{
-					"filename": "heavy-04.png",
+					"filename": "l-heavy-04.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -514,7 +515,7 @@
 					}
 				},
 				{
-					"filename": "heavy-20.png",
+					"filename": "l-heavy-20.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -535,7 +536,7 @@
 					}
 				},
 				{
-					"filename": "heavy-18.png",
+					"filename": "l-heavy-18.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -556,7 +557,7 @@
 					}
 				},
 				{
-					"filename": "heavy-05.png",
+					"filename": "l-heavy-05.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -577,7 +578,7 @@
 					}
 				},
 				{
-					"filename": "heavy-19.png",
+					"filename": "l-heavy-19.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -598,7 +599,7 @@
 					}
 				},
 				{
-					"filename": "heavy-23.png",
+					"filename": "l-heavy-23.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -619,7 +620,7 @@
 					}
 				},
 				{
-					"filename": "heavy-03.png",
+					"filename": "l-heavy-03.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -640,7 +641,7 @@
 					}
 				},
 				{
-					"filename": "heavy-21.png",
+					"filename": "l-heavy-21.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -666,6 +667,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:8b548447984f8aadd9314cf515b04549:9c5505b74fa9031424f20c3095eb5a1c:aab3294bc9e12202a360e0a0cdacf74c$"
+		"smartupdate": "$TexturePacker:SmartUpdate:276738a1dc466a95a189eb2bc0eee773:9415b9e6de5f6b03bdef6f59ce397a1b:a505b4ea486bc7dd85f6891d4a15828b$"
 	}
 }

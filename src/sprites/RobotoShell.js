@@ -196,7 +196,7 @@ class RobotoShell extends Container {
           }
         });
       });
-      this.scene.cameras.main.flash(250, 255, 255, 0, true);
+      // this.scene.cameras.main.flash(250, 255, 255, 0, true);
       this.scene.cameras.main.shake(750, 0.05, true);
       this.boomEmitter.explode(50);
       this.boomEmitter2.explode(100);

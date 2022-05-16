@@ -314,6 +314,14 @@ class ArialNPC extends Container {
     hueRotatePipeline.time = 180.25; // magic numbers ftw
   }
 
+  initLighting() {
+    this.list.forEach((obj) => {
+      if (obj.getData('isHitbox') !== true) {
+        obj.setPipeline('Light2D');
+      }
+    });
+  }
+
   processGround() {
     return !this.doDamageTiles;
   }

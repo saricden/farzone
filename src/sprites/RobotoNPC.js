@@ -195,6 +195,14 @@ class RobotoNPC extends Container {
     hueRotatePipeline.time = 180.25; // magic numbers ftw
   }
 
+  initLighting() {
+    this.list.forEach((obj) => {
+      if (obj.getData('isHitbox') !== true) {
+        obj.setPipeline('Light2D');
+      }
+    });
+  }
+
   mapTarget(target) {
     this.target = target;
     this.bulletRaycaster.mapGameObjects(target, true);
@@ -253,7 +261,7 @@ class RobotoNPC extends Container {
 
       const maxDeathBurst = 500;
 
-      this.scene.cameras.main.flash(1000, 255, 255, 255, true);
+      // this.scene.cameras.main.flash(1000, 255, 255, 255, true);
       this.scene.cameras.main.shake(1000);
       this.scene.cameras.main.stopFollow();
       this.scene.cameras.main.pan(this.x, this.y, 2000, 'Linear', true);

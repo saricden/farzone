@@ -9,28 +9,28 @@ class BootScene extends Scene {
   preload() {
     // Mech1
     this.load.multiatlas('mech1', 'assets/sprites/mech1.json', 'assets/sprites');
-    this.load.atlas('mech1-arm-left', 'assets/sprites/mech1-left-arm.png', 'assets/sprites/mech1-left-arm.json');
-    this.load.atlas('mech1-arm-right', 'assets/sprites/mech1-right-arm.png', 'assets/sprites/mech1-right-arm.json');
-    this.load.image('mech1-head', 'assets/sprites/mech1-head.png');
+    this.load.multiatlas('mech1-arm-left', 'assets/sprites/mech1-left-arm.json', 'assets/sprites');
+    this.load.multiatlas('mech1-arm-right', 'assets/sprites/mech1-right-arm.json', 'assets/sprites');
+    this.load.image('mech1-head', ['assets/sprites/mech1-head.png', 'assets/sprites/mech1-head_n.png']);
     this.load.image('mech1-shell', 'assets/sprites/mech1-shell.png');
     this.load.image('mech1-victory', 'assets/sprites/mech1-victory.png');
 
     // Hume1
     this.load.multiatlas('hume1', 'assets/sprites/hume1.json', 'assets/sprites');
-    this.load.image('hume1-head', 'assets/sprites/hume1-head.png');
-    this.load.image('hume1-sword-arm', 'assets/sprites/hume1-sword-arm-aim.png');
-    this.load.image('hume1-shield-arm', 'assets/sprites/hume1-shield-arm-aim.png');
-    this.load.image('hume1-shield-arm-block', 'assets/sprites/hume1-shield-arm-block.png');
+    this.load.image('hume1-head', ['assets/sprites/hume1-head.png', 'assets/sprites/hume1-head_n.png']);
+    this.load.image('hume1-sword-arm', ['assets/sprites/hume1-sword-arm-aim.png', 'assets/sprites/hume1-sword-arm-aim_n.png']);
+    this.load.image('hume1-shield-arm', ['assets/sprites/hume1-shield-arm-aim.png', 'assets/sprites/hume1-shield-arm-aim_n.png']);
+    this.load.image('hume1-shield-arm-block', ['assets/sprites/hume1-shield-arm-block.png', 'assets/sprites/hume1-shield-arm-block_n.png']);
 
     // Oswald
     this.load.multiatlas('oswald', 'assets/sprites/oswald.json', 'assets/sprites');
-    this.load.image('oswald-head', 'assets/sprites/oswald-head.png');
-    this.load.image('oswald-arm-l', 'assets/sprites/oswald-arm-l.png');
-    this.load.image('oswald-arm-r', 'assets/sprites/oswald-arm-r.png');
+    this.load.image('oswald-head', ['assets/sprites/oswald-head.png', 'assets/sprites/oswald-head_n.png']);
+    this.load.image('oswald-arm-l', ['assets/sprites/oswald-arm-l.png', 'assets/sprites/oswald-arm-l_n.png']);
+    this.load.image('oswald-arm-r', ['assets/sprites/oswald-arm-r.png', 'assets/sprites/oswald-arm-r_n.png']);
     this.load.image('oswald-grenade', 'assets/sprites/grenade.png');
 
     // Maps 2.0
-    this.load.image('tileset-ex', 'assets/maps/2.0/tileset-ex.png');
+    this.load.image('tileset-ex', ['assets/maps/2.0/tileset-ex.png', 'assets/maps/2.0/tileset-ex_n.png']);
     this.load.tilemapTiledJSON('map1', 'assets/maps/2.0/map1.json');
     this.load.tilemapTiledJSON('map2-the-spire', 'assets/maps/2.0/the-spire.json');
     this.load.tilemapTiledJSON('map2-the-great-wall', 'assets/maps/2.0/the-great-wall.json');
@@ -43,6 +43,7 @@ class BootScene extends Scene {
     this.load.audio('ost-level1d', 'assets/music/mech-ost5.mp3');
     this.load.audio('ost-gameover-build', 'assets/music/mech-ost7.mp3');
     this.load.audio('ost-gameover-fanfare', 'assets/music/mech-ost8.mp3');
+    this.load.audio('ost-battle1', 'assets/music/mech-ost10.mp3');
 
     // SFX
     this.load.audio('sfx-shoot', 'assets/sfx/bang_02.wav');
@@ -156,7 +157,7 @@ class BootScene extends Scene {
       frames: [
         {
           key: 'mech1',
-          frame: 'idle.png'
+          frame: 'body-idle.png'
         }
       ],
       frameRate: 0,
@@ -205,7 +206,7 @@ class BootScene extends Scene {
       frames: [
         {
           key: 'mech1-arm-left',
-          frame: 'idle.png'
+          frame: 'l-idle.png'
         }
       ],
       frameRate: 0,
@@ -217,7 +218,7 @@ class BootScene extends Scene {
       frames: this.anims.generateFrameNames('mech1-arm-left', {
         start: 0,
         end: 5,
-        prefix: 'light-',
+        prefix: 'l-light-',
         suffix: '.png',
         zeroPad: -1
       }),
@@ -230,7 +231,7 @@ class BootScene extends Scene {
       frames: this.anims.generateFrameNames('mech1-arm-left', {
         start: 0,
         end: 23,
-        prefix: 'heavy-',
+        prefix: 'l-heavy-',
         suffix: '.png',
         zeroPad: 2
       }),
@@ -243,7 +244,7 @@ class BootScene extends Scene {
       frames: [
         {
           key: 'mech1-arm-right',
-          frame: 'idle.png'
+          frame: 'r-idle.png'
         }
       ],
       frameRate: 0,
@@ -255,7 +256,7 @@ class BootScene extends Scene {
       frames: this.anims.generateFrameNames('mech1-arm-right', {
         start: 0,
         end: 5,
-        prefix: 'light-',
+        prefix: 'r-light-',
         suffix: '.png',
         zeroPad: 0
       }),
@@ -268,7 +269,7 @@ class BootScene extends Scene {
       frames: this.anims.generateFrameNames('mech1-arm-right', {
         start: 0,
         end: 23,
-        prefix: 'heavy-',
+        prefix: 'r-heavy-',
         suffix: '.png',
         zeroPad: 2
       }),

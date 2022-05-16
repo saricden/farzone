@@ -2,6 +2,7 @@
 	"textures": [
 		{
 			"image": "mech1-0.png",
+			"normalMap": "mech1-0_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 1999,
@@ -325,7 +326,7 @@
 					}
 				},
 				{
-					"filename": "idle.png",
+					"filename": "body-idle.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -580,6 +581,7 @@
 		},
 		{
 			"image": "mech1-1.png",
+			"normalMap": "mech1-1_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2047,
@@ -1242,6 +1244,7 @@
 		},
 		{
 			"image": "mech1-2.png",
+			"normalMap": "mech1-2_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2009,
@@ -1822,6 +1825,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:3e82fc6a18e1117dc45b47b487ea9176:520334b30f0cfd4f146fe3c7cf2eeff8:5a8c6056a64149fe9ccd0c3eaf80004b$"
+		"smartupdate": "$TexturePacker:SmartUpdate:e29fdabcdf2bc0562ce18eaeaa61d86c:3fa6092be90acb0ba2fc1ac71bcb119b:a1b38f273a401d209ba7cb48a2528089$"
 	}
 }

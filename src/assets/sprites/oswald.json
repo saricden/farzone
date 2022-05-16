@@ -2,6 +2,7 @@
 	"textures": [
 		{
 			"image": "oswald-0.png",
+			"normalMap": "oswald-0_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2048,
@@ -412,6 +413,7 @@
 		},
 		{
 			"image": "oswald-1.png",
+			"normalMap": "oswald-1_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2042,
@@ -822,6 +824,7 @@
 		},
 		{
 			"image": "oswald-2.png",
+			"normalMap": "oswald-2_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2004,
@@ -1295,6 +1298,7 @@
 		},
 		{
 			"image": "oswald-3.png",
+			"normalMap": "oswald-3_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2045,
@@ -1873,6 +1877,7 @@
 		},
 		{
 			"image": "oswald-4.png",
+			"normalMap": "oswald-4_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2036,
@@ -2430,6 +2435,7 @@
 		},
 		{
 			"image": "oswald-5.png",
+			"normalMap": "oswald-5_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 1961,
@@ -2987,6 +2993,7 @@
 		},
 		{
 			"image": "oswald-6.png",
+			"normalMap": "oswald-6_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2011,
@@ -3481,6 +3488,7 @@
 		},
 		{
 			"image": "oswald-7.png",
+			"normalMap": "oswald-7_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2009,
@@ -3975,6 +3983,7 @@
 		},
 		{
 			"image": "oswald-8.png",
+			"normalMap": "oswald-8_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 1995,
@@ -4387,6 +4396,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:b226debe49712e73da5f10c08a16b863:9ea1256eb1c39c2cea939ff4017c85fa:6c739c765f04f0cfb6807d4c3041e780$"
+		"smartupdate": "$TexturePacker:SmartUpdate:d1170082f080442286320f039817193c:d1b875abb00878ea4241fe153fdcf870:62c84a1718583860adbe7d6ff35eff8f$"
 	}
 }

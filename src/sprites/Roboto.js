@@ -59,6 +59,9 @@ class Roboto extends Container {
       right: Phaser.Input.Keyboard.KeyCodes.D,
     });
 
+    // Muzzle flare lighting
+    this.muzzleFlare = this.scene.lights.addLight(0, 0, 500, 0xFFFF00, 0);
+
     // Let the shoosting begin
     this.rapidfire = this.scene.time.addEvent({
       delay: 75,
@@ -78,6 +81,8 @@ class Roboto extends Container {
         
         this.bulletRay.setOrigin(this.x + this.armLeft.x + vector.x, this.y + this.armLeft.y + vector.y - barrelOffsetY);
         this.bulletRay.setAngle(this.armLeft.rotation + angleMod);
+        
+        this.muzzleFlare.setPosition(this.x + this.armLeft.x + vector.x, this.y + this.armLeft.y + vector.y - barrelOffsetY);
         
         const intersection = this.bulletRay.cast();
         let endX = vector.x * 300;
@@ -119,11 +124,14 @@ class Roboto extends Container {
           ey: endY
         });
 
+        this.muzzleFlare.setIntensity(2.5);
+
         this.scene.time.addEvent({
           delay: 100,
           repeat: 0,
           callback: () => {
             this.bulletGfx.clear();
+            this.muzzleFlare.setIntensity(0);
           }
         });
 
@@ -221,6 +229,14 @@ class Roboto extends Container {
     hueRotatePipeline.time = 180.25; // magic numbers ftw
   }
 
+  initLighting() {
+    this.list.forEach((obj) => {
+      if (obj.getData('isHitbox') !== true) {
+        obj.setPipeline('Light2D');
+      }
+    });
+  }
+
   takeDamage(dmg, intersection, isNetworkControlled = false) {
     this.scene.registry.playerDamageTaken += dmg;
 
@@ -278,7 +294,7 @@ class Roboto extends Container {
   
         const maxDeathBurst = 500;
 
-        this.scene.cameras.main.flash(1000, 255, 255, 255, true);
+        // this.scene.cameras.main.flash(1000, 255, 255, 255, true);
         this.scene.cameras.main.shake(1000);
         this.scene.cameras.main.stopFollow();
         this.scene.cameras.main.pan(this.x, this.y, 2000, 'Linear', true);

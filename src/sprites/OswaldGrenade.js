@@ -88,7 +88,7 @@ class OswaldGrendade extends Image {
 
       this.scene.boomEmitter.setPosition(this.x, this.y);
       this.scene.boomEmitter2.setPosition(this.x, this.y);
-      this.scene.cameras.main.flash(250, 255, 255, 0, true);
+      // this.scene.cameras.main.flash(250, 255, 255, 0, true);
       this.scene.cameras.main.shake(750, 0.05, true);
       this.scene.boomEmitter.explode(50);
       this.scene.boomEmitter2.explode(100);

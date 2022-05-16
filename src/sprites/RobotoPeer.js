@@ -79,6 +79,14 @@ class RobotoPeer extends Container {
     hueRotatePipeline.time = 180.25; // magic numbers ftw
   }
 
+  initLighting() {
+    this.list.forEach((obj) => {
+      if (obj.getData('isHitbox') !== true) {
+        obj.setPipeline('Light2D');
+      }
+    });
+  }
+
   takeDamage(dmg, intersection, isNetworkControlled = false) {
     this.scene.registry.playerDamageInflicted += dmg;
 
@@ -145,7 +153,7 @@ class RobotoPeer extends Container {
   
         const maxDeathBurst = 500;
 
-        this.scene.cameras.main.flash(1000, 255, 255, 255, true);
+        // this.scene.cameras.main.flash(1000, 255, 255, 255, true);
         this.scene.cameras.main.shake(1000);
         this.scene.cameras.main.stopFollow();
         this.scene.cameras.main.pan(this.x, this.y, 2000, 'Linear', true);

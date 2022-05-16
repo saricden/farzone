@@ -50,6 +50,25 @@ class OswaldPeer extends Container {
     this.setData('isPeer', true);
   }
 
+  applyHueRotation() {
+    // Apply hue rotate
+    const hueRotatePipeline = this.scene.renderer.pipelines.get('HueRotate');
+    this.list.forEach((obj) => {
+      if (obj.getData('isHitbox') !== true) {
+        obj.setPipeline(hueRotatePipeline);
+      }
+    });
+    hueRotatePipeline.time = 180.25; // magic numbers ftw
+  }
+
+  initLighting() {
+    this.list.forEach((obj) => {
+      if (obj.getData('isHitbox') !== true) {
+        obj.setPipeline('Light2D');
+      }
+    });
+  }
+
   takeDamage(dmg, intersection) {
     this.scene.registry.playerDamageTaken += dmg;
 

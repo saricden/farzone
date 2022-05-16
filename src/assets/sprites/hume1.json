@@ -2,6 +2,7 @@
 	"textures": [
 		{
 			"image": "hume1-0.png",
+			"normalMap": "hume1-0_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2048,
@@ -685,6 +686,7 @@
 		},
 		{
 			"image": "hume1-1.png",
+			"normalMap": "hume1-1_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2040,
@@ -1137,6 +1139,7 @@
 		},
 		{
 			"image": "hume1-2.png",
+			"normalMap": "hume1-2_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2046,
@@ -1589,6 +1592,7 @@
 		},
 		{
 			"image": "hume1-3.png",
+			"normalMap": "hume1-3_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2048,
@@ -2314,6 +2318,7 @@
 		},
 		{
 			"image": "hume1-4.png",
+			"normalMap": "hume1-4_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2045,
@@ -2829,6 +2834,7 @@
 		},
 		{
 			"image": "hume1-5.png",
+			"normalMap": "hume1-5_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 1991,
@@ -3386,6 +3392,7 @@
 		},
 		{
 			"image": "hume1-6.png",
+			"normalMap": "hume1-6_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 1932,
@@ -3901,6 +3908,7 @@
 		},
 		{
 			"image": "hume1-7.png",
+			"normalMap": "hume1-7_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2048,
@@ -4500,6 +4508,7 @@
 		},
 		{
 			"image": "hume1-8.png",
+			"normalMap": "hume1-8_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2048,
@@ -5393,6 +5402,7 @@
 		},
 		{
 			"image": "hume1-9.png",
+			"normalMap": "hume1-9_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 2039,
@@ -6202,6 +6212,7 @@
 		},
 		{
 			"image": "hume1-10.png",
+			"normalMap": "hume1-10_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 1861,
@@ -6864,6 +6875,7 @@
 		},
 		{
 			"image": "hume1-11.png",
+			"normalMap": "hume1-11_n.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 1270,
@@ -7297,6 +7309,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:03d22c916ea3a51474dcc044f2d1eee3:df4ed9d69361af4c8f7a57c055ec4f22:c68b8c3f1dff204f45a3cd9f69ae0983$"
+		"smartupdate": "$TexturePacker:SmartUpdate:0c7fb494c085475e30f0ecd5ab0861ad:8f723ed0a0b49daf7eb2d2a8a23420cb:2a0a84603c22fed225350a701f9ec5ef$"
 	}
 }

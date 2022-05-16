@@ -81,7 +81,7 @@ class Oswald extends Container {
         this.scene.time.timeScale = 0.33;
         this.scene.sound.play('sfx-time-slow');
         this.scene.bgm.setVolume(0.25);
-        this.scene.cameras.main.flash(2000, 255, 100, 255);
+        // this.scene.cameras.main.flash(2000, 255, 100, 255);
       }
     });
 
@@ -192,6 +192,25 @@ class Oswald extends Container {
 
     // Set data attributes
     this.setData('isPlayer', true);
+  }
+
+  applyHueRotation() {
+    // Apply hue rotate
+    const hueRotatePipeline = this.scene.renderer.pipelines.get('HueRotate');
+    this.list.forEach((obj) => {
+      if (obj.getData('isHitbox') !== true) {
+        obj.setPipeline(hueRotatePipeline);
+      }
+    });
+    hueRotatePipeline.time = 180.25; // magic numbers ftw
+  }
+
+  initLighting() {
+    this.list.forEach((obj) => {
+      if (obj.getData('isHitbox') !== true) {
+        obj.setPipeline('Light2D');
+      }
+    });
   }
 
   takeDamage(dmg, intersection) {
