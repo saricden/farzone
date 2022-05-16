@@ -117,12 +117,14 @@ class Roboto extends Container {
         this.bulletGfx.lineStyle(4, 0xFBF236, 1);
         this.bulletGfx.lineBetween(this.x + this.armLeft.x + vector.x, this.y + this.armLeft.y + vector.y - barrelOffsetY, endX, endY);
 
-        network.send('roboto-shoot', {
-          sx: this.x + this.armLeft.x + vector.x,
-          sy: this.y + this.armLeft.y + vector.y - barrelOffsetY,
-          ex: endX,
-          ey: endY
-        });
+        if (this.scene.registry.isMultiplayer) {
+          network.send('roboto-shoot', {
+            sx: this.x + this.armLeft.x + vector.x,
+            sy: this.y + this.armLeft.y + vector.y - barrelOffsetY,
+            ex: endX,
+            ey: endY
+          });
+        }
 
         this.muzzleFlare.setIntensity(2.5);
 
@@ -242,12 +244,21 @@ class Roboto extends Container {
 
     if (!this.isDead) {
       const {isMultiplayerHost: isPlayer1} = this.scene.registry;
+      const {isMultiplayer} = this.scene.registry;
 
       if (
-        isPlayer1 && this.scene.registry.playerHP > 0 ||
-        !isPlayer1 && this.scene.registry.enemyHP > 0 
+        !isMultiplayer ||
+        (
+          isPlayer1 && this.scene.registry.playerHP > 0 ||
+          !isPlayer1 && this.scene.registry.enemyHP > 0 
+        )
       ) {
-        const maxHP = (isPlayer1 ? this.scene.registry.playerHP : this.scene.registry.enemyHP);
+        // let maxHP = (isPlayer1 ? this.scene.registry.playerHP : this.scene.registry.enemyHP);
+        let maxHP = this.scene.registry.playerHP;
+
+        if (isMultiplayer && !isPlayer1) {
+          maxHP = this.scene.registry.enemyHP;
+        }
         
         const txtX = intersection.x + pMath.Between(-200, 200);
         const txtY = intersection.y + pMath.Between(-200, 200);
@@ -272,14 +283,17 @@ class Roboto extends Container {
         });
       }
   
-      if (isPlayer1 && this.scene.registry.playerHP - dmg > 0) {
+      if (!isMultiplayer && this.scene.registry.playerHP - dmg > 0) {
         this.scene.registry.playerHP -= dmg;
       }
-      else if (!isPlayer1 && this.scene.registry.enemyHP - dmg > 0) {
+      else if (isMultiplayer && isPlayer1 && this.scene.registry.playerHP - dmg > 0) {
+        this.scene.registry.playerHP -= dmg;
+      }
+      else if (isMultiplayer && !isPlayer1 && this.scene.registry.enemyHP - dmg > 0) {
         this.scene.registry.enemyHP -= dmg;
       }
       else {
-        if (isPlayer1) {
+        if (isPlayer1 || !isMultiplayer) {
           this.scene.registry.playerHP = 0;
         }
         else {

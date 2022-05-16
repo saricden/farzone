@@ -141,7 +141,7 @@ class RobotoShell extends Container {
       (shell, object) => {
         this.detonate();
 
-        if (!isNetworkControlled) {
+        if (this.isMultiplayer && !this.isNetworkControlled) {
           network.send('roboto-shell-detonate', {
             id: this.networkID,
             x: this.x,
@@ -166,7 +166,10 @@ class RobotoShell extends Container {
       this.shell
     ]);
 
-    if (!isNetworkControlled) {
+    this.isNetworkControlled = isNetworkControlled;
+    this.isMultiplayer = this.scene.registry.isMultiplayer;
+
+    if (this.isMultiplayer && !this.isNetworkControlled) {
       this.networkID = Date.now();
 
       network.send('roboto-shell-create', {
@@ -177,8 +180,6 @@ class RobotoShell extends Container {
         flipX
       });
     }
-
-    this.isNetworkControlled = isNetworkControlled;
   }
 
   detonate() {
@@ -255,7 +256,7 @@ class RobotoShell extends Container {
   preUpdate() {
     const {tilemap} = this.scene;
 
-    if (!this.isNetworkControlled) {
+    if (this.isMultiplayer && !this.isNetworkControlled) {
       network.send('roboto-shell-move', {
         id: this.networkID,
         x: this.x,
@@ -266,7 +267,7 @@ class RobotoShell extends Container {
     if (this.x > tilemap.widthInPixels || this.x < 0 || this.y > tilemap.heightInPixels || this.y < 0) {
       this.offmap();
 
-      if (!this.isNetworkControlled) {
+      if (this.isMultiplayer && !this.isNetworkControlled) {
         network.send('roboto-shell-offmap', {
           id: this.networkID,
           x: this.x,
