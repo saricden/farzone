@@ -5,13 +5,13 @@
 			"normalMap": "mech1-left-arm_n.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 838,
-				"h": 1134
+				"w": 1943,
+				"h": 988
 			},
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "l-heavy-11.png",
+					"filename": "Left Arm - Idle/l-l-idle.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -20,103 +20,19 @@
 					},
 					"spriteSourceSize": {
 						"x": 7,
-						"y": 9,
-						"w": 273,
-						"h": 143
+						"y": 11,
+						"w": 287,
+						"h": 141
 					},
 					"frame": {
 						"x": 1,
 						"y": 1,
-						"w": 273,
-						"h": 143
+						"w": 287,
+						"h": 141
 					}
 				},
 				{
-					"filename": "l-heavy-13.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 328,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 7,
-						"y": 9,
-						"w": 273,
-						"h": 143
-					},
-					"frame": {
-						"x": 1,
-						"y": 1,
-						"w": 273,
-						"h": 143
-					}
-				},
-				{
-					"filename": "l-heavy-12.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 328,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 5,
-						"y": 8,
-						"w": 272,
-						"h": 143
-					},
-					"frame": {
-						"x": 1,
-						"y": 146,
-						"w": 272,
-						"h": 143
-					}
-				},
-				{
-					"filename": "l-heavy-09.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 328,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 12,
-						"y": 11,
-						"w": 273,
-						"h": 142
-					},
-					"frame": {
-						"x": 1,
-						"y": 291,
-						"w": 273,
-						"h": 142
-					}
-				},
-				{
-					"filename": "l-heavy-15.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 328,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 12,
-						"y": 11,
-						"w": 273,
-						"h": 142
-					},
-					"frame": {
-						"x": 1,
-						"y": 291,
-						"w": 273,
-						"h": 142
-					}
-				},
-				{
-					"filename": "l-idle.png",
+					"filename": "Left Arm - Idle/r-l-idle.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -130,14 +46,35 @@
 						"h": 141
 					},
 					"frame": {
-						"x": 275,
-						"y": 146,
+						"x": 1,
+						"y": 144,
 						"w": 287,
 						"h": 141
 					}
 				},
 				{
-					"filename": "l-light-0.png",
+					"filename": "Left Arm - Light Shot/l-l-light-0.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 12,
+						"y": 13,
+						"w": 281,
+						"h": 139
+					},
+					"frame": {
+						"x": 290,
+						"y": 1,
+						"w": 281,
+						"h": 139
+					}
+				},
+				{
+					"filename": "Left Arm - Light Shot/r-l-light-0.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -151,14 +88,203 @@
 						"h": 139
 					},
 					"frame": {
-						"x": 276,
-						"y": 1,
+						"x": 1,
+						"y": 287,
 						"w": 281,
 						"h": 139
 					}
 				},
 				{
-					"filename": "l-light-1.png",
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-11.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 48,
+						"y": 9,
+						"w": 273,
+						"h": 143
+					},
+					"frame": {
+						"x": 290,
+						"y": 142,
+						"w": 273,
+						"h": 143
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-13.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 48,
+						"y": 9,
+						"w": 273,
+						"h": 143
+					},
+					"frame": {
+						"x": 290,
+						"y": 142,
+						"w": 273,
+						"h": 143
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-11.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 7,
+						"y": 9,
+						"w": 273,
+						"h": 143
+					},
+					"frame": {
+						"x": 1,
+						"y": 428,
+						"w": 273,
+						"h": 143
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-13.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 7,
+						"y": 9,
+						"w": 273,
+						"h": 143
+					},
+					"frame": {
+						"x": 1,
+						"y": 428,
+						"w": 273,
+						"h": 143
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-09.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 43,
+						"y": 11,
+						"w": 273,
+						"h": 142
+					},
+					"frame": {
+						"x": 1,
+						"y": 573,
+						"w": 273,
+						"h": 142
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-15.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 43,
+						"y": 11,
+						"w": 273,
+						"h": 142
+					},
+					"frame": {
+						"x": 1,
+						"y": 573,
+						"w": 273,
+						"h": 142
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-12.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 51,
+						"y": 8,
+						"w": 272,
+						"h": 143
+					},
+					"frame": {
+						"x": 1,
+						"y": 717,
+						"w": 272,
+						"h": 143
+					}
+				},
+				{
+					"filename": "Left Arm - Light Shot/l-l-light-1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 16,
+						"y": 13,
+						"w": 276,
+						"h": 140
+					},
+					"frame": {
+						"x": 573,
+						"y": 1,
+						"w": 276,
+						"h": 140
+					}
+				},
+				{
+					"filename": "Left Arm - Light Shot/l-l-light-5.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 16,
+						"y": 13,
+						"w": 276,
+						"h": 140
+					},
+					"frame": {
+						"x": 573,
+						"y": 1,
+						"w": 276,
+						"h": 140
+					}
+				},
+				{
+					"filename": "Left Arm - Light Shot/r-l-light-1.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -172,14 +298,14 @@
 						"h": 140
 					},
 					"frame": {
-						"x": 559,
+						"x": 851,
 						"y": 1,
 						"w": 276,
 						"h": 140
 					}
 				},
 				{
-					"filename": "l-light-5.png",
+					"filename": "Left Arm - Light Shot/r-l-light-5.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -193,14 +319,56 @@
 						"h": 140
 					},
 					"frame": {
-						"x": 559,
+						"x": 851,
 						"y": 1,
 						"w": 276,
 						"h": 140
 					}
 				},
 				{
-					"filename": "l-light-2.png",
+					"filename": "Left Arm - Light Shot/l-l-light-2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 19,
+						"y": 14,
+						"w": 275,
+						"h": 140
+					},
+					"frame": {
+						"x": 1129,
+						"y": 1,
+						"w": 275,
+						"h": 140
+					}
+				},
+				{
+					"filename": "Left Arm - Light Shot/l-l-light-4.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 19,
+						"y": 14,
+						"w": 275,
+						"h": 140
+					},
+					"frame": {
+						"x": 1129,
+						"y": 1,
+						"w": 275,
+						"h": 140
+					}
+				},
+				{
+					"filename": "Left Arm - Light Shot/r-l-light-2.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -214,14 +382,14 @@
 						"h": 140
 					},
 					"frame": {
-						"x": 1,
-						"y": 435,
+						"x": 1406,
+						"y": 1,
 						"w": 275,
 						"h": 140
 					}
 				},
 				{
-					"filename": "l-light-4.png",
+					"filename": "Left Arm - Light Shot/r-l-light-4.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -235,14 +403,14 @@
 						"h": 140
 					},
 					"frame": {
-						"x": 1,
-						"y": 435,
+						"x": 1406,
+						"y": 1,
 						"w": 275,
 						"h": 140
 					}
 				},
 				{
-					"filename": "l-light-3.png",
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-00.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -250,20 +418,167 @@
 						"h": 154
 					},
 					"spriteSourceSize": {
-						"x": 30,
-						"y": 15,
-						"w": 275,
-						"h": 138
+						"x": 18,
+						"y": 14,
+						"w": 274,
+						"h": 139
+					},
+					"frame": {
+						"x": 284,
+						"y": 287,
+						"w": 274,
+						"h": 139
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-09.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 12,
+						"y": 11,
+						"w": 273,
+						"h": 142
 					},
 					"frame": {
 						"x": 276,
-						"y": 289,
-						"w": 275,
-						"h": 138
+						"y": 428,
+						"w": 273,
+						"h": 142
 					}
 				},
 				{
-					"filename": "l-heavy-07.png",
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-15.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 12,
+						"y": 11,
+						"w": 273,
+						"h": 142
+					},
+					"frame": {
+						"x": 276,
+						"y": 428,
+						"w": 273,
+						"h": 142
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-12.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 5,
+						"y": 8,
+						"w": 272,
+						"h": 143
+					},
+					"frame": {
+						"x": 276,
+						"y": 572,
+						"w": 272,
+						"h": 143
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-08.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 40,
+						"y": 12,
+						"w": 273,
+						"h": 141
+					},
+					"frame": {
+						"x": 275,
+						"y": 717,
+						"w": 273,
+						"h": 141
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 40,
+						"y": 12,
+						"w": 273,
+						"h": 141
+					},
+					"frame": {
+						"x": 275,
+						"y": 717,
+						"w": 273,
+						"h": 141
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-07.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 37,
+						"y": 13,
+						"w": 274,
+						"h": 140
+					},
+					"frame": {
+						"x": 565,
+						"y": 143,
+						"w": 274,
+						"h": 140
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-17.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 37,
+						"y": 13,
+						"w": 274,
+						"h": 140
+					},
+					"frame": {
+						"x": 841,
+						"y": 143,
+						"w": 274,
+						"h": 140
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-07.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -277,98 +592,14 @@
 						"h": 140
 					},
 					"frame": {
-						"x": 1,
-						"y": 577,
+						"x": 1117,
+						"y": 143,
 						"w": 274,
 						"h": 140
 					}
 				},
 				{
-					"filename": "l-heavy-10.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 328,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 10,
-						"y": 10,
-						"w": 272,
-						"h": 142
-					},
-					"frame": {
-						"x": 277,
-						"y": 577,
-						"w": 272,
-						"h": 142
-					}
-				},
-				{
-					"filename": "l-heavy-14.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 328,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 10,
-						"y": 10,
-						"w": 272,
-						"h": 142
-					},
-					"frame": {
-						"x": 277,
-						"y": 577,
-						"w": 272,
-						"h": 142
-					}
-				},
-				{
-					"filename": "l-heavy-08.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 328,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 15,
-						"y": 12,
-						"w": 273,
-						"h": 141
-					},
-					"frame": {
-						"x": 1,
-						"y": 719,
-						"w": 273,
-						"h": 141
-					}
-				},
-				{
-					"filename": "l-heavy-16.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 328,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 15,
-						"y": 12,
-						"w": 273,
-						"h": 141
-					},
-					"frame": {
-						"x": 1,
-						"y": 719,
-						"w": 273,
-						"h": 141
-					}
-				},
-				{
-					"filename": "l-heavy-17.png",
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-17.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -382,14 +613,14 @@
 						"h": 140
 					},
 					"frame": {
-						"x": 278,
-						"y": 429,
+						"x": 1393,
+						"y": 143,
 						"w": 274,
 						"h": 140
 					}
 				},
 				{
-					"filename": "l-heavy-02.png",
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-08.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -397,62 +628,20 @@
 						"h": 154
 					},
 					"spriteSourceSize": {
-						"x": 30,
-						"y": 15,
-						"w": 274,
-						"h": 138
-					},
-					"frame": {
-						"x": 553,
-						"y": 289,
-						"w": 274,
-						"h": 138
-					}
-				},
-				{
-					"filename": "l-heavy-22.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 328,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 30,
-						"y": 15,
-						"w": 274,
-						"h": 138
-					},
-					"frame": {
-						"x": 553,
-						"y": 289,
-						"w": 274,
-						"h": 138
-					}
-				},
-				{
-					"filename": "l-heavy-06.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 328,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 20,
-						"y": 14,
+						"x": 15,
+						"y": 12,
 						"w": 273,
-						"h": 140
+						"h": 141
 					},
 					"frame": {
-						"x": 564,
+						"x": 1669,
 						"y": 143,
 						"w": 273,
-						"h": 140
+						"h": 141
 					}
 				},
 				{
-					"filename": "l-heavy-00.png",
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-16.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -460,20 +649,293 @@
 						"h": 154
 					},
 					"spriteSourceSize": {
-						"x": 36,
+						"x": 15,
+						"y": 12,
+						"w": 273,
+						"h": 141
+					},
+					"frame": {
+						"x": 1669,
+						"y": 143,
+						"w": 273,
+						"h": 141
+					}
+				},
+				{
+					"filename": "Left Arm - Light Shot/l-l-light-3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 23,
+						"y": 15,
+						"w": 275,
+						"h": 138
+					},
+					"frame": {
+						"x": 565,
+						"y": 285,
+						"w": 275,
+						"h": 138
+					}
+				},
+				{
+					"filename": "Left Arm - Light Shot/r-l-light-3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 30,
+						"y": 15,
+						"w": 275,
+						"h": 138
+					},
+					"frame": {
+						"x": 842,
+						"y": 285,
+						"w": 275,
+						"h": 138
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-01.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 21,
+						"y": 15,
+						"w": 274,
+						"h": 139
+					},
+					"frame": {
+						"x": 1119,
+						"y": 285,
+						"w": 274,
+						"h": 139
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-10.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 46,
+						"y": 10,
+						"w": 272,
+						"h": 142
+					},
+					"frame": {
+						"x": 1395,
+						"y": 285,
+						"w": 272,
+						"h": 142
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-14.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 46,
+						"y": 10,
+						"w": 272,
+						"h": 142
+					},
+					"frame": {
+						"x": 1395,
+						"y": 285,
+						"w": 272,
+						"h": 142
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-06.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 35,
+						"y": 14,
+						"w": 273,
+						"h": 140
+					},
+					"frame": {
+						"x": 1669,
+						"y": 286,
+						"w": 273,
+						"h": 140
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-18.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 35,
+						"y": 14,
+						"w": 273,
+						"h": 140
+					},
+					"frame": {
+						"x": 1669,
+						"y": 428,
+						"w": 273,
+						"h": 140
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-02.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 24,
+						"y": 15,
+						"w": 274,
+						"h": 138
+					},
+					"frame": {
+						"x": 560,
+						"y": 425,
+						"w": 274,
+						"h": 138
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-22.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 24,
+						"y": 15,
+						"w": 274,
+						"h": 138
+					},
+					"frame": {
+						"x": 560,
+						"y": 425,
+						"w": 274,
+						"h": 138
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-03.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 26,
+						"y": 16,
+						"w": 274,
+						"h": 138
+					},
+					"frame": {
+						"x": 836,
+						"y": 425,
+						"w": 274,
+						"h": 138
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-04.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 29,
+						"y": 15,
+						"w": 274,
+						"h": 139
+					},
+					"frame": {
+						"x": 1112,
+						"y": 426,
+						"w": 274,
+						"h": 139
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-20.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 29,
+						"y": 15,
+						"w": 274,
+						"h": 139
+					},
+					"frame": {
+						"x": 1112,
+						"y": 426,
+						"w": 274,
+						"h": 139
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-05.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 32,
 						"y": 14,
 						"w": 274,
 						"h": 139
 					},
 					"frame": {
-						"x": 276,
-						"y": 721,
+						"x": 1388,
+						"y": 429,
 						"w": 274,
 						"h": 139
 					}
 				},
 				{
-					"filename": "l-heavy-01.png",
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-19.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -481,20 +943,41 @@
 						"h": 154
 					},
 					"spriteSourceSize": {
-						"x": 33,
-						"y": 15,
+						"x": 32,
+						"y": 14,
 						"w": 274,
 						"h": 139
+					},
+					"frame": {
+						"x": 1388,
+						"y": 429,
+						"w": 274,
+						"h": 139
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-21.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 26,
+						"y": 16,
+						"w": 274,
+						"h": 138
 					},
 					"frame": {
 						"x": 551,
-						"y": 571,
+						"y": 565,
 						"w": 274,
-						"h": 139
+						"h": 138
 					}
 				},
 				{
-					"filename": "l-heavy-04.png",
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-10.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -502,20 +985,20 @@
 						"h": 154
 					},
 					"spriteSourceSize": {
-						"x": 25,
-						"y": 15,
-						"w": 274,
-						"h": 139
+						"x": 10,
+						"y": 10,
+						"w": 272,
+						"h": 142
 					},
 					"frame": {
-						"x": 554,
-						"y": 429,
-						"w": 274,
-						"h": 139
+						"x": 550,
+						"y": 705,
+						"w": 272,
+						"h": 142
 					}
 				},
 				{
-					"filename": "l-heavy-20.png",
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-14.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -523,20 +1006,104 @@
 						"h": 154
 					},
 					"spriteSourceSize": {
-						"x": 25,
+						"x": 10,
+						"y": 10,
+						"w": 272,
+						"h": 142
+					},
+					"frame": {
+						"x": 550,
+						"y": 705,
+						"w": 272,
+						"h": 142
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-02.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 30,
+						"y": 15,
+						"w": 274,
+						"h": 138
+					},
+					"frame": {
+						"x": 550,
+						"y": 849,
+						"w": 274,
+						"h": 138
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-22.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 30,
+						"y": 15,
+						"w": 274,
+						"h": 138
+					},
+					"frame": {
+						"x": 550,
+						"y": 849,
+						"w": 274,
+						"h": 138
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/l-l-heavy-23.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 21,
 						"y": 15,
 						"w": 274,
 						"h": 139
 					},
 					"frame": {
-						"x": 554,
-						"y": 429,
+						"x": 827,
+						"y": 565,
 						"w": 274,
 						"h": 139
 					}
 				},
 				{
-					"filename": "l-heavy-18.png",
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-00.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 36,
+						"y": 14,
+						"w": 274,
+						"h": 139
+					},
+					"frame": {
+						"x": 824,
+						"y": 706,
+						"w": 274,
+						"h": 139
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-06.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -550,56 +1117,14 @@
 						"h": 140
 					},
 					"frame": {
-						"x": 552,
-						"y": 712,
+						"x": 826,
+						"y": 847,
 						"w": 273,
 						"h": 140
 					}
 				},
 				{
-					"filename": "l-heavy-05.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 328,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 22,
-						"y": 14,
-						"w": 274,
-						"h": 139
-					},
-					"frame": {
-						"x": 552,
-						"y": 854,
-						"w": 274,
-						"h": 139
-					}
-				},
-				{
-					"filename": "l-heavy-19.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 328,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 22,
-						"y": 14,
-						"w": 274,
-						"h": 139
-					},
-					"frame": {
-						"x": 552,
-						"y": 854,
-						"w": 274,
-						"h": 139
-					}
-				},
-				{
-					"filename": "l-heavy-23.png",
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-01.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -613,14 +1138,14 @@
 						"h": 139
 					},
 					"frame": {
-						"x": 1,
-						"y": 862,
+						"x": 1103,
+						"y": 567,
 						"w": 274,
 						"h": 139
 					}
 				},
 				{
-					"filename": "l-heavy-03.png",
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-03.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -634,14 +1159,98 @@
 						"h": 138
 					},
 					"frame": {
-						"x": 277,
-						"y": 995,
+						"x": 1379,
+						"y": 570,
 						"w": 274,
 						"h": 138
 					}
 				},
 				{
-					"filename": "l-heavy-21.png",
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-04.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 25,
+						"y": 15,
+						"w": 274,
+						"h": 139
+					},
+					"frame": {
+						"x": 1655,
+						"y": 570,
+						"w": 274,
+						"h": 139
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-20.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 25,
+						"y": 15,
+						"w": 274,
+						"h": 139
+					},
+					"frame": {
+						"x": 1655,
+						"y": 570,
+						"w": 274,
+						"h": 139
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-05.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 22,
+						"y": 14,
+						"w": 274,
+						"h": 139
+					},
+					"frame": {
+						"x": 1101,
+						"y": 708,
+						"w": 274,
+						"h": 139
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-19.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 22,
+						"y": 14,
+						"w": 274,
+						"h": 139
+					},
+					"frame": {
+						"x": 1101,
+						"y": 708,
+						"w": 274,
+						"h": 139
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-21.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -655,10 +1264,52 @@
 						"h": 138
 					},
 					"frame": {
-						"x": 553,
-						"y": 995,
+						"x": 1101,
+						"y": 849,
 						"w": 274,
 						"h": 138
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-18.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 20,
+						"y": 14,
+						"w": 273,
+						"h": 140
+					},
+					"frame": {
+						"x": 1377,
+						"y": 710,
+						"w": 273,
+						"h": 140
+					}
+				},
+				{
+					"filename": "Left Arm - Heavy Shot/r-l-heavy-23.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 328,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 33,
+						"y": 15,
+						"w": 274,
+						"h": 139
+					},
+					"frame": {
+						"x": 1652,
+						"y": 711,
+						"w": 274,
+						"h": 139
 					}
 				}
 			]
@@ -667,6 +1318,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:276738a1dc466a95a189eb2bc0eee773:9415b9e6de5f6b03bdef6f59ce397a1b:a505b4ea486bc7dd85f6891d4a15828b$"
+		"smartupdate": "$TexturePacker:SmartUpdate:b485086bb63222419554e42c95a3f66e:de991e7ff671c3b54977a34fbdba401c:a505b4ea486bc7dd85f6891d4a15828b$"
 	}
 }

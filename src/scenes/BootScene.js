@@ -11,7 +11,8 @@ class BootScene extends Scene {
     this.load.multiatlas('mech1', 'assets/sprites/mech1.json', 'assets/sprites');
     this.load.multiatlas('mech1-arm-left', 'assets/sprites/mech1-left-arm.json', 'assets/sprites');
     this.load.multiatlas('mech1-arm-right', 'assets/sprites/mech1-right-arm.json', 'assets/sprites');
-    this.load.image('mech1-head', ['assets/sprites/mech1-head.png', 'assets/sprites/mech1-head_n.png']);
+    this.load.image('l-mech1-head', ['assets/sprites/l-mech1-head.png', 'assets/sprites/l-mech1-head_n.png']);
+    this.load.image('r-mech1-head', ['assets/sprites/r-mech1-head.png', 'assets/sprites/r-mech1-head_n.png']);
     this.load.image('mech1-shell', 'assets/sprites/mech1-shell.png');
     this.load.image('mech1-victory', 'assets/sprites/mech1-victory.png');
 
@@ -28,6 +29,11 @@ class BootScene extends Scene {
     this.load.image('oswald-arm-l', ['assets/sprites/oswald-arm-l.png', 'assets/sprites/oswald-arm-l_n.png']);
     this.load.image('oswald-arm-r', ['assets/sprites/oswald-arm-r.png', 'assets/sprites/oswald-arm-r_n.png']);
     this.load.image('oswald-grenade', 'assets/sprites/grenade.png');
+
+    // Montserrat
+    this.load.multiatlas('montserrat', 'assets/sprites/montserrat.json', 'assets/sprites');
+    this.load.image('r-montserrat-head', ['assets/sprites/r-montserrat-head.png', 'assets/sprites/r-montserrat-head_n.png']);
+    this.load.image('l-montserrat-head', ['assets/sprites/l-montserrat-head.png', 'assets/sprites/l-montserrat-head_n.png']);
 
     // Maps 2.0
     this.load.image('tileset-ex', ['assets/maps/2.0/tileset-ex.png', 'assets/maps/2.0/tileset-ex_n.png']);
@@ -87,6 +93,7 @@ class BootScene extends Scene {
     this.load.image('ui-mech1-shell', 'assets/ui/mech1-shell-icon.png');
     this.load.image('ui-hume1', 'assets/ui/hume1-head-icon.png');
     this.load.image('ui-oswald', 'assets/ui/oswald-head-icon.png');
+    this.load.image('ui-montserrat', 'assets/ui/montserrat-head-icon.png');
 
     // DOM UI
     this.load.html('dom-title', 'assets/ui-dom/title.html');
@@ -140,11 +147,11 @@ class BootScene extends Scene {
   create() {
     // Mech1 animations
     this.anims.create({
-      key: 'mech1-run',
+      key: 'l-mech1-run',
       frames: this.anims.generateFrameNames('mech1', {
         start: 0,
         end: 69,
-        prefix: 'run-',
+        prefix: 'Body-Legs - Run/l-run-',
         suffix: '.png',
         zeroPad: 2
       }),
@@ -153,11 +160,24 @@ class BootScene extends Scene {
     });
 
     this.anims.create({
-      key: 'mech1-idle',
+      key: 'r-mech1-run',
+      frames: this.anims.generateFrameNames('mech1', {
+        start: 0,
+        end: 69,
+        prefix: 'Body-Legs - Run/r-run-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 70,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'l-mech1-idle',
       frames: [
         {
           key: 'mech1',
-          frame: 'body-idle.png'
+          frame: 'Body-Legs - Idle/l-body-idle.png'
         }
       ],
       frameRate: 0,
@@ -165,11 +185,11 @@ class BootScene extends Scene {
     });
 
     this.anims.create({
-      key: 'mech1-up',
+      key: 'r-mech1-idle',
       frames: [
         {
           key: 'mech1',
-          frame: 'up.png'
+          frame: 'Body-Legs - Idle/r-body-idle.png'
         }
       ],
       frameRate: 0,
@@ -177,11 +197,11 @@ class BootScene extends Scene {
     });
 
     this.anims.create({
-      key: 'mech1-down',
+      key: 'l-mech1-up',
       frames: [
         {
           key: 'mech1',
-          frame: 'down.png'
+          frame: 'Body-Legs - Up/l-up.png'
         }
       ],
       frameRate: 0,
@@ -189,11 +209,47 @@ class BootScene extends Scene {
     });
 
     this.anims.create({
-      key: 'mech1-up-down',
+      key: 'r-mech1-up',
+      frames: [
+        {
+          key: 'mech1',
+          frame: 'Body-Legs - Up/r-up.png'
+        }
+      ],
+      frameRate: 0,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'l-mech1-down',
+      frames: [
+        {
+          key: 'mech1',
+          frame: 'Body-Legs - Down/l-down.png'
+        }
+      ],
+      frameRate: 0,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'r-mech1-down',
+      frames: [
+        {
+          key: 'mech1',
+          frame: 'Body-Legs - Down/r-down.png'
+        }
+      ],
+      frameRate: 0,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'l-mech1-up-down',
       frames: this.anims.generateFrameNames('mech1', {
         start: 0,
         end: 11,
-        prefix: 'up-down-',
+        prefix: 'Body-Legs - Up-Down/l-up-down-',
         suffix: '.png',
         zeroPad: 2
       }),
@@ -202,11 +258,24 @@ class BootScene extends Scene {
     });
 
     this.anims.create({
-      key: 'mech1-arm-left-idle',
+      key: 'r-mech1-up-down',
+      frames: this.anims.generateFrameNames('mech1', {
+        start: 0,
+        end: 11,
+        prefix: 'Body-Legs - Up-Down/r-up-down-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'l-mech1-arm-left-idle',
       frames: [
         {
           key: 'mech1-arm-left',
-          frame: 'l-idle.png'
+          frame: 'Left Arm - Idle/l-l-idle.png'
         }
       ],
       frameRate: 0,
@@ -214,11 +283,23 @@ class BootScene extends Scene {
     });
 
     this.anims.create({
-      key: 'mech1-arm-left-light-shot',
+      key: 'r-mech1-arm-left-idle',
+      frames: [
+        {
+          key: 'mech1-arm-left',
+          frame: 'Left Arm - Idle/r-l-idle.png'
+        }
+      ],
+      frameRate: 0,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'l-mech1-arm-left-light-shot',
       frames: this.anims.generateFrameNames('mech1-arm-left', {
         start: 0,
         end: 5,
-        prefix: 'l-light-',
+        prefix: 'Left Arm - Light Shot/l-l-light-',
         suffix: '.png',
         zeroPad: -1
       }),
@@ -227,11 +308,24 @@ class BootScene extends Scene {
     });
 
     this.anims.create({
-      key: 'mech1-arm-left-heavy-shot',
+      key: 'r-mech1-arm-left-light-shot',
+      frames: this.anims.generateFrameNames('mech1-arm-left', {
+        start: 0,
+        end: 5,
+        prefix: 'Left Arm - Light Shot/r-l-light-',
+        suffix: '.png',
+        zeroPad: -1
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'l-mech1-arm-left-heavy-shot',
       frames: this.anims.generateFrameNames('mech1-arm-left', {
         start: 0,
         end: 23,
-        prefix: 'l-heavy-',
+        prefix: 'Left Arm - Heavy Shot/l-l-heavy-',
         suffix: '.png',
         zeroPad: 2
       }),
@@ -240,11 +334,24 @@ class BootScene extends Scene {
     });
 
     this.anims.create({
-      key: 'mech1-arm-right-idle',
+      key: 'r-mech1-arm-left-heavy-shot',
+      frames: this.anims.generateFrameNames('mech1-arm-left', {
+        start: 0,
+        end: 23,
+        prefix: 'Left Arm - Heavy Shot/r-l-heavy-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'l-mech1-arm-right-idle',
       frames: [
         {
           key: 'mech1-arm-right',
-          frame: 'r-idle.png'
+          frame: 'Right Arm - Idle/l-r-idle.png'
         }
       ],
       frameRate: 0,
@@ -252,11 +359,23 @@ class BootScene extends Scene {
     });
 
     this.anims.create({
-      key: 'mech1-arm-right-light-shot',
+      key: 'r-mech1-arm-right-idle',
+      frames: [
+        {
+          key: 'mech1-arm-right',
+          frame: 'Right Arm - Idle/r-r-idle.png'
+        }
+      ],
+      frameRate: 0,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'l-mech1-arm-right-light-shot',
       frames: this.anims.generateFrameNames('mech1-arm-right', {
         start: 0,
         end: 5,
-        prefix: 'r-light-',
+        prefix: 'Right Arm - Light Shot/l-r-light-',
         suffix: '.png',
         zeroPad: 0
       }),
@@ -265,11 +384,37 @@ class BootScene extends Scene {
     });
 
     this.anims.create({
-      key: 'mech1-arm-right-heavy-shot',
+      key: 'r-mech1-arm-right-light-shot',
+      frames: this.anims.generateFrameNames('mech1-arm-right', {
+        start: 0,
+        end: 5,
+        prefix: 'Right Arm - Light Shot/r-r-light-',
+        suffix: '.png',
+        zeroPad: 0
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'l-mech1-arm-right-heavy-shot',
       frames: this.anims.generateFrameNames('mech1-arm-right', {
         start: 0,
         end: 23,
-        prefix: 'r-heavy-',
+        prefix: 'Right Arm - Heavy Shot/l-r-heavy-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'r-mech1-arm-right-heavy-shot',
+      frames: this.anims.generateFrameNames('mech1-arm-right', {
+        start: 0,
+        end: 23,
+        prefix: 'Right Arm - Heavy Shot/r-r-heavy-',
         suffix: '.png',
         zeroPad: 2
       }),
@@ -491,6 +636,33 @@ class BootScene extends Scene {
       }),
       frameRate: 60,
       repeat: 0
+    });
+
+    // Montserrat animations
+    this.anims.create({
+      key: 'r-montserrat-idle',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 29,
+        prefix: 'montserrat - Idle/r-idle-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'l-montserrat-idle',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 29,
+        prefix: 'montserrat - Idle/l-idle-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
     });
 
     this.input.mouse.disableContextMenu();

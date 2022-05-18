@@ -70,13 +70,13 @@ class RobotoPeer extends Container {
 
   applyHueRotation() {
     // Apply hue rotate
-    const hueRotatePipeline = this.scene.renderer.pipelines.get('HueRotate');
-    this.list.forEach((obj) => {
-      if (obj.getData('isHitbox') !== true) {
-        obj.setPipeline(hueRotatePipeline);
-      }
-    });
-    hueRotatePipeline.time = 180.25; // magic numbers ftw
+    // const hueRotatePipeline = this.scene.renderer.pipelines.get('HueRotate');
+    // this.list.forEach((obj) => {
+    //   if (obj.getData('isHitbox') !== true) {
+    //     obj.setPipeline(hueRotatePipeline);
+    //   }
+    // });
+    // hueRotatePipeline.time = 180.25; // magic numbers ftw
   }
 
   initLighting() {

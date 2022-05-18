@@ -49,9 +49,9 @@ const config = {
 
     BattleHUD
   ],
-  pipeline: {
-    'HueRotate': HueRotatePipeline
-  }
+  // pipeline: {
+  //   'HueRotate': HueRotatePipeline
+  // }
 };
 
 const game = new Game(config);

@@ -23,6 +23,9 @@ class BattleHUD extends Scene {
     else if (this.p1Key === 'oswald') {
       this.playerIcon = this.add.image(20, window.innerHeight - 20, 'ui-oswald');
     }
+    else if (this.p1Key === 'montserrat') {
+      this.playerIcon = this.add.image(20, window.innerHeight - 20, 'ui-montserrat');
+    }
     this.playerIcon.setScale(0.1);
     this.playerIcon.setOrigin(0, 1);
     
@@ -35,14 +38,17 @@ class BattleHUD extends Scene {
     else if (this.p2Key === 'oswald') {
       this.enemyIcon = this.add.image(window.innerWidth - 20, window.innerHeight - 20, 'ui-oswald');
     }
+    else if (this.p2Key === 'montserrat') {
+      this.enemyIcon = this.add.image(window.innerWidth - 20, window.innerHeight - 20, 'ui-montserrat');
+    }
     this.enemyIcon.setScale(0.1);
     this.enemyIcon.setOrigin(1, 1);
     this.enemyIcon.setFlipX(true);
-    this.enemyIcon.setTint(0xFF0000);
+    // this.enemyIcon.setTint(0xFF0000);
 
-    const hueRotatePipeline = this.renderer.pipelines.get('HueRotate');
-    this.enemyIcon.setPipeline(hueRotatePipeline);
-    hueRotatePipeline.time = 180.25;
+    // const hueRotatePipeline = this.renderer.pipelines.get('HueRotate');
+    // this.enemyIcon.setPipeline(hueRotatePipeline);
+    // hueRotatePipeline.time = 180.25;
 
     this.bgGfx = this.add.graphics();
     this.bgGfx.fillStyle(0xFFFFFF, 0.1);

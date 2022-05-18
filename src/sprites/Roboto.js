@@ -4,7 +4,7 @@ import { network } from "../network";
 const { Container } = GameObjects;
 
 class Roboto extends Container {
-  constructor(scene, x, y, playerID) {
+  constructor(scene, x, y) {
     super(scene, x, y, []);
 
     this.scene = scene;
@@ -13,18 +13,20 @@ class Roboto extends Container {
     this.jumpAnimBuffer = 50;
     this.jumpAnimLock = false;
     this.isDead = false;
+    this.animPrefix = 'r';
+    this.isFlipped = false;
 
     this.core = this.scene.physics.add.sprite(0, 0, 'mech1');
-    this.core.play('mech1-idle');
+    this.core.play('r-mech1-idle');
     this.core.body.setAllowGravity(false);
 
     this.armLeft = this.scene.physics.add.sprite(-20, -148, 'mech1-arm-left');
-    this.armLeft.play('mech1-arm-left-idle');
+    this.armLeft.play('r-mech1-arm-left-idle');
     this.armLeft.setOrigin(0.19, 0.29);
     this.armLeft.body.setAllowGravity(false);
 
     this.armRight = this.scene.physics.add.sprite(-20, -148, 'mech1-arm-right');
-    this.armRight.play('mech1-arm-right-idle');
+    this.armRight.play('r-mech1-arm-right-idle');
     this.armRight.setOrigin(0.21, 0.28);
     this.armRight.body.setAllowGravity(false);
 
@@ -73,7 +75,7 @@ class Roboto extends Container {
         const vector = new pMath.Vector2();
         let angleMod = 2 * Math.PI;
 
-        if (this.core.flipX) {
+        if (this.isFlipped) {
           angleMod = Math.PI;
         }
 
@@ -150,16 +152,16 @@ class Roboto extends Container {
             const vector = new pMath.Vector2();
             let angleMod = 2 * Math.PI;
     
-            if (this.core.flipX) {
-              angleMod = Math.PI;
+            if (this.isFlipped) {
+              // angleMod = Math.PI;
             }
     
             vector.setToPolar(this.armLeft.rotation + angleMod, barrelOffsetX);
     
-            new RobotoShell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.core.flipX, true);
+            new RobotoShell(this.scene, this.x + vector.x, this.y + vector.y - barrelOffsetY, this.armLeft.rotation, this.isFlipped, true);
     
-            this.armLeft.play('mech1-arm-left-heavy-shot', true);
-            this.armRight.play('mech1-arm-right-heavy-shot', true);
+            this.armLeft.play(`${this.animPrefix}-mech1-arm-left-heavy-shot`, true);
+            this.armRight.play(`${this.animPrefix}-mech1-arm-right-heavy-shot`, true);
             this.scene.sound.play('sfx-rocket');
   
             this.scene.registry.playerRockets--;
@@ -178,8 +180,8 @@ class Roboto extends Container {
         }
         else {
           this.rapidfire.paused = false;
-          this.armLeft.play('mech1-arm-left-light-shot', true);
-          this.armRight.play('mech1-arm-right-light-shot', true);
+          this.armLeft.play(`${this.animPrefix}-mech1-arm-left-light-shot`, true);
+          this.armRight.play(`${this.animPrefix}-mech1-arm-right-light-shot`, true);
         }
       }
     });
@@ -187,8 +189,8 @@ class Roboto extends Container {
     this.scene.input.on('pointerup', () => {
       if (!this.isDead) {
         this.rapidfire.paused = true;
-        this.armLeft.play('mech1-arm-left-idle', true);
-        this.armRight.play('mech1-arm-right-idle', true);
+        this.armLeft.play(`${this.animPrefix}-mech1-arm-left-idle`, true);
+        this.armRight.play(`${this.animPrefix}-mech1-arm-right-idle`, true);
       }
     });
 
@@ -222,13 +224,13 @@ class Roboto extends Container {
 
   applyHueRotation() {
     // Apply hue rotate
-    const hueRotatePipeline = this.scene.renderer.pipelines.get('HueRotate');
-    this.list.forEach((obj) => {
-      if (obj.getData('isHitbox') !== true) {
-        obj.setPipeline(hueRotatePipeline);
-      }
-    });
-    hueRotatePipeline.time = 180.25; // magic numbers ftw
+    // const hueRotatePipeline = this.scene.renderer.pipelines.get('HueRotate');
+    // this.list.forEach((obj) => {
+    //   if (obj.getData('isHitbox') !== true) {
+    //     obj.setPipeline(hueRotatePipeline);
+    //   }
+    // });
+    // hueRotatePipeline.time = 180.25; // magic numbers ftw
   }
 
   initLighting() {
@@ -237,6 +239,21 @@ class Roboto extends Container {
         obj.setPipeline('Light2D');
       }
     });
+  }
+
+  setFlipX(flip) {
+    this.isFlipped = flip;
+
+    if (flip) {
+      this.animPrefix = 'l';
+    }
+    else {
+      this.animPrefix = 'r';
+    }
+
+    this.head.setTexture(`${this.animPrefix}-mech1-head`);
+    this.armLeft.play(`${this.animPrefix}-mech1-arm-left-idle`);
+    this.armRight.play(`${this.animPrefix}-mech1-arm-right-idle`);
   }
 
   takeDamage(dmg, intersection, isNetworkControlled = false) {
@@ -387,10 +404,7 @@ class Roboto extends Container {
       let headAngleMod = 0.35;
   
       if (mousePointer.x <= relX) {
-        this.core.setFlipX(true);
-        this.armLeft.setFlipX(true);
-        this.armRight.setFlipX(true);
-        this.head.setFlipX(true);
+        this.setFlipX(true);
         this.armLeft.setOrigin(1 - 0.19, 0.29);
         this.armRight.setOrigin(1 - 0.21, 0.28);
         this.armLeft.setX(20);
@@ -400,10 +414,7 @@ class Roboto extends Container {
         headAngleMod = 0.35;
       }
       else {
-        this.core.setFlipX(false);
-        this.armLeft.setFlipX(false);
-        this.armRight.setFlipX(false);
-        this.head.setFlipX(false);
+        this.setFlipX(false);
         this.armLeft.setOrigin(0.19, 0.29);
         this.armRight.setOrigin(0.21, 0.28);
         this.armLeft.setX(-20);
@@ -421,26 +432,26 @@ class Roboto extends Container {
         this.jumpAnimLock = false;
   
         if (this.body.velocity.x !== 0) {
-          if (this.core.flipX && this.body.velocity.x > 0 || !this.core.flipX && this.body.velocity.x < 0) {
-            this.core.playReverse('mech1-run', true);
+          if (this.isFlipped && this.body.velocity.x > 0 || !this.isFlipped && this.body.velocity.x < 0) {
+            this.core.playReverse(`${this.animPrefix}-mech1-run`, true);
           }
           else {
-            this.core.play('mech1-run', true);
+            this.core.play(`${this.animPrefix}-mech1-run`, true);
           }
         }
         else {
-          this.core.play('mech1-idle', true);
+          this.core.play(`${this.animPrefix}-mech1-idle`, true);
         }
       }
       else {
         if (this.body.velocity.y < -this.jumpAnimBuffer) {
-          this.core.play('mech1-up', true);
+          this.core.play(`${this.animPrefix}-mech1-up`, true);
         }
         else if (this.body.velocity.y > this.jumpAnimBuffer) {
-          this.core.play('mech1-down', true);
+          this.core.play(`${this.animPrefix}-mech1-down`, true);
         }
         else if (!this.jumpAnimLock) {
-          this.core.play('mech1-up-down', true);
+          this.core.play(`${this.animPrefix}-mech1-up-down`, true);
           this.jumpAnimLock = true;
         }
       }

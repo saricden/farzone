@@ -14,6 +14,8 @@ class RobotoNPC extends Container {
     this.jumpAnimLock = false;
     this.isDead = false;
     this.isPaused = false;
+    this.animPrefix = 'r';
+    this.isFlipped = false;
 
     // AI config
     this.triggerDelay = 25; // The # of MS to change shooting state
@@ -22,20 +24,20 @@ class RobotoNPC extends Container {
     this.closeThreshold = 2000; // The distance before the enemy will stop moving
 
     this.torsoLegs = this.scene.physics.add.sprite(0, 0, 'mech1');
-    this.torsoLegs.play('mech1-idle');
+    this.torsoLegs.play('r-mech1-idle');
     this.torsoLegs.body.setAllowGravity(false);
 
     this.armLeft = this.scene.physics.add.sprite(-20, -148, 'mech1-arm-left');
-    this.armLeft.play('mech1-arm-left-idle');
+    this.armLeft.play('r-mech1-arm-left-idle');
     this.armLeft.setOrigin(0.19, 0.29);
     this.armLeft.body.setAllowGravity(false);
 
     this.armRight = this.scene.physics.add.sprite(-20, -148, 'mech1-arm-right');
-    this.armRight.play('mech1-arm-right-idle');
+    this.armRight.play('r-mech1-arm-right-idle');
     this.armRight.setOrigin(0.21, 0.28);
     this.armRight.body.setAllowGravity(false);
 
-    this.head = this.scene.physics.add.image(-12, -185, 'mech1-head');
+    this.head = this.scene.physics.add.image(-12, -185, 'r-mech1-head');
     this.head.setOrigin(0.5, 1);
     this.head.setScale(0.75);
     this.head.body.setAllowGravity(false);
@@ -77,7 +79,7 @@ class RobotoNPC extends Container {
         const vector = new pMath.Vector2();
         let angleMod = 2 * Math.PI;
 
-        if (this.torsoLegs.flipX) {
+        if (this.isFlipped) {
           angleMod = Math.PI;
         }
 
@@ -150,10 +152,7 @@ class RobotoNPC extends Container {
           let angleMod = 2 * Math.PI;
   
           if (this.target.x <= this.x) {
-            this.torsoLegs.setFlipX(true);
-            this.armLeft.setFlipX(true);
-            this.armRight.setFlipX(true);
-            this.head.setFlipX(true);
+            this.setFlipX(true);
             this.armLeft.setOrigin(1 - 0.19, 0.29);
             this.armRight.setOrigin(1 - 0.21, 0.28);
             this.armLeft.setX(20);
@@ -162,10 +161,7 @@ class RobotoNPC extends Container {
             angleMod = Math.PI;
           }
           else {
-            this.torsoLegs.setFlipX(false);
-            this.armLeft.setFlipX(false);
-            this.armRight.setFlipX(false);
-            this.head.setFlipX(false);
+            this.setFlipX(false);
             this.armLeft.setOrigin(0.19, 0.29);
             this.armRight.setOrigin(0.21, 0.28);
             this.armLeft.setX(-20);
@@ -186,13 +182,13 @@ class RobotoNPC extends Container {
 
   applyHueRotation() {
     // Apply hue rotate
-    const hueRotatePipeline = this.scene.renderer.pipelines.get('HueRotate');
-    this.list.forEach((obj) => {
-      if (obj.getData('isHitbox') !== true) {
-        obj.setPipeline(hueRotatePipeline);
-      }
-    });
-    hueRotatePipeline.time = 180.25; // magic numbers ftw
+    // const hueRotatePipeline = this.scene.renderer.pipelines.get('HueRotate');
+    // this.list.forEach((obj) => {
+    //   if (obj.getData('isHitbox') !== true) {
+    //     obj.setPipeline(hueRotatePipeline);
+    //   }
+    // });
+    // hueRotatePipeline.time = 180.25; // magic numbers ftw
   }
 
   initLighting() {
@@ -218,6 +214,21 @@ class RobotoNPC extends Container {
     this.bulletRaycaster.mapGameObjects(layers, true, {
       collisionTiles: [51, 52, 53, 54, 61, 62, 63, 71, 72, 73, 81, 82, 84, 85, 86, 87, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 113, 118, 123, 127, 133, 137]
     });
+  }
+
+  setFlipX(flip) {
+    this.isFlipped = flip;
+
+    if (flip) {
+      this.animPrefix = 'l';
+    }
+    else {
+      this.animPrefix = 'r';
+    }
+
+    this.head.setTexture(`${this.animPrefix}-mech1-head`);
+    this.armLeft.play(`${this.animPrefix}-mech1-arm-left-idle`);
+    this.armRight.play(`${this.animPrefix}-mech1-arm-right-idle`);
   }
 
   takeDamage(dmg, intersection) {
@@ -407,25 +418,25 @@ class RobotoNPC extends Container {
   
         if (this.body.velocity.x !== 0) {
           if (this.torsoLegs.flipX && this.body.velocity.x > 0 || !this.torsoLegs.flipX && this.body.velocity.x < 0) {
-            this.torsoLegs.playReverse('mech1-run', true);
+            this.torsoLegs.playReverse(`${this.animPrefix}-mech1-run`, true);
           }
           else {
-            this.torsoLegs.play('mech1-run', true);
+            this.torsoLegs.play(`${this.animPrefix}-mech1-run`, true);
           }
         }
         else {
-          this.torsoLegs.play('mech1-idle', true);
+          this.torsoLegs.play(`${this.animPrefix}-mech1-idle`, true);
         }
       }
       else {
         if (this.body.velocity.y < -this.jumpAnimBuffer) {
-          this.torsoLegs.play('mech1-up', true);
+          this.torsoLegs.play(`${this.animPrefix}-mech1-up`, true);
         }
         else if (this.body.velocity.y > this.jumpAnimBuffer) {
-          this.torsoLegs.play('mech1-down', true);
+          this.torsoLegs.play(`${this.animPrefix}-mech1-down`, true);
         }
         else if (!this.jumpAnimLock) {
-          this.torsoLegs.play('mech1-up-down', true);
+          this.torsoLegs.play(`${this.animPrefix}-mech1-up-down`, true);
           this.jumpAnimLock = true;
         }
       }
