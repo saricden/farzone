@@ -153,7 +153,7 @@ class Roboto extends Container {
             let angleMod = 2 * Math.PI;
     
             if (this.isFlipped) {
-              // angleMod = Math.PI;
+              angleMod = Math.PI;
             }
     
             vector.setToPolar(this.armLeft.rotation + angleMod, barrelOffsetX);
