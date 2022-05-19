@@ -488,8 +488,9 @@ class GameScene2 extends Scene {
     else {
       this.cameras.main.setBackgroundColor(this.bgColor);
     }
+    
     this.cameras.main.setZoom(this.camZoomMin);
-    // this.cameras.main.setZoom(0.86);
+    // this.cameras.main.setZoom(0.8);
     // this.cameras.main.setBounds(0, 0, this.tilemap.widthInPixels, this.tilemap.heightInPixels);
     
     this.cameraMid = new pMath.Vector2();

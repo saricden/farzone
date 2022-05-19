@@ -34,6 +34,7 @@ class BootScene extends Scene {
     this.load.multiatlas('montserrat', 'assets/sprites/montserrat.json', 'assets/sprites');
     this.load.image('r-montserrat-head', ['assets/sprites/r-montserrat-head.png', 'assets/sprites/r-montserrat-head_n.png']);
     this.load.image('l-montserrat-head', ['assets/sprites/l-montserrat-head.png', 'assets/sprites/l-montserrat-head_n.png']);
+    this.load.image('montserrat-kunai', 'assets/sprites/kunai.png');
 
     // Maps 2.0
     this.load.image('tileset-ex', ['assets/maps/2.0/tileset-ex.png', 'assets/maps/2.0/tileset-ex_n.png']);
@@ -640,6 +641,19 @@ class BootScene extends Scene {
 
     // Montserrat animations
     this.anims.create({
+      key: 'l-montserrat-idle',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 29,
+        prefix: 'montserrat - Idle/l-idle-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
       key: 'r-montserrat-idle',
       frames: this.anims.generateFrameNames('montserrat', {
         start: 0,
@@ -653,16 +667,185 @@ class BootScene extends Scene {
     });
 
     this.anims.create({
-      key: 'l-montserrat-idle',
+      key: 'l-montserrat-run',
       frames: this.anims.generateFrameNames('montserrat', {
         start: 0,
-        end: 29,
-        prefix: 'montserrat - Idle/l-idle-',
+        end: 39,
+        prefix: 'montserrat - Run/l-run-',
         suffix: '.png',
         zeroPad: 2
       }),
       frameRate: 60,
       repeat: -1
+    });
+
+    this.anims.create({
+      key: 'r-montserrat-run',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 39,
+        prefix: 'montserrat - Run/r-run-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'l-montserrat-walk-back',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 59,
+        prefix: 'montserrat - Walk-back/l-walk-back-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'r-montserrat-walk-back',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 59,
+        prefix: 'montserrat - Walk-back/r-walk-back-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'l-montserrat-up',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 19,
+        prefix: 'montserrat - Up/l-up-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'r-montserrat-up',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 19,
+        prefix: 'montserrat - Up/r-up-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'l-montserrat-down',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 19,
+        prefix: 'montserrat - Down/l-down-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'r-montserrat-down',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 19,
+        prefix: 'montserrat - Down/r-down-',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'l-montserrat-flip',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 9,
+        prefix: 'montserrat - Flip/l-flip-',
+        suffix: '.png',
+        zeroPad: 0
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'r-montserrat-flip',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 9,
+        prefix: 'montserrat - Flip/r-flip-',
+        suffix: '.png',
+        zeroPad: 0
+      }),
+      frameRate: 60,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'l-montserrat-throw-stand',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 19,
+        prefix: 'montserrat - Throw-Stand/l-throw-stand',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'r-montserrat-throw-stand',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 19,
+        prefix: 'montserrat - Throw-Stand/r-throw-stand',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'l-montserrat-throw-air',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 19,
+        prefix: 'montserrat - Throw-air/l-throw-air',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: 'r-montserrat-throw-air',
+      frames: this.anims.generateFrameNames('montserrat', {
+        start: 0,
+        end: 19,
+        prefix: 'montserrat - Throw-air/r-throw-air',
+        suffix: '.png',
+        zeroPad: 2
+      }),
+      frameRate: 60,
+      repeat: 0
     });
 
     this.input.mouse.disableContextMenu();

@@ -1,5 +1,6 @@
 import { GameObjects, Math as pMath } from "phaser";
 import { network } from "../network";
+import MontserratKunai from "./MontserratKunai";
 const { Container } = GameObjects;
 
 class Montserrat extends Container {
@@ -10,6 +11,11 @@ class Montserrat extends Container {
     this.speed = 1400;
     this.jumpForce = 1000;
     this.isDead = false;
+    this.isThrowing = false;
+    this.hasThrownInAir = false;
+    this.isGrappling = false;
+    this.isFlipped = false;
+    this.hasDoubleJumped = false;
     this.animPrefix = 'r';
 
     this.core = this.scene.add.sprite(0, 0, 'montserrat');
@@ -38,13 +44,70 @@ class Montserrat extends Container {
       right: Phaser.Input.Keyboard.KeyCodes.D,
     });
 
-    this.scene.input.on('pointerdown', () => {
+    this.scene.input.on('pointerdown', (pointer) => {
+      if (!this.isDead) {
+        this.setRotation(0);
+        
+        if (pointer.rightButtonDown()) {
+          // TODO: grapple
+        }
+        else {
+          if (!this.isThrowing) {
+            this.isThrowing = true;
+            this.hasThrownInAir = true;
 
+            const throwOffsetX = 250;
+            const vector = new pMath.Vector2();
+            const angle = pMath.Angle.Between(this.x, this.y, pointer.worldX, pointer.worldY);
+            let angleMod = 2 * Math.PI;
+
+            if (this.isFlipped) {
+              angleMod = Math.PI;
+            }
+
+            if (this.isFlipped) {
+              vector.setToPolar(angle + angleMod, -throwOffsetX);
+            }
+            else {
+              vector.setToPolar(angle + angleMod, throwOffsetX);
+            }
+
+            new MontserratKunai(this.scene, this.x + vector.x, this.y + vector.y, angle, this.isFlipped, true);
+    
+            if (this.body.onFloor()) {
+              this.core.play(`${this.animPrefix}-montserrat-throw-stand`);
+            }
+            else {
+              this.core.play(`${this.animPrefix}-montserrat-throw-air`);
+            }
+          }
+        }
+      }
     });
 
     this.scene.input.on('pointerup', () => {
 
     });
+
+    this.scene.input.keyboard.on('keydown-W', () => {
+      if (!this.isGrappling) {
+        if (this.body.onFloor()) {
+          this.body.setVelocityY(-this.jumpForce);
+        }
+        else if (!this.hasDoubleJumped) {
+          this.body.setVelocityY(-this.jumpForce);
+          this.hasDoubleJumped = true;
+        }
+      }
+    });
+
+    // Animation events
+    this.resetThrowing = this.resetThrowing.bind(this);
+
+    this.core.on('animationcomplete-l-montserrat-throw-stand', this.resetThrowing);
+    this.core.on('animationcomplete-r-montserrat-throw-stand', this.resetThrowing);
+    this.core.on('animationcomplete-l-montserrat-throw-air', this.resetThrowing);
+    this.core.on('animationcomplete-r-montserrat-throw-air', this.resetThrowing);
 
     // For tracking distance stat:
     this.prevX = this.x;
@@ -56,6 +119,10 @@ class Montserrat extends Container {
 
     // Set data attributes
     this.setData('isPlayer', true);
+  }
+
+  resetThrowing() {
+    this.isThrowing = false;
   }
 
   mapTarget(target) {
@@ -86,12 +153,20 @@ class Montserrat extends Container {
   }
 
   setFlipX(flip) {
+    this.isFlipped = flip;
+
     if (flip) {
       this.animPrefix = 'l';
+
+      this.head.setX(-20);
     }
     else {
       this.animPrefix = 'r';
+
+      this.head.setX(20);
     }
+
+    this.head.setTexture(`${this.animPrefix}-montserrat-head`);
   }
 
   initLighting() {
@@ -221,30 +296,105 @@ class Montserrat extends Container {
 
     if (!this.isDead) {
       if (!this.isKnocked) {
-        if (left.isDown) {
-          this.body.setVelocityX(-this.speed);
-          this.setFlipX(true);
-        }
-        else if (right.isDown) {
-          this.body.setVelocityX(this.speed);
-          this.setFlipX(false);
-        }
-        else {
-          this.body.setVelocityX(0);
+        if (!this.isThrowing && !this.isGrappling) {
+          if (left.isDown && (this.isFlipped || !this.body.onFloor())) {
+            this.body.setVelocityX(-this.speed);
+          }
+          else if (left.isDown && !this.isFlipped) {
+            this.body.setVelocityX(-this.speed / 2);
+          }
+          else if (right.isDown && (!this.isFlipped || !this.body.onFloor())) {
+            this.body.setVelocityX(this.speed);
+          }
+          else if (right.isDown && this.isFlipped) {
+            this.body.setVelocityX(this.speed / 2);
+          }
+          else {
+            this.body.setVelocityX(0);
+          }
         }
       }
       else if (!this.body.blocked.none) {
         this.isKnocked = false;
       }
+
+      // Aim controls
+      const {zoom, worldView} = this.scene.cameras.main;
+      const relX = ((this.x - worldView.x) * zoom);
+      const relY = ((this.y - worldView.y) * zoom);
   
-      if (up.isDown && this.body.onFloor()) {
-        this.body.setVelocityY(-this.jumpForce);
+      this.aimAngle = pMath.Angle.Between(relX + (this.head.x * zoom), relY + (this.head.y * zoom), mousePointer.x, mousePointer.y);
+  
+      let angleMod = Math.PI / 4;
+
+      if (mousePointer.x <= relX) {
+        this.setFlipX(true);
+
+        angleMod = Math.PI;
+      }
+      else {
+        this.setFlipX(false);  
       }
 
+      if ((this.aimAngle + angleMod) / 3 > 1) {
+        this.head.setRotation(((this.aimAngle + angleMod) / 3) - 2);
+      }
+      else {
+        this.head.setRotation((this.aimAngle + angleMod) / 3);
+      }
 
+      const {x: vx, y: vy} = this.body.velocity;
 
-      this.core.play(`${this.animPrefix}-montserrat-idle`, true);
-      this.head.setTexture(`${this.animPrefix}-montserrat-head`);
+      this.head.setVisible(true);
+
+      if (!this.isThrowing && !this.isGrappling) {
+        if (this.body.onFloor()) {
+          this.rotation = 0;
+
+          if (vx !== 0) {
+            if (this.isFlipped && vx > 0 || !this.isFlipped && vx < 0) {
+              this.core.play(`${this.animPrefix}-montserrat-walk-back`, true);
+            }
+            else {
+              this.core.play(`${this.animPrefix}-montserrat-run`, true);
+            }
+          }
+          else {
+            this.core.play(`${this.animPrefix}-montserrat-idle`, true);
+          }
+        }
+        else {
+          if (vy < 0) {
+            if (this.hasDoubleJumped && !this.hasThrownInAir) {
+              this.core.play(`${this.animPrefix}-montserrat-flip`, true);
+              this.head.setVisible(false);
+
+              const flipRot = 5 * Math.PI * (delta / 1000);
+    
+              if (this.isFlipped) {
+                this.rotation -= flipRot;
+              }
+              else {
+                this.rotation += flipRot;
+              }
+            }
+            else {
+              this.rotation = 0;
+              this.core.play(`${this.animPrefix}-montserrat-up`, true);
+            }
+          }
+          else if (vy > 0) {
+            this.rotation = 0;
+            this.core.play(`${this.animPrefix}-montserrat-down`, true);
+          }
+        }
+      }
+
+      if (this.body.onFloor()) {
+        this.hasDoubleJumped = false;
+        this.hasThrownInAir = false;
+      }
+      
     }
   }
 }
